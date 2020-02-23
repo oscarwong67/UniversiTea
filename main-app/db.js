@@ -5,7 +5,7 @@ const util = require('util');
 const mysql = require('mysql');
 
 console.log('Initializing database connection...');
-//  TODO: connect to the database
+// this is the connection to the test DB on Jeremy's server
 const pool = mysql.createPool({
     connectionLimit: 10,
     host: '107.180.50.225',
