@@ -8,10 +8,10 @@ console.log('Initializing database connection...');
 //  TODO: connect to the database
 const pool = mysql.createPool({
     connectionLimit: 10,
-    host: '',
-    user: '',
-    password: '',
-    database: '',
+    host: '107.180.50.225',
+    user: 'admin3',
+    password: 'joshua747',
+    database: 'seng401',
     charset: 'utf8mb4',
     debug: false
 });
