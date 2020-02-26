@@ -1,5 +1,5 @@
 <template>
-    <section class="create-post">
+    <section class="create-post section">
       <div class='container'>
         <b-field label="Create a Post" >
           <b-input v-model="title" placeholder='Post Title' maxlength='100'></b-input>

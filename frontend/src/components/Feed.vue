@@ -1,5 +1,5 @@
 <template>
-  <section class='feed'>
+  <section class='feed section'>
     <CreatePost />
     <hr/>
     <section class='posts'>
