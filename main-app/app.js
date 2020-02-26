@@ -9,6 +9,7 @@ const init = async () => {
     });
 
     await server.register(require('./apiExample')); // register the routes in apiExample.js
+    await server.register(require('./authentication')); // registers the routes in authentication
 
     await server.start();
     console.log('Server running on %s', server.info.uri);
