@@ -8,7 +8,7 @@ const init = async () => {
         host: 'localhost'
     });
 
-    await server.register(require('./apiExample')); // register the routes in apiExample.js
+    //await server.register(require('./apiExample')); // register the routes in apiExample.js
     await server.register(require('./authentication')); // registers the routes in authentication
 
     await server.start();
