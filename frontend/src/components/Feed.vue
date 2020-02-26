@@ -3,15 +3,11 @@
     <CreatePost />
     <hr/>
     <section class='posts'>
-      <!-- TODO: REMOVE and replace with proper dynamic rendering -->
       <Post
-        title='SENG401 #1'
-        :poster="{
-          name: 'Oscar',
-          degreeType: 'B.Sc'
-        }"
-        school="University of Calgary"
-        content="<p>Blah blah blah blah blah blah blah blah</p>"
+        v-for='post in posts'
+        :key='post.Post_ID'
+        :poster="{name: post.Fname, degreeType: post.Degree_Type}"
+        :title="post.Title" :content="post.Content" :school="post.SchoolName"
       />
     </section>
   </section>
@@ -20,12 +16,23 @@
 <script>
 import CreatePost from './CreatePost.vue';
 import Post from './Post.vue';
+import { API_ADDRESS } from '../constants';
 
 export default {
   name: 'Feed',
   components: {
     CreatePost,
     Post,
+  },
+  data: () => ({
+    posts: [],
+  }),
+  async mounted() {
+    // TODO: add query parameters similar to how I did it in the job board
+    const res = await fetch(`${API_ADDRESS}/api/feed/?page=1&limit=9`);
+    const data = await res.json();
+    console.log(data.posts);
+    this.posts = data.posts;
   },
 };
 </script>

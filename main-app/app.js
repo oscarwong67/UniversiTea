@@ -8,11 +8,27 @@ const init = async () => {
   });
 
   await server.register([{
-    plugin: require('./apiExample'), 
+    plugin: require('./apiExample'),
     plugin: require('./posts')
   }]); // register the routes in apiExample.js
 
-  await server.start();
+  const start = async function () {
+    try {
+      await server.register({
+        plugin: require('hapi-cors'),
+        options: {
+          origins: ['http://localhost:8080']
+        }
+      })
+
+      await server.start();
+    } catch (err) {
+      console.log(err);
+      process.exit(1);
+    }
+  }
+
+  await start();
   console.log('Server running on %s', server.info.uri);
 };
 
