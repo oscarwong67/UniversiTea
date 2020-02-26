@@ -13,10 +13,15 @@ exports.plugin = {
             path: '/api/authentication/signup',
             handler: function (request, h) {
                 try {
+                    const singupResults = await db.query('INSERT INTO USER SET ?', {
+                        email: request.body.email, usdrname: request.body.username, password: request.body.password, 
+                        university: request.body.university, degree: request.body.degree
+                    });
+                    if(!singupResults.insertId) throw new Error('Unable to insert into User during signup');
+                    return goodResponse();
 
                 } catch (err) {
-                    console.log(err);
-                    return badResponse;
+                    return badResponse(err);
                 }
             }
         });

@@ -6,6 +6,7 @@ const goodResponse = () => {
 }
 
 // returns a bad response
-const badResponse = () => {
+const badResponse = (err) => {
+    console.log(err);
     return '400';
 }
