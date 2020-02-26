@@ -36,5 +36,5 @@ exports.plugin = {
                 return `Hello ${request.payload.name}, you've sent a POST request!`
             }
         })
-    }
+    },
 };
