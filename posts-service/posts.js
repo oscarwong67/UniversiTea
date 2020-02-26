@@ -25,5 +25,29 @@ exports.plugin = {
                 }
             }
         });
+        
+        server.route({
+          method: 'POST',
+          path: '/api/addPost/',
+          handler: function (request, h) {
+            try {
+              let content = request.body.content;
+              let header = request.body.header;
+              let userId = request.body.userId;
+              let schoolId = request.body.schoolId;
+              const addPost = await db.query(
+                'INSERT INTO POSTS SET ?', 
+                { Content: content, Header: header, User_ID: userId, School_ID: schoolId }
+              );
+              if (!addPost.affectedRows) { throw new Error('Unable add post'); }
+              res.status(200).json({ success: true });
+            } catch (error) {
+              console.log(error);
+              res.status(400).json({ success: false });
+            }
+              // do i need this???
+              return `Hello ${request.payload.name}, you've sent a POST request!`
+          }
+      });
     }
 };
