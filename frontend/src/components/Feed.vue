@@ -7,11 +7,11 @@
       <Post
         title='SENG401 #1'
         :poster="{
-          name: 'Anonymous',
+          name: 'Oscar',
           degreeType: 'B.Sc'
         }"
         school="University of Calgary"
-        content="Blah blah blah blah blah blah blah blah"
+        content="<p>Blah blah blah blah blah blah blah blah</p>"
       />
     </section>
   </section>

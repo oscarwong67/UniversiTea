@@ -1,14 +1,12 @@
 <template>
  <div class='container post'>
-     <div class='columns is-gapless is-0'>
-        <div class='column'>{{this.poster.name}}</div>
-        <div class='column'>{{this.poster.degreeType}} Student</div>
-        <div class='column'>@ {{this.school}}</div>
+     <div class='post-info'>
+        <span class='posterName'>{{this.poster.name || 'Anonymous'}}&nbsp;(</span>
+        <span class='degreeType'>{{this.poster.degreeType}} Student&nbsp;</span>
+        <span class='school'>@ {{this.school}})</span>
      </div>
      <h2 class='post-title'>{{this.title || 'POST TITLE'}}</h2>
-     <section class='body'>
-         {{this.content}}
-     </section>
+     <section class='body' v-html="content" />
  </div>
 </template>
 
