@@ -32,12 +32,12 @@ exports.plugin = {
           handler: function (request, h) {
             try {
               let content = request.body.content;
-              let header = request.body.header;
+              let title = request.body.title;
               let userId = request.body.userId;
               let schoolId = request.body.schoolId;
               const addPost = await db.query(
                 'INSERT INTO POSTS SET ?', 
-                { Content: content, Header: header, User_ID: userId, School_ID: schoolId }
+                { Content: content, Title: title, User_ID: userId, School_ID: schoolId }
               );
               if (!addPost.affectedRows) { throw new Error('Unable add post'); }
               res.status(200).json({ success: true });
