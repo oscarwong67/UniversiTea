@@ -5,7 +5,7 @@
         <span class='degreeType'>{{this.poster.degreeType}} Student&nbsp;</span>
         <span class='school'>@ {{this.school}})</span>
      </div>
-     <h2 class='post-title'>{{this.title || 'POST TITLE'}}</h2>
+     <h2 class='post-title'>{{this.title}}</h2>
      <section class='body' v-html="content" />
  </div>
 </template>
