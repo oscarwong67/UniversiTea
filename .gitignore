@@ -105,3 +105,4 @@ dist
 frontend/package-lock.json
 main-app/package-lock.json
 .DS_Store
+package-lock.json

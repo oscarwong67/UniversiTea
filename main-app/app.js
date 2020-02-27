@@ -8,8 +8,10 @@ const init = async () => {
         host: 'localhost'
     });
 
-    //await server.register(require('./apiExample')); // register the routes in apiExample.js
-    await server.register(require('./authentication')); // registers the routes in authentication
+    await server.register([{
+        plugin: require('./apiExample'),
+        plugin: require('./authentication')
+      }]);
 
     await server.start();
     console.log('Server running on %s', server.info.uri);
