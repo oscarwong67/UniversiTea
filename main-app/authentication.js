@@ -13,20 +13,19 @@ exports.plugin = {
         server.route({
             method: 'POST',
             path: '/api/authentication/signup',
-            handler: function (request, h) {
+            handler: async function (request, h) {
                 try {
                     //  get school id from SCHOOL
-                    const schoolResult = await db.query('SELECT * FROM SCHOOL WHERE SchoolName=?',[request.payload.schoolName]);
+                    const schoolResult = await db.query('SELECT * FROM SCHOOL WHERE SchoolName=?', [request.payload.schoolName]);
                     //  keeps sending this error
                     if (!schoolResult.length) throw new Error('Invalid school name!');
 
                     //  insert signup
                     const signupResults = await db.query('INSERT INTO USER SET ?', {
                         Fname: request.payload.Fname, Lname: request.payload.Lname,
-                        Email: request.payload.email, Password: request.payload.password, 
+                        Email: request.payload.email, Password: request.payload.password,
                         Degree_Type: request.payload.Degree_Type, School_ID: schoolResult[0].School_ID
                     });
-                    // if(!signupResults.insertId) throw new Error('Unable to insert into User during signup');
                     return helper.goodResponse(h);
                 } catch (err) {
                     return helper.badResponse(err, h);
@@ -38,16 +37,16 @@ exports.plugin = {
         server.route({
             method: 'GET',
             path: '/api/authentication/login',
-            handler: function (request, h){
+            handler: async function (request, h){
                 try{
-                    var inputUsername = request.payload.username;
-                    var inputPassword = request.payload.password;
+                    const inputEmail = request.query.email;
+                    const inputPassword = request.query.password;
                     //Query DB - If valid login, returned object will not be empty
-                    var dbResult = await db.query('SELECT * FROM USER WHERE username = ? AND password = ?;', [inputUsername, inputPassword]);
-                    return dbResult;
+                    const dbResult = await db.query('SELECT * FROM USER WHERE Email=? AND Password=?;', [inputEmail, inputPassword]);
+                    h.authenticated({credentials: {User_ID: dbResult[0].User_ID, School_ID: dbResult[0].School_ID }});
+                    return helper.goodResponse(h);
                 } catch(err){
-                    return helper.badResponse(err, h);
-                }
+                    return helper.badResponse(err, h);                }
             }
         });
     }
