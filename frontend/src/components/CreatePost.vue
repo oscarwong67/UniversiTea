@@ -21,6 +21,7 @@
 
 <script>
 import { VueEditor } from 'vue2-editor';
+import { API_ADDRESS } from '../constants';
 
 export default {
   name: 'CreatePost',
@@ -38,9 +39,21 @@ export default {
     content: '',
   }),
   methods: {
-    handleSavingContent() {
+    async handleSavingContent() {
       // You have the content to save
+      // TODO: fix hard coded userid and schoolid
       console.log(this.content);
+      const res = await fetch(`${API_ADDRESS}/api/addPost`, {
+        method: 'POST',
+        body: JSON.stringify({
+          tite: this.content,
+          content: this.content,
+          userId: 0,
+          schoolId: 0,
+        }),
+      });
+      const data = await res.json();
+      console.log(data);
     },
   },
 };

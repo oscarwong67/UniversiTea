@@ -37,18 +37,16 @@ exports.plugin = {
               let title = request.body.title;
               let userId = request.body.userId;
               let schoolId = request.body.schoolId;
-              const addPost = await db.query(
+              const addPost = db.query(
                 'INSERT INTO POSTS SET ?', 
                 { Content: content, Title: title, User_ID: userId, School_ID: schoolId }
               );
               if (!addPost.affectedRows) { throw new Error('Unable add post'); }
-              res.status(200).json({ success: true });
+              return res.status(200).json({ success: true });
             } catch (error) {
               console.log(error);
-              res.status(400).json({ success: false });
+              return res.status(400).json({ success: false });
             }
-              // do i need this???
-              return `Hello ${request.payload.name}, you've sent a POST request!`
           }
       });
     }
