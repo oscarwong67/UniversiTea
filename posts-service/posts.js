@@ -1,6 +1,7 @@
 'use strict';
 
 const db = require('./db');
+const helper = require('./helper');
 
 exports.plugin = {
     pkg: require('./package.json'),
@@ -35,17 +36,15 @@ exports.plugin = {
             try {
               let content = request.payload.content;
               let title = request.payload.title;
-              let userId = request.payload.userId;
-              let schoolId = request.payload.schoolId;
+              let user = request.payload.user;
+              let school = request.payload.school;
               const addPost = db.query(
                 'INSERT INTO POSTS SET ?', 
-                { Content: content, Title: title, User_ID: userId, School_ID: schoolId }
+                { Content: content, Title: title, User_ID: user, School_ID: school }
               );
-              if (!addPost.affectedRows) { throw new Error('Unable add post'); }
-              
-            } catch (error) {
-              console.log(error);
-              return res.status(400).json({ success: false });
+              return helper.goodResponse(h);
+            } catch (err) {
+              return helper.badResponse(h, err);
             }
           }
       });

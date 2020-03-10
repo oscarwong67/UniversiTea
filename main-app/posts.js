@@ -15,6 +15,19 @@ exports.plugin = {
         const data = await res.json();
         return data;
       },
+    }),
+
+    server.route({
+      method: 'POST',
+      path: '/api/addPost',
+      async handler(request, h) {
+        const url = `http://${postsMicroserviceHost}${request.url.pathname}`;
+        console.log(url);
+        const res = await fetch(url, {
+          method: 'POST',
+          body: JSON.stringify({...request.payload}),
+        });
+      }
     });
   },
 };
