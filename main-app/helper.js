@@ -1,11 +1,15 @@
 
 
 // returns a good response
-const goodResponse = () => {
-    return '200';
+const goodResponse = (h, data) => {
+    return h.response(data).code(200);
 }
 
 // returns a bad response
-const badResponse = () => {
-    return '400';
+const badResponse = (h, err) => {
+    console.log(err);
+    const data = { key: 'value' }
+    return h.response('error').code(400);
 }
+
+module.exports = {goodResponse, badResponse};

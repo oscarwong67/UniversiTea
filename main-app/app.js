@@ -14,12 +14,16 @@ const init = async () => {
 
   const start = async function () {
     try {
-      await server.register({
-        plugin: require('hapi-cors'),
-        options: {
-          origins: ['http://localhost:8080']
+      await server.register([
+        { plugin: require('./apiExample'), options: {} },
+        { plugin: require('./authentication'), options: {} },
+        {
+          plugin: require('hapi-cors'),
+          options: {
+            origins: ['http://localhost:8080']
+          }
         }
-      })
+      ]);
 
       await server.start();
     } catch (err) {
