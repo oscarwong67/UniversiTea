@@ -23,6 +23,15 @@
           <router-link class='navbar-item' to="/about">About</router-link>
         </div>
        <div class='navbar-end'>
+          <b-button
+            class='navbar-item'
+            type="is-info"
+            icon-left="bell"
+            outlined
+            @click="isNotificationPopupActive=true"
+          >
+            Notifications
+          </b-button>
           <b-button class='navbar-item' type="is-primary" outlined @click="isLoginModalActive=true">
             Log In
           </b-button>
@@ -65,7 +74,12 @@
                           <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
                       </button>
 
-                      <b-dropdown-item :value="degreeType" aria-role="listitem" v-for="degreeType in degreeTypes" :key="degreeType">
+                      <b-dropdown-item
+                        :value="degreeType"
+                        aria-role="listitem"
+                        v-for="degreeType in degreeTypes"
+                        :key="degreeType"
+                      >
                         {{degreeType}}
                       </b-dropdown-item>
                     </b-dropdown>
