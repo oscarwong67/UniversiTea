@@ -26,23 +26,23 @@ exports.plugin = {
                     // TODO: put in julian's error thing
                 }
             }
-        });
+        }),
         
         server.route({
           method: 'POST',
           path: '/api/addPost/',
           handler: function (request, h) {
             try {
-              let content = request.body.content;
-              let title = request.body.title;
-              let userId = request.body.userId;
-              let schoolId = request.body.schoolId;
+              let content = request.payload.content;
+              let title = request.payload.title;
+              let userId = request.payload.userId;
+              let schoolId = request.payload.schoolId;
               const addPost = db.query(
                 'INSERT INTO POSTS SET ?', 
                 { Content: content, Title: title, User_ID: userId, School_ID: schoolId }
               );
               if (!addPost.affectedRows) { throw new Error('Unable add post'); }
-              return res.status(200).json({ success: true });
+              
             } catch (error) {
               console.log(error);
               return res.status(400).json({ success: false });
