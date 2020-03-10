@@ -46,7 +46,8 @@ exports.plugin = {
                     h.authenticated({credentials: {User_ID: dbResult[0].User_ID, School_ID: dbResult[0].School_ID }});
                     return helper.goodResponse(h);
                 } catch(err){
-                    return helper.badResponse(err, h);                }
+                    return helper.badResponse(h, err);
+                }
             }
         });
     }

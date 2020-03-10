@@ -1,12 +1,12 @@
 
 
 // returns a good response
-const goodResponse = (data, h) => {
+const goodResponse = (h, data) => {
     return h.response(data).code(200);
 }
 
 // returns a bad response
-const badResponse = (err, h) => {
+const badResponse = (h, err) => {
     console.log(err);
     const data = { key: 'value' }
     return h.response('error').code(400);
