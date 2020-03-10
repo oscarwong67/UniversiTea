@@ -29,6 +29,7 @@ exports.plugin = {
         //     }
         // });
 
+        // adding comments to event store database
         server.route({
             method: 'POST',
             path: '/api/addComment',
@@ -48,7 +49,60 @@ exports.plugin = {
                             "Parent_ID" : parentID // CHANGE THIS TO MATCH THE DATABASE ORDER
                         }
                     };
-                    db.query(event);
+                    db.query(
+                        'INSERT INTO EVENT SET ?',
+                        { Content : event }
+                    );
+                    //Call function for adding to current state database
+                } catch(err) {
+
+                }
+            }
+        });
+
+        // editing a comment in the event store database
+        server.route({
+            method: 'POST',
+            path: '/api/editComment',
+            handler: async function (request, h) {
+                try {
+                    let commentID = request.payload.commentID;
+                    let newContent = request.payload.newContent;
+                    
+                    let event = {
+                        "editComment" : {
+                            "Comment_ID": commentID,
+                            "Content" : newContent,
+                        }
+                    };
+                    db.query(
+                        'INSERT INTO EVENT SET ?',
+                        { Content : event }
+                    );
+                    //Call function for adding to current state database
+                } catch(err) {
+
+                }
+            }
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/api/deleteComment',
+            handler: async function (request, h) {
+                try {
+                    let commentID = request.payload.commentID;
+                    
+                    let event = {
+                        "deleteComment" : {
+                            "Comment_ID": commentID,
+                        }
+                    };
+                    db.query(
+                        'INSERT INTO EVENT SET ?',
+                        { Content : event }
+                    );
+                    //Call function for adding to current state database
                 } catch(err) {
 
                 }
