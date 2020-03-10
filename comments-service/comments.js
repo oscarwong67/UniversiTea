@@ -28,5 +28,32 @@ exports.plugin = {
         //         }
         //     }
         // });
+
+        server.route({
+            method: 'POST',
+            path: '/api/addComment',
+            handler: async function (request, h) {
+                try {
+                    let commentID = request.payload.commentID;
+                    let content = request.payload.content;
+                    let userID = request.payload.userID;
+                    let parentID = request.payload.parentID
+                    
+                    let event = {
+                        "addComment" : {
+                            "Comment_ID": commentID,
+                            "Content" : content,
+                            "User_ID" : userID,
+                            "Post_ID" : postID,
+                            "Parent_ID" : parentID // CHANGE THIS TO MATCH THE DATABASE ORDER
+                        }
+                    };
+                    db.query(event);
+                } catch(err) {
+
+                }
+            }
+        });
+
     }
-};
+}
