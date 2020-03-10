@@ -27,11 +27,11 @@ exports.plugin = {
                     // TODO: put in julian's error thing
                 }
             }
-        }),
+        });
         
         server.route({
           method: 'POST',
-          path: '/api/addPost/',
+          path: '/api/addPost',
           handler: function (request, h) {
             try {
               let content = request.payload.content;

@@ -9,11 +9,7 @@ exports.plugin = {
       method: 'GET',
       path: '/api/feed/',
       async handler(request, h) {
-        const url = `http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`;
-        console.log(url);
-        const res = await fetch(url);
-        const data = await res.json();
-        return data;
+        return h.redirect(`http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`);
       },
     });
 
@@ -21,13 +17,14 @@ exports.plugin = {
       method: 'POST',
       path: '/api/addPost',
       async handler(request, h) {
-        // const url = `http://${postsMicroserviceHost}${request.url.pathname}`;
-        // console.log(url);
-        // const res = await fetch(url, {
-        //   method: 'POST',
-        //   body: JSON.stringify({...request.payload}),
-        // });
-        return 'no';
+        const url = `http://${postsMicroserviceHost}/api/addPost`;
+        console.log(url);
+        const res = await fetch(url, {
+          method: 'POST',
+          body: JSON.stringify(request.payload),
+          headers: { 'Content-Type': 'application/json' },
+        });
+        return res;
       }
     });
   },
