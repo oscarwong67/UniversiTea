@@ -42,14 +42,14 @@ export default {
     async handleSavingContent() {
       // You have the content to save
       // TODO: fix hard coded userid and schoolid
-      console.log(this.content);
+      // console.log(this.content);
       const res = await fetch(`${API_ADDRESS}/api/addPost`, {
         method: 'POST',
         body: JSON.stringify({
           tite: this.content,
           content: this.content,
-          userId: 0,
-          schoolId: 0,
+          user: 1,
+          school: 1,
         }),
       });
       const data = await res.json();
