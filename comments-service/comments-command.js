@@ -5,31 +5,10 @@ const db = require('./db');
 exports.plugin = {
     pkg: require('./package.json'),
     register: async function (server, options) {
-        // Example:
-        // server.route({
-        //     method: 'GET',
-        //     path: '/api/feed/',
-        //     handler: async function (request, h) {
-        //         try {
-        //             let page = parseInt(request.query.page) || 1;
-        //             const limit = parseInt(request.query.limit) || 9;
-        //             if (page < 1) page = 1;
-        //             const posts = await db.query(`
-        //                 SELECT * 
-        //                 FROM POSTS AS P, SCHOOL AS S, USER AS U
-        //                 WHERE P.User_ID=U.User_ID AND P.School_ID=S.School_ID
-        //                 ORDER BY Post_id
-        //                 LIMIT ${(page - 1) * limit}, ${limit}
-        //             `)
-        //             return { posts };
-        //         } catch(err) {
-        //             console.log(err);
-        //             // TODO: put in julian's error thing
-        //         }
-        //     }
-        // });
 
         // adding comments to event store database
+        // Input: Comment ID, Post Content, User ID, Parent ID (if it is a reply)
+        // Output: Void
         server.route({
             method: 'POST',
             path: '/api/addComment',
@@ -51,7 +30,7 @@ exports.plugin = {
                     };
                     db.query(
                         'INSERT INTO EVENT SET ?',
-                        { Content : event }
+                        { Content : event } // I dont know if this syntax is correct
                     );
                     //Call function for adding to current state database
                 } catch(err) {
@@ -61,6 +40,8 @@ exports.plugin = {
         });
 
         // editing a comment in the event store database
+        // Input: Comment ID, Content
+        // Output: Void
         server.route({
             method: 'POST',
             path: '/api/editComment',
@@ -86,6 +67,9 @@ exports.plugin = {
             }
         });
 
+        // deleteing a comment in the event store database
+        // Input: Comment ID
+        // Output: Void
         server.route({
             method: 'POST',
             path: '/api/deleteComment',
