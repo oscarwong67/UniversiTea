@@ -1,6 +1,7 @@
 <template>
   <section class='feed section'>
-    <CreatePost />
+    <CreatePost v-if="isLoggedIn" />
+    <h3 v-else>Log In to Post and Comment!</h3>
     <hr/>
     <section class='posts'>
       <Post
@@ -39,6 +40,11 @@ export default {
   methods: {
     redirectToPost(postid) {
       this.$router.push(`./viewpost/${postid}`);
+    },
+  },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem('User_ID');
     },
   },
 };
