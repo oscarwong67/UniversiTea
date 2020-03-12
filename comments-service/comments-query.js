@@ -11,7 +11,7 @@ exports.plugin = {
         // Output: All comments in the post
         server.route({
             method: 'POST',
-            path: '/api/addComment',
+            path: '/api/getComment',
             handler: async function (request, h) {
                 try {
                     var pid = parseInt(request.query.pid);
