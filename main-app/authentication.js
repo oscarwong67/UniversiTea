@@ -41,7 +41,7 @@ exports.plugin = {
                     return helper.badResponse(h, err);
                 }
             }
-        }),
+        });
 
         //Login to existing profile
         server.route({
@@ -77,6 +77,18 @@ exports.plugin = {
                         //cookie found as request.state.session
                     }
                         return helper.goodResponse(h, credentials);
+                } catch(err){
+                    return helper.badResponse(h, err);
+                }
+            }
+        });
+
+        server.route({
+            method: 'GET',
+            path: 'api/authentication/logout',
+            handler: async function (request, h) {
+                try {
+                    return h.goodResponse(h).unstate('session');
                 } catch(err){
                     return helper.badResponse(h, err);
                 }

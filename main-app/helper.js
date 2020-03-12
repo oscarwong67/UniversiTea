@@ -8,8 +8,14 @@ const goodResponse = (h, data) => {
 // returns a bad response
 const badResponse = (h, err) => {
     console.log(err);
-    const data = { key: 'value' }
     return h.response('error').code(400);
 }
 
-module.exports = {goodResponse, badResponse};
+const updateCookie = (request, h) => {
+    if(request.state.session) {
+        request.state.session.lastVisit = Date.now();
+    }
+    return h.response().state('session', updateCookie);
+}
+
+module.exports = {goodResponse, badResponse, updateCookie};
