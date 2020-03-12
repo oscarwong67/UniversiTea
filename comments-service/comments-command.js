@@ -80,18 +80,18 @@ exports.plugin = {
                     let newContent = request.payload.newContent;
                     
                     let event = {
-                        "editComment" : {
-                            "Comment_ID": commentID,
-                            "Content" : newContent,
-                        }
+                        "Action": "editComment",
+                        "Comment_ID": commentID,
+                        "Content" : newContent,
                     };
-                    db.query(
+                    await db.query(
                         'INSERT INTO EVENT SET ?',
                         { Content : event }
                     );
                     //Call function for adding to current state database
+                    return helper.goodResponse(h, null);
                 } catch(err) {
-
+                    return helper.badResponse(h, err);
                 }
             }
         });
@@ -107,17 +107,17 @@ exports.plugin = {
                     let commentID = request.payload.commentID;
                     
                     let event = {
-                        "deleteComment" : {
-                            "Comment_ID": commentID,
-                        }
+                        "Action" : "deleteComment",
+                        "Comment_ID": commentID,
                     };
-                    db.query(
+                    await db.query(
                         'INSERT INTO EVENT SET ?',
                         { Content : event }
                     );
                     //Call function for adding to current state database
+                    return helper.goodResponse(h, null);
                 } catch(err) {
-
+                    return helper.badResponse(h, err);
                 }
             }
         });
