@@ -9,7 +9,10 @@ exports.plugin = {
       method: 'GET',
       path: '/api/feed/',
       async handler(request, h) {
-        return h.redirect(`http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`);
+        const url = `http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        return data;
       },
     });
 

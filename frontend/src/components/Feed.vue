@@ -4,6 +4,7 @@
     <hr/>
     <section class='posts'>
       <Post
+        class='post'
         v-for='post in posts'
         :key='post.Post_ID'
         :poster="{name: post.Fname, degreeType: post.Degree_Type}"
@@ -39,5 +40,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.posts {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
 
+.post {
+  width: 100%;
+  margin-bottom: 1em;
+}
 </style>

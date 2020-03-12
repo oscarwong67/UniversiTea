@@ -45,15 +45,16 @@ export default {
   components: {
     VueEditor,
   },
+  props: ['defaultTitle', 'defaultContent', 'defaultMediaUrls'],
   data: () => ({
     customToolbar: [
       ['bold', 'italic', 'underline'],
       [{ list: 'ordered' }, { list: 'bullet' }],
       ['code-block'],
     ],
-    title: '',
-    content: '',
-    mediaUrls: [],
+    title: this ? Object.assign('', this.defaultTitle) : '',
+    content: this ? Object.assign('', this.defaultContent) : '',
+    mediaUrls: this ? Object.assign([], this.mediaUrls) : '',
     currentMediaUrl: '',
   }),
   methods: {
@@ -61,13 +62,9 @@ export default {
       // You have the content to save
       // TODO: fix hard coded userid and schoolid
       // console.log(this.content);
-      const mediaUrls = this.mediaUrls.map((mediaUrl) => {
-        const temp = mediaUrl.split(' - ');
-        return {
-          url: temp[0],
-          type: temp[1],
-        };
-      });
+      const mediaUrls = this.mediaUrls.map((mediaUrl) => ({
+        ...mediaUrl,
+      }));
       const res = await fetch(`${API_ADDRESS}/api/addPost`, {
         method: 'POST',
         body: JSON.stringify({
@@ -95,7 +92,10 @@ export default {
       } else if (extension === 'mp4' || extension === 'webm') {
         type = 'video';
       }
-      this.mediaUrls.push(`${this.currentMediaUrl} - ${type}`);
+      this.mediaUrls.push({
+        url: this.currentMediaUrl,
+        type,
+      });
       this.currentMediaUrl = '';
     },
     removeMediaUrl(index) {
