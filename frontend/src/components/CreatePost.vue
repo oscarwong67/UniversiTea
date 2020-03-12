@@ -60,9 +60,7 @@ export default {
   }),
   methods: {
     async handleSavingContent() {
-      // TODO: fix hard coded userid and schoolid
-      // TODO handle anonymous
-      // console.log(this.content);
+      // You have the content to save
       const mediaUrls = this.mediaUrls.map((mediaUrl) => ({
         ...mediaUrl,
       }));
@@ -71,8 +69,8 @@ export default {
         body: JSON.stringify({
           title: this.title,
           content: this.content,
-          user: 1,
-          school: 1,
+          user: localStorage.getItem('User_ID'),
+          school: localStorage.getItem('School_ID'),
           mediaUrls,
         }),
         headers: {
