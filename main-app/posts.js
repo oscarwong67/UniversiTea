@@ -10,11 +10,9 @@ exports.plugin = {
       path: '/api/feed/',
       async handler(request, h) {
         const url = `http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`;
-        console.log(url);
         const res = await fetch(url);
         const data = await res.json();
         return data;
-        // return h.redirect(`http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`);
       },
     });
 
@@ -41,6 +39,29 @@ exports.plugin = {
         const data = await res.json();
         console.log(data);
         return data;
+      }
+    });
+
+    server.route({
+      method: 'POST',
+      path: '/api/uploadMedia',
+      async handler(request, h) {
+        const url = `http://${postsMicroserviceHost}/api/uploadMedia`;
+        const res = await fetch(url, {
+          method: 'POST',
+          body: request.payload,
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        return res;
+      },
+      options: {
+        payload: {
+            output: 'stream',
+            parse: true,
+            allow: 'multipart/form-data',
+            maxBytes: 2 * 1000 * 1000,
+            timeout: false,
+        }
       },
     });
   },

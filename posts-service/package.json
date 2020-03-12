@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
+    "dotenv": "^8.2.0",
+    "hapi-cors": "^1.0.3",
     "mysql": "^2.18.1"
   }
 }
