@@ -1,30 +1,37 @@
-exports.plugin = {
-    pkg: require('./package.json'),
-    register: async function (server, options) {
-      server.route({
+'use strict'
+const db = require('./db');
+const helper = require('./helper');
+
+module.exports = [
+    {
+        //promote user to admin status
         method: 'POST',
         path: '/api/admin/promote',
-        async handler(request, h) {
-          const user = request.payload.email;
-          
-        },
-      });
-
-      server.route({
+        handler: async function (request, h) {
+            try {
+            const user = request.payload.email;
+            const userToAdmin = await db.query('UPDATE USER SET Admin=1 WHERE Email=?', [user]);
+            if (!userToAdmin.affectedRows) throw new Error('Error setting ${user} to admin');
+            return helper.goodResponse(h, user);
+            } catch(err) {
+                return helper.badResponse(h, err);
+            }
+        }
+    },
+    {
+        //delete post
         method: 'POST',
         path: '/api/admin/deletePost',
-        async handler(request, h) {
-          
-        },
-      });
-
-      server.route({
+        handler: async function (request, h) {
+            
+        }
+    },
+    {
+        //delete comment
         method: 'POST',
         path: '/api/admin/deleteComment',
-        async handler(request, h) {
-          
-        },
-      });
-    },
-};
-  
+        handler: async function (request, h) {
+            
+        }
+    }
+]
