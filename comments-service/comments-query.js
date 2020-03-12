@@ -10,8 +10,8 @@ exports.plugin = {
         // Input: Post ID
         // Output: All comments in the post
         server.route({
-            method: 'POST',
-            path: '/api/addComment',
+            method: 'GET',
+            path: '/api/getComment',
             handler: async function (request, h) {
                 try {
                     var pid = parseInt(request.query.pid);
@@ -29,5 +29,25 @@ exports.plugin = {
             }
         });
 
+
+        server.route({
+            method: 'GET',
+            path: '/api/getEvent',
+            handler: async function (request, h) {
+                try {
+                    var pid = parseInt(request.query.pid);
+                    const events = db.query(
+                        `
+                        SELECT *
+                        FROM EVENT
+                        WHERE Event_ID = ${pid}
+                        `
+                    ); // I dont know if this syntax is correct
+                    return {events};
+                } catch(err) {
+
+                }
+            }
+        });
     }
 }
