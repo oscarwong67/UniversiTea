@@ -20,6 +20,10 @@ const init = async () => {
           options: {
             origins: ['http://localhost:8080']
           }
+        },
+        {
+          plugin: require('hapi-auth-cookie'),
+          options: {}
         }
       ]);
 

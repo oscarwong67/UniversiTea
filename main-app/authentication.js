@@ -2,6 +2,9 @@
 const db = require('./db');
 const helper = require('./helper');
 
+// Bcrypt setup
+const Bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 // this file will control profile signup and login
 exports.plugin = {
@@ -15,20 +18,27 @@ exports.plugin = {
             path: '/api/authentication/signup',
             handler: async function (request, h) {
                 try {
+                    //params needed
+                    const Fname = request.payload.Fname;
+                    const Lname = request.payload.Lname;
+                    const Email = request.payload.email;
+                    const inputPassword = request.payload.password;
+                    const schoolName = request.payload.schoolName;
+                    const Degree_Type = request.payload.Degree_Type;
+        
                     //  get school id from SCHOOL
-                    const schoolResult = await db.query('SELECT * FROM SCHOOL WHERE SchoolName=?', [request.payload.schoolName]);
-                    //  keeps sending this error
+                    const schoolResult = await db.query('SELECT * FROM SCHOOL WHERE SchoolName=?', [schoolName]);
                     if (!schoolResult.length) throw new Error('Invalid school name!');
 
                     //  insert signup
+                    const password = Bcrypt.hashSync(inputPassword, saltRounds);
                     const signupResults = await db.query('INSERT INTO USER SET ?', {
-                        Fname: request.payload.Fname, Lname: request.payload.Lname,
-                        Email: request.payload.email, Password: request.payload.password,
-                        Degree_Type: request.payload.Degree_Type, School_ID: schoolResult[0].School_ID
+                        Fname, Lname, Email, password, Degree_Type, 
+                        School_ID: schoolResult[0].School_ID
                     });
                     return helper.goodResponse(h);
                 } catch (err) {
-                    return helper.badResponse(err, h);
+                    return helper.badResponse(h, err);
                 }
             }
         });
@@ -39,12 +49,21 @@ exports.plugin = {
             path: '/api/authentication/login',
             handler: async function (request, h){
                 try{
+                    //params
                     const inputEmail = request.query.email;
                     const inputPassword = request.query.password;
-                    //Query DB - If valid login, returned object will not be empty
-                    const dbResult = await db.query('SELECT * FROM USER WHERE Email=? AND Password=?;', [inputEmail, inputPassword]);
-                    h.authenticated({credentials: {User_ID: dbResult[0].User_ID, School_ID: dbResult[0].School_ID }});
-                    return helper.goodResponse(h);
+                    //find account
+                    const user = await db.query('SELECT * FROM USER WHERE Email=?;', [inputEmail]);
+                    if (!user.length) {
+                        return { isValid: false, credentials: null };
+                    }
+                    const match = await Bcrypt.compare(inputPassword, user[0].Password);
+                    var credentials = { isValid: match };
+                    if(match) {
+                        credentials.User_ID = user[0].User_ID;
+                        credentials.School_ID = user[0].School_ID;
+                    }
+                        return helper.goodResponse(h, credentials);
                 } catch(err){
                     return helper.badResponse(h, err);
                 }
