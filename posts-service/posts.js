@@ -23,8 +23,7 @@ exports.plugin = {
                     `)
                     return { posts };
                 } catch(err) {
-                    console.log(err);
-                    // TODO: put in julian's error thing
+                  return helper.badResponse(h, err);
                 }
             }
         });
@@ -47,6 +46,24 @@ exports.plugin = {
               return helper.badResponse(h, err);
             }
           }
+      });
+
+      server.route({
+        method: 'GET',
+        path: '/api/getPost/',
+        handler: async function (request, h) {
+          try {
+            let postid = parseInt(request.query.postid) || 1;
+            const post = await db.query(
+              'SELECT * FROM POSTS WHERE ?',
+              { Post_ID: postid }
+            );
+            console.log(post);
+            return { post };
+          } catch (err) {
+            return helper.badResponse(h, err);
+          }
+        }
       });
     }
 };

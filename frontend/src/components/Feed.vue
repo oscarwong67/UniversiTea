@@ -16,7 +16,7 @@
 <script>
 import CreatePost from './CreatePost.vue';
 import Post from './Post.vue';
-import { API_ADDRESS } from '../constants';
+// import { API_ADDRESS } from '../constants';
 
 export default {
   name: 'Feed',
@@ -29,10 +29,11 @@ export default {
   }),
   async mounted() {
     // TODO: add query parameters similar to how I did it in the job board
-    const res = await fetch(`${API_ADDRESS}/api/feed/?page=1&limit=9`);
-    const data = await res.json();
-    console.log(data.posts);
-    this.posts = data.posts;
+    console.log(this.$route.params);
+    // const res = await fetch(`${API_ADDRESS}/api/feed/?page=1&limit=9`);
+    // const data = await res.json();
+    // console.log(data.posts);
+    // this.posts = data.posts;
   },
 };
 </script>

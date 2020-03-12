@@ -18,15 +18,21 @@ exports.plugin = {
       path: '/api/addPost',
       async handler(request, h) {
         const url = `http://${postsMicroserviceHost}/api/addPost`;
-        console.log(request.payload);
         const res = await fetch(url, {
           method: 'POST',
-          // body: JSON.stringify(request.payload),
           body: request.payload,
           headers: { 'Content-Type': 'application/json' },
         });
         return res;
       }
+    });
+
+    server.route({
+      method: 'GET',
+      path: '/api/getPost/',
+      async handler(request, h) {
+        return await h.redirect(`http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`);
+      },
     });
   },
 };
