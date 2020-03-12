@@ -5,6 +5,7 @@
     <section class='posts'>
       <Post
         class='post'
+        @click.native='redirectToPost(post.Post_ID)'
         v-for='post in posts'
         :key='post.Post_ID'
         :poster="{name: post.Fname, degreeType: post.Degree_Type}"
@@ -34,6 +35,12 @@ export default {
     const data = await res.json();
     console.log(data.posts);
     this.posts = data.posts;
+  },
+  methods: {
+    redirectToPost(postid) {
+      console.log('in redirect');
+      this.$router.push(`./viewpost/${postid}`);
+    },
   },
 };
 </script>
