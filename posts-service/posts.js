@@ -32,13 +32,13 @@ exports.plugin = {
         server.route({
           method: 'POST',
           path: '/api/addPost',
-          handler: function (request, h) {
+          handler: async function (request, h) {
             try {
               let content = request.payload.content;
               let title = request.payload.title;
               let user = request.payload.user;
               let school = request.payload.school;
-              const addPost = db.query(
+              await db.query(
                 'INSERT INTO POSTS SET ?', 
                 { Content: content, Title: title, User_ID: user, School_ID: school }
               );

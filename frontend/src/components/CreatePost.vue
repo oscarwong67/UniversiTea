@@ -11,8 +11,25 @@
             :editor-toolbar="customToolbar"
           />
         </b-field>
-        <b-field label="Image/Video">
-            <b-input v-model="media" type='file' accept='image/*,video/*' multiple></b-input>
+        <b-field
+          grouped
+          label="Image/Video URLs"
+          custom-class="url-input"
+          class='url-input'
+        >
+          <div class='break' />
+          <p class='break' v-for="(mediaUrl, idx) in mediaUrls" :key="mediaUrl">
+            {{mediaUrl}}
+            <b-button outlined @click='removeMediaUrl(idx)'>x</b-button>
+          </p>
+          <b-input
+            v-model="currentMediaUrl"
+            placeholder="https://example.com"
+            type="text"
+            maxlength='200'
+            expanded
+          />
+          <b-button outlined @click='addMediaUrl' v-if='currentMediaUrl.length > 0'>+</b-button>
         </b-field>
         <b-button @click='handleSavingContent'>Submit</b-button>
       </div>
@@ -35,25 +52,44 @@ export default {
       ['code-block'],
     ],
     title: '',
-    media: '',
     content: '',
+    mediaUrls: [],
+    currentMediaUrl: '',
   }),
   methods: {
     async handleSavingContent() {
-      // You have the content to save
-      // TODO: fix hard coded userid and schoolid
       console.log(this.content);
-      const res = await fetch(`${API_ADDRESS}/api/addPost`, {
-        method: 'POST',
-        body: JSON.stringify({
-          tite: this.content,
-          content: this.content,
-          userId: 0,
-          schoolId: 0,
-        }),
-      });
-      const data = await res.json();
-      console.log(data);
+      try {
+        const res = await fetch(`${API_ADDRESS}/api/addPost`, {
+          method: 'POST',
+          // TODO: fix hard coded userid and schoolid
+          body: JSON.stringify({
+            tite: this.content,
+            content: this.content,
+            userId: 0,
+            schoolId: 0,
+          }),
+        });
+        const data = await res.json();
+        console.log(data);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    addMediaUrl() {
+      // eslint-disable-next-line no-useless-escape
+      const extension = this.currentMediaUrl.split(/\#|\?/)[0].split('.').pop().trim().toLowerCase();
+      let type = 'invalid media URL';
+      if (extension === 'jpg' || extension === 'png' || extension === 'jpeg' || extension === 'tiff' || extension === 'gif' || extension === 'webp') {
+        type = 'image';
+      } else if (extension === 'mp4' || extension === 'webm') {
+        type = 'video';
+      }
+      this.mediaUrls.push(`${this.currentMediaUrl} - ${type}`);
+      this.currentMediaUrl = '';
+    },
+    removeMediaUrl(index) {
+      this.mediaUrls.splice(index);
     },
   },
 };
@@ -66,5 +102,14 @@ export default {
     border: 2px solid white;
     border-radius: 6px;
     padding: 1em;
+}
+
+.url-input {
+  flex-wrap: wrap;
+}
+
+.break {
+  width: 100%;
+  flex-basis: 100%;
 }
 </style>

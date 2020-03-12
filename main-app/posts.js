@@ -27,5 +27,28 @@ exports.plugin = {
         return res;
       }
     });
+
+    server.route({
+      method: 'POST',
+      path: '/api/uploadMedia',
+      async handler(request, h) {
+        const url = `http://${postsMicroserviceHost}/api/uploadMedia`;
+        const res = await fetch(url, {
+          method: 'POST',
+          body: request.payload,
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        return res;
+      },
+      options: {
+        payload: {
+            output: 'stream',
+            parse: true,
+            allow: 'multipart/form-data',
+            maxBytes: 2 * 1000 * 1000,
+            timeout: false,
+        }
+      },
+    });
   },
 };
