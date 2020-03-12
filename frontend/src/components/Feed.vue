@@ -1,6 +1,7 @@
 <template>
   <section class='feed section'>
-    <CreatePost />
+    <CreatePost v-if="isLoggedIn" />
+    <h3 v-else>Log In to Post and Comment!</h3>
     <hr/>
     <section class='posts'>
       <Post
@@ -34,6 +35,11 @@ export default {
     const data = await res.json();
     console.log(data.posts);
     this.posts = data.posts;
+  },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem('User_ID');
+    },
   },
 };
 </script>
