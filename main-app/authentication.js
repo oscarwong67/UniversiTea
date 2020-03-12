@@ -41,7 +41,7 @@ exports.plugin = {
                     return helper.badResponse(h, err);
                 }
             }
-        });
+        }),
 
         //Login to existing profile
         server.route({

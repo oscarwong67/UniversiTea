@@ -7,9 +7,9 @@ const init = async () => {
   });
 
   await server.register([{
-    plugin: require('./apiExample'),
-    plugin: require('./posts'),
-    plugin: require('./authentication'),
+    // plugin: require('./apiExample'),
+    plugin: require('./posts')
+    // plugin: require('./authentication'),
   }]); // register the routes
 
   const start = async function () {
