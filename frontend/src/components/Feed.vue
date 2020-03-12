@@ -33,12 +33,11 @@ export default {
     // TODO: add query parameters similar to how I did it in the job board
     const res = await fetch(`${API_ADDRESS}/api/feed/?page=1&limit=9`);
     const data = await res.json();
-    console.log(data.posts);
+    // console.log(data.posts);
     this.posts = data.posts;
   },
   methods: {
     redirectToPost(postid) {
-      console.log('in redirect');
       this.$router.push(`./viewpost/${postid}`);
     },
   },

@@ -75,5 +75,22 @@ exports.plugin = {
           }
         }
       });
+
+      server.route({
+        method: 'POST',
+        path: '/api/deletePost',
+        handler: async function (request, h) {
+          try {
+            let postid = request.payload.postid;
+            await db.query(`
+              DELETE FROM POSTS
+              WHERE Post_ID=${postid}
+            `);
+            return helper.goodResponse(h);
+          } catch (err) {
+            return helper.badResponse(h, err);
+          }
+        }
+      });
     }
 };

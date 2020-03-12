@@ -64,5 +64,19 @@ exports.plugin = {
         }
       },
     });
+
+    server.route({
+      method: 'POST',
+      path: '/api/deletePost',
+      async handler(request, h) {
+        const url = `http://${postsMicroserviceHost}/api/deletePost`;
+        const res = await fetch(url, {
+          method: 'POST',
+          body: request.payload,
+          headers: { 'Content-Type': 'application/json' },
+        });
+        return res;
+      }
+    });
   },
 };

@@ -32,6 +32,7 @@
           <b-button outlined @click='addMediaUrl' v-if='currentMediaUrl.length > 0'>+</b-button>
         </b-field>
         <b-button @click='handleSavingContent'>Submit</b-button>
+        <b-checkbox>Post Anonymously</b-checkbox>
       </div>
     </section>
 </template>
@@ -60,6 +61,7 @@ export default {
   methods: {
     async handleSavingContent() {
       // TODO: fix hard coded userid and schoolid
+      // TODO handle anonymous
       // console.log(this.content);
       const mediaUrls = this.mediaUrls.map((mediaUrl) => ({
         ...mediaUrl,
@@ -120,5 +122,10 @@ export default {
 .break {
   width: 100%;
   flex-basis: 100%;
+}
+
+.checkbox {
+  padding: .5em;
+  padding-left: 1em;
 }
 </style>
