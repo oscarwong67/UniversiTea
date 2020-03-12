@@ -31,8 +31,33 @@ exports.plugin = {
         .then(
             function(response){
                 response.json().then(function(data) {
-                    const userID = data.User_ID;
-                    //send notification to the user with userID
+                    const userID = data.User_ID; //User who made the new comment
+                    const commentID = data.Comment_ID; //The new comment
+                    const commentContent = data.Content;
+                    const parentComments = [];
+                    const parentUsers = [];
+                    const parentCommentsContents = [];
+                    const parentID = data.Parent_ID;
+
+                    //While there is a parentID, find the id of the parent and the user who posted it
+                    while(parentID != null && parentID != 0){
+                        parentComments.add(parentID);
+                        const getParentURL = `http://${commentsMicroserviceHost}/api/getComment`;
+                        const getParentRes = await fetch(url, {
+                            method: 'GET',
+                            body: {"Comment_ID" : parentID},
+                            headers: { 'Content-Type': 'application/json' },
+                        })
+                        .then(function(response){
+                            parentUsers.add(response.User_ID);
+                            parentCommentsContents.add(resonse.Content);
+                            parentID = response.Parent_ID;
+                        });   
+                    }
+
+                    //Notify all users in the parentUsers list
+                    //that their comment with id and contents (at same index in parentComments list)
+                    //had a reply by userID saying commentContent
                 });
             }
         );
