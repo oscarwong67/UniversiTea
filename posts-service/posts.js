@@ -38,10 +38,19 @@ exports.plugin = {
               let title = request.payload.title;
               let user = request.payload.user;
               let school = request.payload.school;
-              await db.query(
+              let mediaUrls = request.payload.mediaUrls;
+              const postResult = await db.query(
                 'INSERT INTO POSTS SET ?', 
                 { Content: content, Title: title, User_ID: user, School_ID: school }
               );
+              if (!postResult.insertId) throw new Error('Failed to insert post');
+              mediaUrls.forEach(async (mediaUrl) => {
+                const mediaInsertResult = await db.query(
+                  'INSERT INTO MEDIA SET ?',
+                  {Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postResult.insertId}
+                )
+                if (!mediaInsertResult.insertId) throw new Error('Failed to insert media');
+              });
               return helper.goodResponse(h);
             } catch (err) {
               return helper.badResponse(h, err);

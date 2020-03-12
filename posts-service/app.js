@@ -9,8 +9,7 @@ const init = async () => {
     host: 'localhost'
   });
 
-  await server.register([
-    { plugin: require('./posts'), options: {} }]); // register the routes in posts.js
+  await server.register(require('./posts')); // register the routes in posts.js
 
   const start = async function () {
     try {

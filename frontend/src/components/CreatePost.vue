@@ -61,6 +61,13 @@ export default {
       // You have the content to save
       // TODO: fix hard coded userid and schoolid
       // console.log(this.content);
+      const mediaUrls = this.mediaUrls.map((mediaUrl) => {
+        const temp = mediaUrl.split(' - ');
+        return {
+          url: temp[0],
+          type: temp[1],
+        };
+      });
       const res = await fetch(`${API_ADDRESS}/api/addPost`, {
         method: 'POST',
         body: JSON.stringify({
@@ -68,7 +75,11 @@ export default {
           content: this.content,
           user: 1,
           school: 1,
+          mediaUrls,
         }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
       const data = await res.json();
       console.log(data);
