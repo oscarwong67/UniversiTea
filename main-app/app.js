@@ -11,12 +11,6 @@ const init = async () => {
     encoding: 'base64json'
   });
 
-  await server.register([{
-    plugin: require('./apiExample'),
-    plugin: require('./posts'),
-    plugin: require('./authentication'),
-  }]); // register the routes
-
   const start = async function () {
     try {
       await server.register([
@@ -29,8 +23,10 @@ const init = async () => {
         {
           plugin: require('hapi-auth-cookie'),
           options: {}
-        }
+        },
       ]);
+
+      server.route(require('./routes'));
 
       await server.start();
     } catch (err) {
