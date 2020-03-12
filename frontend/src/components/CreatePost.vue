@@ -58,23 +58,22 @@ export default {
   }),
   methods: {
     async handleSavingContent() {
-      console.log(this.content);
-      try {
-        const res = await fetch(`${API_ADDRESS}/api/addPost`, {
-          method: 'POST',
-          // TODO: fix hard coded userid and schoolid
-          body: JSON.stringify({
-            tite: this.content,
-            content: this.content,
-            userId: 0,
-            schoolId: 0,
-          }),
-        });
-        const data = await res.json();
-        console.log(data);
-      } catch (err) {
-        console.error(err);
-      }
+      // You have the content to save
+      // TODO: fix hard coded userid and schoolid
+      // console.log(this.content);
+      const res = await fetch(`${API_ADDRESS}/api/addPost`, {
+        method: 'POST',
+        body: JSON.stringify({
+          title: this.title,
+          content: this.content,
+          user: 1,
+          school: 1,
+        }),
+      });
+      const data = await res.json();
+      console.log(data);
+      this.content = '';
+      this.title = '';
     },
     addMediaUrl() {
       // eslint-disable-next-line no-useless-escape

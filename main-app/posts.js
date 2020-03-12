@@ -18,10 +18,11 @@ exports.plugin = {
       path: '/api/addPost',
       async handler(request, h) {
         const url = `http://${postsMicroserviceHost}/api/addPost`;
-        console.log(url);
+        console.log(request.payload);
         const res = await fetch(url, {
           method: 'POST',
-          body: JSON.stringify(request.payload),
+          // body: JSON.stringify(request.payload),
+          body: request.payload,
           headers: { 'Content-Type': 'application/json' },
         });
         return res;
