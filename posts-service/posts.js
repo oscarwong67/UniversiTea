@@ -78,7 +78,7 @@ exports.plugin = {
 
       server.route({
         method: 'POST',
-        path: '/api/deletePost',
+        path: '/api/deletePost/',
         handler: async function (request, h) {
           try {
             let postid = request.payload.postid;

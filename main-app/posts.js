@@ -67,7 +67,7 @@ exports.plugin = {
 
     server.route({
       method: 'POST',
-      path: '/api/deletePost',
+      path: '/api/deletePost/',
       async handler(request, h) {
         const url = `http://${postsMicroserviceHost}/api/deletePost`;
         const res = await fetch(url, {
@@ -75,8 +75,9 @@ exports.plugin = {
           body: request.payload,
           headers: { 'Content-Type': 'application/json' },
         });
+        console.log(res);
         return res;
-      }
+      },
     });
   }
 };
