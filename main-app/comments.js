@@ -29,8 +29,12 @@ exports.plugin = {
           headers: { 'Content-Type': 'application/json' },
         })
         .then(
-            //API should return the User_ID of the comment. When this is recieved
-            //send a notificaiton to the appropriate user
+            function(response){
+                response.json().then(function(data) {
+                    const userID = data.User_ID;
+                    //send notification to the user with userID
+                });
+            }
         );
         return res;
       }
