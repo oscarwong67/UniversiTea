@@ -1,5 +1,7 @@
 'use strict';
 
+const helper = require('./helper');
+
 const db = require('./db');
 
 exports.plugin = {
@@ -17,24 +19,51 @@ exports.plugin = {
                     let commentID = request.payload.commentID;
                     let content = request.payload.content;
                     let userID = request.payload.userID;
+                    let postID = request.payload.postID;
                     let parentID = request.payload.parentID
                     
                     let event = {
-                        "addComment" : {
-                            "Comment_ID": commentID,
-                            "Content" : content,
-                            "User_ID" : userID,
-                            "Post_ID" : postID,
-                            "Parent_ID" : parentID // CHANGE THIS TO MATCH THE DATABASE ORDER
-                        }
+                        "Action" : "getComment",
+                        "Comment_ID": commentID,
+                        "Content" : content,
+                        "User_ID" : userID,
+                        "Post_ID" : postID,
+                        "Parent_ID" : parentID == undefined ? null : parentID // CHANGE THIS TO MATCH THE DATABASE ORDER
                     };
-                    db.query(
+                    
+                    event = JSON.stringify(event);
+                    await db.query(
                         'INSERT INTO EVENT SET ?',
                         { Content : event } // I dont know if this syntax is correct
                     );
+                    return helper.goodResponse(h, null);
                     //Call function for adding to current state database
                 } catch(err) {
+                    return helper.badResponse(h, err);
+                }
+            }
+        });
+        
+        //COMMENT QUERY FOR TESTING
+        server.route({
+            method: 'GET',
+            path: '/api/getBlob',
+            handler: async function (request, h) {
+                try {
+                
+                    let query = await db.query(
+                        'SELECT Content FROM EVENT'
+                    );
+                    query = JSON.stringify(query[0]);
+                    query = await JSON.parse(query);
+                    let content = JSON.parse(query['Content']);
+                    console.log(content);
+                    return helper.goodResponse(h, null);
 
+                   
+                    //Call function for adding to current state database
+                } catch(err) {
+                    return helper.badResponse(h, err);
                 }
             }
         });
