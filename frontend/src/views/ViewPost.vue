@@ -37,20 +37,9 @@ export default {
     handleEdit() {
       // TODO
     },
-    async handleDelete() {
-      const response = window.confirm('are you sure you want to delete this post?');
-      if (response === true) {
-        const res = await fetch(`${API_ADDRESS}/api/deletePost`, {
-          method: 'POST',
-          body: JSON.stringify({
-            postid: this.post[0].Post_ID,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        console.log(res);
-      }
+    handleDelete() {
+      alert('are you sure you want to delete this post?');
+      // TODO
     },
   },
 };
