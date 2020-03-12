@@ -46,7 +46,7 @@ export default {
       const res = await fetch(`${API_ADDRESS}/api/addPost`, {
         method: 'POST',
         body: JSON.stringify({
-          tite: this.content,
+          title: this.title,
           content: this.content,
           user: 1,
           school: 1,
@@ -54,6 +54,8 @@ export default {
       });
       const data = await res.json();
       console.log(data);
+      this.content = '';
+      this.title = '';
     },
   },
 };
