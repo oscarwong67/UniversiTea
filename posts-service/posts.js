@@ -54,10 +54,11 @@ exports.plugin = {
         handler: async function (request, h) {
           try {
             let postid = parseInt(request.query.postid);
-            const post = await db.query(
-              'SELECT * FROM POSTS WHERE ?',
-              { Post_ID: postid }
-            );
+            const post = await db.query(`
+              SELECT P.*, S.SchoolName, U.FName 
+              FROM POSTS AS P, USER AS U, SCHOOL AS S 
+              WHERE P.Post_ID=${ postid } AND P.User_ID=U.User_ID AND P.School_ID=S.School_ID
+            `);
             console.log(post);
             return { post };
           } catch (err) {

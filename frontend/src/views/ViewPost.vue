@@ -1,18 +1,16 @@
 <template>
-  <div class= "viewpost">
+  <div class= "viewpost container">
     <hr/>
-    <div class = 'container'>
-      <section class='posts'>
+    <div class = 'posts container'>
         <Post
           :key='post[0].Post_ID'
-          :poster="{name: post[0].Fname, degreeType: post[0].Degree_Type}"
+          :poster="{name: post[0].FName, degreeType: post[0].Degree_Type}"
           :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
         />
-        <hr/>
-        <!-- <div class = "button has-addons is-right"> -->
-          <b-button @click='handleEdit'>Edit</b-button>
-        <!-- </div> -->
-      </section>
+      <div class = 'buttons container level-right'>
+        <b-button @click='handleEdit'>Edit</b-button>
+        <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -30,7 +28,6 @@ export default {
     Post,
   },
   async mounted() {
-    // TODO: handle post not found
     const id = this.$route.params.postid;
     const res = await fetch(`${API_ADDRESS}/api/getPost/?postid=${id}`);
     const data = await res.json();
@@ -40,6 +37,24 @@ export default {
     handleEdit() {
       // TODO
     },
+    handleDelete() {
+      alert('are you sure you want to delete this post?');
+      // TODO
+    },
   },
 };
 </script>
+
+<style scoped>
+.buttons {
+  padding: 1em;
+  background-color: white;
+  border: none;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.posts {
+  border-radius: 6px;
+  background-color: white;
+}
+</style>
