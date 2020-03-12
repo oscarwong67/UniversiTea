@@ -40,6 +40,9 @@ exports.plugin = {
                     const parentID = data.Parent_ID;
 
                     //While there is a parentID, find the id of the parent and the user who posted it
+                    //An alternative to speed this up would be to put another function in the comment service 
+                    //that returns a large list of everything necessary.
+                    //This would reduce overhead of making an HTTP request for every nested comment.
                     while(parentID != null && parentID != 0){
                         parentComments.add(parentID);
                         const getParentURL = `http://${commentsMicroserviceHost}/api/getComment`;
