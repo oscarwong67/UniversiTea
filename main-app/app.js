@@ -6,10 +6,15 @@ const init = async () => {
     host: 'localhost',
   });
 
+  server.state('session', {
+    ttl: 1000 * 60 * 60,
+    encoding: 'base64json'
+  });
+
   await server.register([{
-    // plugin: require('./apiExample'),
-    plugin: require('./posts')
-    // plugin: require('./authentication'),
+    plugin: require('./apiExample'),
+    plugin: require('./posts'),
+    plugin: require('./authentication'),
   }]); // register the routes
 
   const start = async function () {

@@ -62,6 +62,19 @@ exports.plugin = {
                     if(match) {
                         credentials.User_ID = user[0].User_ID;
                         credentials.School_ID = user[0].School_ID;
+
+                        //cookie creation
+                        let cookie = request.state.session;
+                        if (!cookie) {
+                          cookie = {
+                            username: inputEmail,
+                            firstVisit: false
+                          };
+                        }
+                  
+                        cookie.lastVisit = Date.now();
+                        h.response().state('session', cookie);
+                        //cookie found as request.state.session
                     }
                         return helper.goodResponse(h, credentials);
                 } catch(err){
