@@ -31,20 +31,21 @@ module.exports = [
           Fname, Lname, Email, password, Degree_Type,
           School_ID: schoolResult[0].School_ID
         });
-        return helper.goodResponse(h);
+        return helper.goodResponse(h, { User_ID: signupResults.insertId, School_ID: schoolResult[0].School_ID, isValid: true });
       } catch (err) {
         return helper.badResponse(h, err);
       }
     }
   },
   {
-    method: 'GET',
+    method: 'POST',
     path: '/api/authentication/login',
     handler: async function (request, h) {
+      console.log('HELP');
       try {
         //params
-        const inputEmail = request.query.email;
-        const inputPassword = request.query.password;
+        const inputEmail = request.payload.email;
+        const inputPassword = request.payload.password;
         //find account
         const user = await db.query('SELECT * FROM USER WHERE Email=?;', [inputEmail]);
         if (!user.length) {
