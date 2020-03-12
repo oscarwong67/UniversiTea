@@ -53,7 +53,7 @@ exports.plugin = {
         path: '/api/getPost/',
         handler: async function (request, h) {
           try {
-            let postid = parseInt(request.query.postid) || 1;
+            let postid = parseInt(request.query.postid);
             const post = await db.query(
               'SELECT * FROM POSTS WHERE ?',
               { Post_ID: postid }
