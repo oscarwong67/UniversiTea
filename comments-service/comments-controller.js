@@ -2,7 +2,6 @@
 
 const helper = require('./helper');
 
-const db = require('./db');
 const commandModel = require('./command-model');
 
 exports.plugin = {
