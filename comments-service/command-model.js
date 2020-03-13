@@ -46,14 +46,14 @@ const editComment = async (request) => {
     return;
 }
 
-// deleteing a comment in the event store database
+// deleting a comment in the event store database
 // Input: Comment ID
 // Output: Void
 const deleteComment = async (request) => {
     let commentID = request.payload.commentID;
                     
     let event = {
-        "Action" : "deleteComment",
+        "Action": "deleteComment",
         "Comment_ID": commentID,
     };
     event = JSON.stringify(event);

@@ -40,7 +40,15 @@ const editComment = async (request) => {
 }
 
 const deleteComment = async (request) => {
+  let commentID = request.payload.commentID;
 
+  let result = await db.query(
+    `DELETE FROM COMMENT 
+    WHERE Comment_ID = '${commentID}'`,
+  );
+  console.log(result);
+
+  return;
 }
 
 const getComments = async (request) => {

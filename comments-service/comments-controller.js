@@ -44,7 +44,7 @@ exports.plugin = {
             }
         });
 
-        // deleteing a comment in the event store database
+        // deleting a comment in the event store database
         // Input: Comment ID
         // Output: Void
         server.route({
@@ -53,6 +53,7 @@ exports.plugin = {
             handler: async function (request, h) {
                 try {
                     await commandModel.deleteComment(request);
+                    await queryModel.deleteComment(request);
                     return helper.goodResponse(h, null);
                 } catch(err) {
                     return helper.badResponse(h, err);
