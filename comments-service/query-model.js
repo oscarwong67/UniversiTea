@@ -3,19 +3,19 @@
 const db = require('./db');
 const helper = require('./helper');
 
-const addComment = (request) => {
+const addComment = async (request) => {
 
 }
 
-const editComment = (request) => {
+const editComment = async (request) => {
 
 }
 
-const deleteComment = (request) => {
+const deleteComment = async (request) => {
 
 }
 
-const getComments = (request) => {
+const getComments = async (request) => {
 
 }
 
