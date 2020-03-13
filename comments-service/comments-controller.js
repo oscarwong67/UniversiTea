@@ -1,8 +1,6 @@
 'use strict';
 
 const helper = require('./helper');
-
-const db = require('./db');
 const commandModel = require('./command-model');
 
 exports.plugin = {
@@ -18,8 +16,8 @@ exports.plugin = {
             handler: async function (request, h) {
                 try {
                     await commandModel.addComment(request)
+                    
                     return helper.goodResponse(h, null);
-                    //Call function for adding to current state database
                 } catch(err) {
                     return helper.badResponse(h, err);
                 }
