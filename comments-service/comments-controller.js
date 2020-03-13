@@ -3,6 +3,7 @@
 const helper = require('./helper');
 
 const commandModel = require('./command-model');
+const queryModel = require('./query-model');
 
 exports.plugin = {
     pkg: require('./package.json'),
