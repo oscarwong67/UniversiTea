@@ -15,9 +15,4 @@ const deleteComment = (request) => {
 
 }
 
-const getComments = (request) => {
-
-}
-
-//IF YOU MAKE A NEW FUNCTION, ADD IT HERE OR IT WONT WORK
-module.exports = {addComment, editComment, deleteComment, getComments};
+module.exports = {addComment, editComment, deleteComment};
