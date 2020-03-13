@@ -1,7 +1,5 @@
 'use strict';
 
-const helper = require('./helper');
-
 const db = require('./db');
 
 exports.plugin = {
@@ -16,12 +14,12 @@ exports.plugin = {
             path: '/api/getComment',
             handler: async function (request, h) {
                 try {
-                    let pid = parseInt(request.query.pid);
+                    var pid = parseInt(request.query.pid);
                     const comments = db.query(
                         `
                         SELECT *
                         FROM COMMENT
-                        WHERE User_ID = ${pid}
+                        WHERE Post_ID = ${pid}
                         `
                     ); // I dont know if this syntax is correct
                     return {comments};
@@ -37,7 +35,7 @@ exports.plugin = {
             path: '/api/getEvent',
             handler: async function (request, h) {
                 try {
-                    let pid = parseInt(request.query.pid);
+                    var pid = parseInt(request.query.pid);
                     const events = db.query(
                         `
                         SELECT *

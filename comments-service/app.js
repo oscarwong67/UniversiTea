@@ -8,7 +8,7 @@ const init = async () => {
         host: 'localhost'
     });
 
-    await server.register(require('./comments-controller')); // register the routes in posts.js
+    await server.register(require('./comments-command')); // register the routes in posts.js
 
     await server.start();
     console.log('Server running on %s', server.info.uri);
