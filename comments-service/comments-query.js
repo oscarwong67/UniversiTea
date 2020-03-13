@@ -19,7 +19,7 @@ exports.plugin = {
                         `
                         SELECT *
                         FROM COMMENT
-                        WHERE Post_ID = ${pid}
+                        WHERE User_ID = ${pid}
                         `
                     ); // I dont know if this syntax is correct
                     return {comments};
