@@ -23,11 +23,7 @@ exports.plugin = {
                     let parentID = request.payload.parentID
                     
                     let event = {
-<<<<<<< HEAD
                         "Action" : "addComment",
-=======
-                        "Action" : "getComment",
->>>>>>> parent of 3e4dca3... separated controller and model for ES
                         "Comment_ID": commentID,
                         "Content" : content,
                         "User_ID" : userID,
@@ -49,7 +45,6 @@ exports.plugin = {
         });
         
         //COMMENT QUERY FOR TESTING
-<<<<<<< HEAD
         // server.route({
         //     method: 'GET',
         //     path: '/api/getBlob',
@@ -72,30 +67,6 @@ exports.plugin = {
         //         }
         //     }
         // });
-=======
-        server.route({
-            method: 'GET',
-            path: '/api/getBlob',
-            handler: async function (request, h) {
-                try {
-                
-                    let query = await db.query(
-                        'SELECT Content FROM EVENT'
-                    );
-                    query = JSON.stringify(query[0]);
-                    query = await JSON.parse(query);
-                    let content = JSON.parse(query['Content']);
-                    console.log(content);
-                    return helper.goodResponse(h, null);
-
-                   
-                    //Call function for adding to current state database
-                } catch(err) {
-                    return helper.badResponse(h, err);
-                }
-            }
-        });
->>>>>>> parent of 3e4dca3... separated controller and model for ES
 
         // editing a comment in the event store database
         // Input: Comment ID, Content
