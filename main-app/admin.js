@@ -19,19 +19,45 @@ module.exports = [
         }
     },
     {
-        //delete post
+        //add new school
         method: 'POST',
-        path: '/api/admin/deletePost',
+        path: '/api/admin/addSchool',
         handler: async function (request, h) {
-            
+            try {
+                const schoolName = request.payload.schoolName;
+                const addSchool = await db.query('INSERT INTO SCHOOL SET SchoolName=?', [schoolName]);
+                return helper.goodResponse(h, { schoolID: addSchool.insertId });
+            } catch(err) {
+                return helper.badResponse(h, err);
+            }
         }
     },
     {
-        //delete comment
+        // delete school and forum??
         method: 'POST',
-        path: '/api/admin/deleteComment',
+        path: '/api/admin/deleteSchool',
         handler: async function (request, h) {
-            
+            try {
+                return;
+            } catch (err) {
+                return helper.badResponse(h, err);
+            }
+        }
+    },
+    {
+        //edit school name
+        method: 'POST',
+        path: '/api/admin/editSchool',
+        handler: async function (request, h) {
+            try {
+                const oldSchoolName = request.payload.schoolName;
+                const newSchoolName = request.payload.newSchoolName;
+                const updateSchoolName = await db.query('UPDATE SCHOOL SET SchoolName=? WHERE SchoolName=?', [newSchoolName, oldSchoolName]);
+                if(!updateSchoolName.affectedRows) throw new Error('No school with name ${oldSchoolName} was found');
+                return helper.goodResponse(h, newSchoolName);
+            } catch (err) {
+                return helper.badResponse(h, err);
+            }
         }
     }
 ]
