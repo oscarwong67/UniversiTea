@@ -9,14 +9,14 @@ const addComment = async (request) => {
     let content = request.payload.content;
     let userID = request.payload.userID;
     let postID = request.payload.postID;
-    let parentID = request.payload.parentID
+    let parentID = request.payload.parentID == undefined ? null : request.payload.parentID;
     let event = {
-        "Action" : "getComment",
+        "Action" : "addComment",
         "Comment_ID": commentID,
         "Content" : content,
         "User_ID" : userID,
         "Post_ID" : postID,
-        "Parent_ID" : parentID == undefined ? null : parentID
+        "Parent_ID" : parentID
     };
     
     event = JSON.stringify(event);

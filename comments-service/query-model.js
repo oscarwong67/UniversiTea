@@ -3,23 +3,40 @@
 const db = require('./db');
 const helper = require('./helper');
 
-// must first determine if commentID already exists in database, then act accordingly
-const handleEvent = async (request) => {
+
+const addComment = async (request) => {
   let commentID = request.payload.commentID;
   let content = request.payload.content;
   let userID = request.payload.userID;
   let postID = request.payload.postID;
-  let parentID = request.payload.parentID;
+  let parentID = request.payload.parentID == undefined ? null : request.payload.parentID;
 
-  // i wanted to query to check if a comment exist but i just realized idk if its gonna work bc its a POST method
-}
+  let ver = 1;
 
-const addComment = async (request) => {
+  await db.query(
+    'INSERT INTO COMMENT SET ?',
+    { 
+      Comment_ID: commentID,
+      Version: ver, 
+      User_ID: userID,
+      Content: content,
+      Post_ID: postID,
+      Parent_ID: parentID
+    }
+  );
 
+  return;
 }
 
 const editComment = async (request) => {
+  let commentID = request.payload.commentID;
+  let newContent = request.payload.newContent;
 
+  await db.query(
+    `UPDATE COMMENT SET Content = '${newContent}' WHERE Comment_ID = '${commentID}'`,
+  );
+
+  return;
 }
 
 const deleteComment = async (request) => {

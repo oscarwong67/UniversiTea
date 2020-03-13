@@ -17,7 +17,8 @@ exports.plugin = {
             path: '/api/addComment',
             handler: async function (request, h) {
                 try {
-                    await commandModel.addComment(request)
+                    await commandModel.addComment(request);
+                    await queryModel.addComment(request);
                     return helper.goodResponse(h, null);
                     //Call function for adding to current state database
                 } catch(err) {
@@ -35,6 +36,7 @@ exports.plugin = {
             handler: async function (request, h) {
                 try {
                     await commandModel.editComment(request);
+                    await queryModel.editComment(request);
                     return helper.goodResponse(h, null);
                 } catch(err) {
                     return helper.badResponse(h, err);
