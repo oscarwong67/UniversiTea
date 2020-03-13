@@ -32,7 +32,7 @@
           <b-button outlined @click='addMediaUrl' v-if='currentMediaUrl.length > 0'>+</b-button>
         </b-field>
         <b-button @click='handleSavingContent'>Submit</b-button>
-        <b-checkbox>Post Anonymously</b-checkbox>
+        <b-checkbox v-model='isAnonymous'>Post Anonymously</b-checkbox>
       </div>
     </section>
 </template>
@@ -57,6 +57,7 @@ export default {
     content: this ? Object.assign('', this.defaultContent) : '',
     mediaUrls: this ? Object.assign([], this.mediaUrls) : '',
     currentMediaUrl: '',
+    isAnonymous: false,
   }),
   methods: {
     async handleSavingContent() {
@@ -69,7 +70,7 @@ export default {
         body: JSON.stringify({
           title: this.title,
           content: this.content,
-          user: localStorage.getItem('User_ID'),
+          user: this.isAnonymous ? null : localStorage.getItem('User_ID'),
           school: localStorage.getItem('School_ID'),
           mediaUrls,
         }),
