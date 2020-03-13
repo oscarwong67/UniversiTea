@@ -1,5 +1,7 @@
 'use strict';
 
+const helper = require('./helper');
+
 const db = require('./db');
 
 exports.plugin = {
@@ -14,7 +16,7 @@ exports.plugin = {
             path: '/api/getComment',
             handler: async function (request, h) {
                 try {
-                    var pid = parseInt(request.query.pid);
+                    let pid = parseInt(request.query.pid);
                     const comments = db.query(
                         `
                         SELECT *
@@ -35,7 +37,7 @@ exports.plugin = {
             path: '/api/getEvent',
             handler: async function (request, h) {
                 try {
-                    var pid = parseInt(request.query.pid);
+                    let pid = parseInt(request.query.pid);
                     const events = db.query(
                         `
                         SELECT *

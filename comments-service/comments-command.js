@@ -23,7 +23,7 @@ exports.plugin = {
                     let parentID = request.payload.parentID
                     
                     let event = {
-                        "Action" : "getComment",
+                        "Action" : "addComment",
                         "Comment_ID": commentID,
                         "Content" : content,
                         "User_ID" : userID,
@@ -45,28 +45,28 @@ exports.plugin = {
         });
         
         //COMMENT QUERY FOR TESTING
-        server.route({
-            method: 'GET',
-            path: '/api/getBlob',
-            handler: async function (request, h) {
-                try {
+        // server.route({
+        //     method: 'GET',
+        //     path: '/api/getBlob',
+        //     handler: async function (request, h) {
+        //         try {
                 
-                    let query = await db.query(
-                        'SELECT Content FROM EVENT'
-                    );
-                    query = JSON.stringify(query[0]);
-                    query = await JSON.parse(query);
-                    let content = JSON.parse(query['Content']);
-                    console.log(content);
-                    return helper.goodResponse(h, null);
+        //             let query = await db.query(
+        //                 'SELECT Content FROM EVENT'
+        //             );
+        //             query = JSON.stringify(query[0]);
+        //             query = await JSON.parse(query);
+        //             let content = JSON.parse(query['Content']);
+        //             console.log(content);
+        //             return helper.goodResponse(h, null);
 
                    
-                    //Call function for adding to current state database
-                } catch(err) {
-                    return helper.badResponse(h, err);
-                }
-            }
-        });
+        //             //Call function for adding to current state database
+        //         } catch(err) {
+        //             return helper.badResponse(h, err);
+        //         }
+        //     }
+        // });
 
         // editing a comment in the event store database
         // Input: Comment ID, Content
