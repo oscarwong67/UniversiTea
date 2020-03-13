@@ -68,7 +68,7 @@ exports.plugin = {
               FROM POSTS AS P, USER AS U, SCHOOL AS S 
               WHERE P.Post_ID=${ postid } AND P.User_ID=U.User_ID AND P.School_ID=S.School_ID
             `);
-            console.log(post);
+            // console.log(post);
             return { post };
           } catch (err) {
             return helper.badResponse(h, err);
@@ -81,10 +81,13 @@ exports.plugin = {
         path: '/api/deletePost/',
         handler: async function (request, h) {
           try {
+            console.log('here');
+            console.log(request.payload);
             let postid = request.payload.postid;
+            console.log(postid);
             await db.query(`
               DELETE FROM POSTS
-              WHERE Post_ID=${postid}
+              WHERE Post_ID=${ postid }
             `);
             return helper.goodResponse(h);
           } catch (err) {

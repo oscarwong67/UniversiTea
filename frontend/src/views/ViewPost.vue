@@ -29,6 +29,7 @@ export default {
   },
   async mounted() {
     const id = this.$route.params.postid;
+    console.log(id);
     const res = await fetch(`${API_ADDRESS}/api/getPost/?postid=${id}`);
     const data = await res.json();
     this.post = data.post;
@@ -37,9 +38,28 @@ export default {
     handleEdit() {
       // TODO
     },
-    handleDelete() {
-      alert('are you sure you want to delete this post?');
-      // TODO
+    async handleDelete() {
+      this.$buefy.dialog.confirm({
+        message: 'Are you sure you want to <b>delete</b> this post? This action cannot be undone.',
+        confirmText: 'Delete Post',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: async () => {
+          console.log(this.post[0].Post_ID);
+          const res = await fetch(`${API_ADDRESS}/api/deletePost/`, {
+            method: 'POST',
+            body: JSON.stringify({
+              postid: this.post[0].Post_ID,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          console.log(res);
+          this.$buefy.toast.open('Post deleted!');
+          this.$route.push('/');
+        },
+      });
     },
   },
 };
