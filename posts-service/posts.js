@@ -38,9 +38,10 @@ exports.plugin = {
               let user = request.payload.user;
               let school = request.payload.school;
               let mediaUrls = request.payload.mediaUrls;
+              let isAnonymous = request.payload.isAnonymous;
               const postResult = await db.query(
                 'INSERT INTO POSTS SET ?', 
-                { Content: content, Title: title, User_ID: user, School_ID: school }
+                { Content: content, Title: title, User_ID: user, School_ID: school, Is_Anonymous: isAnonymous }
               );
               if (!postResult.insertId) throw new Error('Failed to insert post');
               mediaUrls.forEach(async (mediaUrl) => {
@@ -96,7 +97,7 @@ exports.plugin = {
       // TODO: fix this after anon posts are fixed
       server.route({
         method: 'POST',
-        path: 'api/editPost',
+        path: '/api/editPost',
         handler: async function (request, h) {
           try {
             let postid = request.payload.postid;
@@ -104,11 +105,12 @@ exports.plugin = {
             let title = request.payload.title;
             let user = request.payload.user;
             let mediaUrls = request.payload.mediaUrls;
+            let isAnonymous = request.payload.isAnonymous;
             const post = await db.query(
               `UPDATE POSTS
               SET ?
               WHERE Post_ID=${ postid }`,
-              { Content: content, Title: title, User_ID: user }
+              { Content: content, Title: title, User_ID: user, Is_Anonymous: isAnonymous }
             )
             return helper.goodResponse(h);
           } catch (err) {
