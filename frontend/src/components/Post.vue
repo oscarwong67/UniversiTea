@@ -1,7 +1,8 @@
 <template>
  <div class='container post'>
      <div class='post-info'>
-        <span class='posterName'>{{this.poster.name || 'Anonymous'}}&nbsp;(</span>
+        <span class='posterName'>{{this.poster.isAnonymous ?
+            'Anonymous' : this.poster.name}}&nbsp;(</span>
         <span class='degreeType'>{{this.poster.degreeType}} Student&nbsp;</span>
         <span class='school'>@ {{this.school}})</span>
      </div>

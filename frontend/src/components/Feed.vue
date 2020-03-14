@@ -9,7 +9,7 @@
         @click.native='redirectToPost(post.Post_ID)'
         v-for='post in posts'
         :key='post.Post_ID'
-        :poster="{name: post.Fname, degreeType: post.Degree_Type}"
+        :poster="{name: post.Fname, degreeType: post.Degree_Type, isAnonymous: post.Is_Anonymous}"
         :title="post.Title" :content="post.Content" :school="post.SchoolName"
       />
     </section>

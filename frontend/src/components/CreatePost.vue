@@ -55,7 +55,7 @@ export default {
     ],
     title: this ? Object.assign('', this.defaultTitle) : '',
     content: this ? Object.assign('', this.defaultContent) : '',
-    mediaUrls: this ? Object.assign([], this.mediaUrls) : '',
+    mediaUrls: this ? Object.assign([], this.mediaUrls) : [],
     currentMediaUrl: '',
     isAnonymous: false,
   }),
@@ -70,7 +70,8 @@ export default {
         body: JSON.stringify({
           title: this.title,
           content: this.content,
-          user: this.isAnonymous ? null : localStorage.getItem('User_ID'),
+          user: localStorage.getItem('User_ID'),
+          isAnonymous: this.isAnonymous,
           school: localStorage.getItem('School_ID'),
           mediaUrls,
         }),
