@@ -36,6 +36,10 @@ const editComment = async (request) => {
     `UPDATE COMMENT SET Content = '${newContent}' WHERE Comment_ID = '${commentID}'`,
   );
 
+  await db.query(
+    ` UPDATE COMMENT SET Version = Version + 1 WHERE Comment_ID = '${commentID}'`
+  );
+
   return;
 }
 
