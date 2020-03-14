@@ -51,6 +51,7 @@ export default {
     const id = this.$route.params.postid;
     const res = await fetch(`${API_ADDRESS}/api/getPost/?postid=${id}`);
     const data = await res.json();
+    console.log(data);
     this.post = data.post;
   },
   methods: {
@@ -74,7 +75,7 @@ export default {
             },
           });
           this.$buefy.toast.open('Post deleted!');
-          this.$route.push('/');
+          this.$router.push('/');
         },
       });
     },

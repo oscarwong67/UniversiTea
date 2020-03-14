@@ -7,7 +7,6 @@
     :oldMediaUrls="this.mediaUrls" :oldAnonymous="this.isAnonymous"
     @titleChange='updateTitle($event)'
     @contentChange='updateContent($event)'
-
     @mediaRm='removeMediaUrl($event)'
     @anonChange='updateAnon($event)'
   />
@@ -49,6 +48,7 @@ export default {
     updateContent(newContent) {
       this.content = newContent;
     },
+    // NOTE: i dont think we need addMediaUrl anymore but gonna leave it here just incase
     addMediaUrl(currentMediaUrl) {
       // eslint-disable-next-line no-useless-escape
       const extension = currentMediaUrl.split(/\#|\?/)[0].split('.').pop().trim().toLowerCase();
@@ -63,7 +63,6 @@ export default {
         type,
       });
       console.log(this.mediaUrls);
-      // currentMediaUrl = '';
     },
     removeMediaUrl(index) {
       console.log(this.mediaUrls);
@@ -78,6 +77,7 @@ export default {
       this.$buefy.dialog.confirm({
         message: 'Are you sure you want to delete the changes you made to this post? This action cannot be undone.',
         confirmText: 'Delete Changes',
+        cancelText: 'Continue Editing',
         type: 'is-warning',
         hasIcon: true,
         onConfirm: () => {

@@ -64,13 +64,19 @@ exports.plugin = {
         handler: async function (request, h) {
           try {
             let postid = parseInt(request.query.postid);
+            console.log(postid);
             const post = await db.query(`
               SELECT P.*, S.SchoolName, U.FName, U.User_ID
-              FROM POSTS AS P, USER AS U, SCHOOL AS S 
+              FROM POSTS AS P, USER AS U, SCHOOL AS S
               WHERE P.Post_ID=${ postid } AND P.User_ID=U.User_ID AND P.School_ID=S.School_ID
             `);
-            // console.log(post);
-            return { post };
+            const media = await db.query(`
+              SELECT *
+              FROM MEDIA
+              WHERE Post_ID=${ postid }
+            `)
+            console.log(post);
+            return helper.goodResponse, { post, media };
           } catch (err) {
             return helper.badResponse(h, err);
           }
@@ -85,6 +91,10 @@ exports.plugin = {
             let postid = request.payload.postid;
             await db.query(`
               DELETE FROM POSTS
+              WHERE Post_ID=${ postid }
+            `);
+            await db.query(`
+              DELETE FROM MEDIA
               WHERE Post_ID=${ postid }
             `);
             return helper.goodResponse(h);
@@ -112,6 +122,18 @@ exports.plugin = {
               WHERE Post_ID=${ postid }`,
               { Content: content, Title: title, Is_Anonymous: isAnonymous }
             )
+            await db.query(`
+              DELETE FROM MEDIA
+              WHERE Post_ID=${ postid }
+            `);
+            if (!postResult.insertId) throw new Error('Failed to insert post');
+            mediaUrls.forEach(async (mediaUrl) => {
+              const mediaInsertResult = await db.query(
+                'INSERT INTO MEDIA SET ?',
+                {Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postResult.insertId}
+              )
+              if (!mediaInsertResult.insertId) throw new Error('Failed to insert media');
+            });
             return helper.goodResponse(h);
           } catch (err) {
             return helper.badResponse(h, err);
