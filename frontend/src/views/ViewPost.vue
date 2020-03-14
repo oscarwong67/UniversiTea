@@ -18,7 +18,10 @@
     </div>
   </div>
   <div class='edit container' v-else>
-    <CreatePost/>
+    <CreatePost
+      :defaultTitle="post[0].Title"
+      :defaultContent="post[0].Content"
+    />
   </div>
 </div>
 </template>

@@ -75,8 +75,21 @@ module.exports = [
         body: JSON.stringify(request.payload),
         headers: { 'Content-Type': 'application/json' },
       });
-      // console.log('here');
-      // console.log(res);
+      return res;
+    }
+  },
+
+  // TODO: test this after anon posts is fixed
+  {
+    method: 'POST',
+    path: '/api/editPost/',
+    async handler(request, h) {
+      const url = `http://${postsMicroserviceHost}/api/editPost/`;
+      const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(request.payload),
+        headers: { 'Content-Type': 'application/json' },
+      });
       return res;
     }
   },

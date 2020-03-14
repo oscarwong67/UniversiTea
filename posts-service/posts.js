@@ -81,10 +81,7 @@ exports.plugin = {
         path: '/api/deletePost/',
         handler: async function (request, h) {
           try {
-            console.log('here');
-            console.log(request.payload);
             let postid = request.payload.postid;
-            console.log(postid);
             await db.query(`
               DELETE FROM POSTS
               WHERE Post_ID=${ postid }
@@ -95,5 +92,29 @@ exports.plugin = {
           }
         }
       });
+
+      // TODO: fix this after anon posts are fixed
+      server.route({
+        method: 'POST',
+        path: 'api/editPost',
+        handler: async function (request, h) {
+          try {
+            let postid = request.payload.postid;
+            let content = request.payload.content;
+            let title = request.payload.title;
+            let user = request.payload.user;
+            let mediaUrls = request.payload.mediaUrls;
+            const post = await db.query(
+              `UPDATE POSTS
+              SET ?
+              WHERE Post_ID=${ postid }`,
+              { Content: content, Title: title, User_ID: user }
+            )
+            return helper.goodResponse(h);
+          } catch (err) {
+            return helper.badResponse(h, err);
+          }
+        }
+      })
     }
 };
