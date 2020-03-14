@@ -97,20 +97,20 @@ exports.plugin = {
       // TODO: fix this after anon posts are fixed
       server.route({
         method: 'POST',
-        path: '/api/editPost',
+        path: '/api/editPost/',
         handler: async function (request, h) {
+          console.log(request.payload);
           try {
             let postid = request.payload.postid;
             let content = request.payload.content;
             let title = request.payload.title;
-            let user = request.payload.user;
             let mediaUrls = request.payload.mediaUrls;
             let isAnonymous = request.payload.isAnonymous;
             const post = await db.query(
               `UPDATE POSTS
               SET ?
               WHERE Post_ID=${ postid }`,
-              { Content: content, Title: title, User_ID: user, Is_Anonymous: isAnonymous }
+              { Content: content, Title: title, Is_Anonymous: isAnonymous }
             )
             return helper.goodResponse(h);
           } catch (err) {

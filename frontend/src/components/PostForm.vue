@@ -1,40 +1,46 @@
 <template>
-  <section class="create-post section">
-    <div class='container'>
-      <b-field label="Create a Post" >
-        <b-input v-model="title" placeholder='Post Title' maxlength='100'></b-input>
-      </b-field>
-      <b-field>
-        <vue-editor
-          v-model="content"
-          placeholder='Start typing!'
-          :editor-toolbar="customToolbar"
-        />
-      </b-field>
-      <b-field
-        grouped
-        label="Image/Video URLs"
-        custom-class="url-input"
-        class='url-input'
-      >
-        <div class='break' />
-        <p class='break' v-for="(mediaUrl, idx) in mediaUrls" :key="mediaUrl">
-          {{mediaUrl}}
-          <b-button outlined @click='removeMediaUrl(idx)'>x</b-button>
-        </p>
-        <b-input
-          v-model="currentMediaUrl"
-          placeholder="https://example.com"
-          type="text"
-          maxlength='200'
-          expanded
-        />
-        <b-button outlined @click='addMediaUrl' v-if='currentMediaUrl.length > 0'>+</b-button>
-      </b-field>
-      <!-- <b-button @click='handleSavingContent'>Submit</b-button> -->
-      <b-checkbox v-model='isAnonymous'>Post Anonymously</b-checkbox>
-    </div>
-  </section>
+    <section class="create-post section">
+      <div class='container'>
+        <b-field>
+          <b-input
+            v-model="title" placeholder='Post Title'
+            maxlength='100' @input='handleTitleChange'>
+          </b-input>
+        </b-field>
+        <b-field>
+          <vue-editor
+            v-model="content"
+            placeholder='Start typing!'
+            :editor-toolbar="customToolbar"
+            @input='handleContentChange'
+          />
+        </b-field>
+        <b-field
+          grouped
+          label="Image/Video URLs"
+          custom-class="url-input"
+          class='url-input'
+        >
+          <div class='break' />
+          <p class='break' v-for="(mediaUrl, idx) in mediaUrls" :key="mediaUrl">
+            {{mediaUrl}}
+            <b-button outlined @click='handleRmMediaChange(idx)'>x</b-button>
+          </p>
+          <b-input
+            v-model="currentMediaUrl"
+            placeholder="https://example.com"
+            type="text"
+            maxlength='200'
+            expanded
+          />
+          <b-button outlined
+            @click='handleAddMediaChange'
+            v-if='currentMediaUrl.length > 0'
+          >+</b-button>
+        </b-field>
+        <b-checkbox v-model='isAnonymous' @input='handleAnonChange'>Post Anonymously</b-checkbox>
+      </div>
+    </section>
 </template>
 
 <script>
@@ -51,13 +57,39 @@ export default {
       [{ list: 'ordered' }, { list: 'bullet' }],
       ['code-block'],
     ],
-    title: this ? Object.assign('', this.defaultTitle) : '',
-    content: this ? Object.assign('', this.defaultContent) : '',
-    mediaUrls: this ? Object.assign([], this.mediaUrls) : '',
+    title: '',
+    content: '',
+    mediaUrls: [],
     currentMediaUrl: '',
     isAnonymous: false,
   }),
+  props: ['oldTitle', 'oldContent', 'oldMediaUrls', 'oldAnonymous'],
+  created() {
+    this.title = this.$props.oldTitle;
+    this.content = this.$props.oldContent;
+    if (this.$props.oldMediaUrls !== undefined) {
+      this.mediaUrls = this.$props.oldMediaUrls;
+    }
+    this.isAnonymous = this.$props.oldAnonymous;
+  },
   methods: {
+    handleTitleChange() {
+      this.$emit('titleChange', this.title);
+    },
+    handleContentChange() {
+      this.$emit('contentChange', this.content);
+    },
+    handleAddMediaChange() {
+      this.$emit('mediaAdd', this.currentMediaUrl);
+      this.addMediaUrl();
+    },
+    handleRmMediaChange(index) {
+      this.$emit('mediaRm', index);
+      this.mediaUrls.splice(index);
+    },
+    handleAnonChange() {
+      this.$emit('anonChange', this.isAnonymous);
+    },
     addMediaUrl() {
       // eslint-disable-next-line no-useless-escape
       const extension = this.currentMediaUrl.split(/\#|\?/)[0].split('.').pop().trim().toLowerCase();
@@ -73,32 +105,26 @@ export default {
       });
       this.currentMediaUrl = '';
     },
-    removeMediaUrl(index) {
-      this.mediaUrls.splice(index);
-    },
   },
 };
-</script>
 
+</script>
 <style scoped>
-.bcreate-post {
+.create-post {
   background-color: white;
   order: 2px solid white;
-  border-radius: 6px;
   padding: 1em;
 }
-
 .url-input {
   flex-wrap: wrap;
 }
-
 .break {
   width: 100%;
   flex-basis: 100%;
 }
-
 .checkbox {
   padding: .5em;
-  padding-left: 1em;
+  padding-top: 0px;
+  padding-left: none;
 }
 </style>

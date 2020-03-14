@@ -3,11 +3,15 @@
 <hr/>
   <div class= "view container" v-if="!isEditing">
     <div class = 'posts container' v-if="postExists">
-        <Post
-          :key='post[0].Post_ID'
-          :poster="{name: post[0].FName, degreeType: post[0].Degree_Type}"
-          :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
-        />
+      <Post
+        :key='post[0].Post_ID'
+        :poster="{
+          name: post[0].FName,
+          degreeType: post[0].Degree_Type,
+          isAnonymous: post[0].Is_Anonymous
+        }"
+        :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
+      />
       <div class = 'buttons container level-right' v-if="isOP">
         <b-button @click='handleEdit'>Edit</b-button>
         <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
@@ -18,9 +22,11 @@
     </div>
   </div>
   <div class='edit container' v-else>
-    <CreatePost
-      :defaultTitle="post[0].Title"
-      :defaultContent="post[0].Content"
+    <EditPost
+      :oldTitle="post[0].Title"
+      :oldContent="post[0].Content"
+      :oldMediaUrls="post[0].mediaUrls"
+      :oldAnonymous="post[0].isAnonymous"
     />
   </div>
 </div>
@@ -28,7 +34,7 @@
 
 <script>
 import Post from '../components/Post.vue';
-import CreatePost from '../components/CreatePost.vue';
+import EditPost from '../components/EditPost.vue';
 import { API_ADDRESS } from '../constants';
 
 export default {
@@ -39,7 +45,7 @@ export default {
   }),
   components: {
     Post,
-    CreatePost,
+    EditPost,
   },
   async mounted() {
     const id = this.$route.params.postid;

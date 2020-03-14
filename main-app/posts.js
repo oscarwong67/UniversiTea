@@ -23,7 +23,7 @@ module.exports = [
           allow: 'multipart/form-data',
           maxBytes: 2 * 1000 * 1000,
           timeout: false,
-      }
+      },
     },
   },
 
@@ -40,17 +40,16 @@ module.exports = [
 
   {
     method: 'POST',
-    path: '/api/addPost',
+    path: '/api/addPost/',
     async handler(request, h) {
       const url = `http://${postsMicroserviceHost}/api/addPost`;
-      // console.log(request.payload);
       const res = await fetch(url, {
         method: 'POST',
-        body: request.payload,
+        body: JSON.stringify(request.payload),
         headers: { 'Content-Type': 'application/json' },
       });
       return res;
-    }
+    },
   },
 
   {
@@ -62,7 +61,7 @@ module.exports = [
       const data = await res.json();
       // console.log(data);
       return data;
-    }
+    },
   },
 
   {
@@ -76,7 +75,7 @@ module.exports = [
         headers: { 'Content-Type': 'application/json' },
       });
       return res;
-    }
+    },
   },
 
   // TODO: test this after anon posts is fixed
@@ -84,6 +83,7 @@ module.exports = [
     method: 'POST',
     path: '/api/editPost/',
     async handler(request, h) {
+      console.log(request.payload);
       const url = `http://${postsMicroserviceHost}/api/editPost/`;
       const res = await fetch(url, {
         method: 'POST',
