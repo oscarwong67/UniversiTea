@@ -24,14 +24,32 @@
         </div>
        <div class='navbar-end'>
          <div class='double-button-container navbar-item' v-if="isLoggedIn">
-           <b-button
-            type="is-info"
-            icon-left="bell"
-            outlined
-            @click="isNotificationPopupActive=true"
-          >
-            Notifications
-          </b-button>
+           <b-dropdown aria-role="list">
+             <b-button
+              type="is-info"
+              icon-left="bell"
+              outlined
+              slot="trigger" slot-scope="{ active }"
+              @click="isNotificationPopupActive=true"
+            >
+              <span>Notifications</span>
+              <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
+            </b-button>
+            <b-dropdown-item
+              aria-role="listitem"
+              v-for="notification in notifications"
+              :key="notification.Notification_ID"
+              @click="redirectToPost(notification.postId)"
+              >
+              <div class='container'>
+                {{ notification.parentComment ?
+                'New reply to your comment!'
+                : 'New reply on your post!' }}
+                <div>On "{{ notification.postTitle }}"</div>
+                <div><b-icon icon="reply" size="is-small"/>&nbsp;{{notification.ageString}}</div>
+              </div>
+            </b-dropdown-item>
+           </b-dropdown>
           <b-button outlined @click='logout'>Log Out</b-button>
          </div>
           <div v-else class='navbar-item double-button-container'>
@@ -134,6 +152,7 @@ export default {
       'M.D.',
       'DDS',
     ],
+    notifications: [],
   }),
   methods: {
     updateEmailPassword(email, password) {
@@ -189,6 +208,30 @@ export default {
       localStorage.removeItem('isAdmin');
       this.$router.go();
     },
+    async fetchNotifications() {
+      // TODO: fetch notifications (let's say like last 25)
+      // if i'm feeling really extra, only do it if I haven't fetched them in x amount of time
+      const mockedNotifications = [
+        {
+          parentComment: 2,
+          postTitle: 'Download Swip',
+          ageString: '1 day ago',
+          postId: 1,
+        },
+        {
+          postTitle: 'Eat UToppings',
+          ageString: '2 days ago',
+          postId: 2,
+        },
+      ];
+      this.notifications = mockedNotifications;
+    },
+    redirectToPost(postId) {
+      this.$router.push(`./viewpost/${postId}`);
+    },
+  },
+  mounted() {
+    this.fetchNotifications();
   },
   computed: {
     isLoggedIn() {
@@ -200,10 +243,16 @@ export default {
 
 <style scoped>
 .modal-content, .modal:nth-child(2), .card {
-  overflow: scroll;
+  overflow: overlay;
 }
 
 .double-button-container {
   display: flex;
+}
+
+.dropdown-menu {
+  max-height: 40vh;
+  overflow: auto;
+  height: auto;
 }
 </style>
