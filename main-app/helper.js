@@ -11,11 +11,4 @@ const badResponse = (h, err) => {
     return h.response('error').code(400);
 }
 
-const updateCookie = (request, h) => {
-    if(request.state.session) {
-        request.state.session.lastVisit = Date.now();
-    }
-    return h.response().state('session', updateCookie);
-}
-
-module.exports = {goodResponse, badResponse, updateCookie};
+module.exports = {goodResponse, badResponse};
