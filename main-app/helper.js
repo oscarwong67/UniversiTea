@@ -8,7 +8,6 @@ const goodResponse = (h, data) => {
 // returns a bad response
 const badResponse = (h, err) => {
     console.log(err);
-    const data = { key: 'value' }
     return h.response('error').code(400);
 }
 

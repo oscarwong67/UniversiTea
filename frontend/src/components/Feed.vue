@@ -1,9 +1,11 @@
 <template>
   <section class='feed section'>
-    <CreatePost />
+    <CreatePost v-if="isLoggedIn" />
+    <h3 v-else>Log In to Post and Comment!</h3>
     <hr/>
     <section class='posts'>
       <Post
+        class='post'
         v-for='post in posts'
         :key='post.Post_ID'
         :poster="{name: post.Fname, degreeType: post.Degree_Type}"
@@ -34,10 +36,25 @@ export default {
     console.log(data.posts);
     this.posts = data.posts;
   },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem('User_ID');
+    },
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.posts {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
 
+.post {
+  width: 100%;
+  margin-bottom: 1em;
+}
 </style>

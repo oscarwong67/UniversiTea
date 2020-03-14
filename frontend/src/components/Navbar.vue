@@ -23,8 +23,8 @@
           <router-link class='navbar-item' to="/about">About</router-link>
         </div>
        <div class='navbar-end'>
-          <b-button
-            class='navbar-item'
+         <div class='double-button-container navbar-item' v-if="isLoggedIn">
+           <b-button
             type="is-info"
             icon-left="bell"
             outlined
@@ -32,12 +32,20 @@
           >
             Notifications
           </b-button>
-          <b-button class='navbar-item' type="is-primary" outlined @click="isLoginModalActive=true">
-            Log In
-          </b-button>
-          <b-button class='navbar-item' type="is-primary" @click="isSignupModalActive=true">
-            Signup
-          </b-button>
+          <b-button outlined @click='logout'>Log Out</b-button>
+         </div>
+          <div v-else class='navbar-item double-button-container'>
+            <b-button
+              type="is-primary"
+              outlined
+              @click="isLoginModalActive=true"
+            >
+              Log In
+            </b-button>
+            <b-button type="is-primary" @click="isSignupModalActive=true">
+              Signup
+            </b-button>
+          </div>
           <b-modal class='modal' :active.sync="isLoginModalActive">
             <section class="section card">
                 <h2>Log In</h2>
@@ -95,6 +103,7 @@
 </template>
 <script>
 import LoginForm from './LoginForm.vue';
+import { API_ADDRESS } from '../constants';
 
 export default {
   name: 'Navbar',
@@ -131,11 +140,59 @@ export default {
       this.email = email;
       this.password = password;
     },
-    handleLogin() {
-
+    afterLogin(data) {
+      if (data.isValid) {
+        localStorage.setItem('User_ID', data.User_ID);
+        localStorage.setItem('School_ID', data.School_ID);
+        localStorage.setItem('isAdmin', data.isAdmin);
+        this.$router.go();
+      }
     },
-    handleSignup() {
+    async handleLogin() {
+      const res = await fetch(`${API_ADDRESS}/api/authentication/login`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: this.email,
+          password: this.password,
+        }),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await res.json();
+      this.afterLogin(data);
+    },
+    async handleSignup() {
+      const res = await fetch(`${API_ADDRESS}/api/authentication/signup`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: this.email,
+          password: this.password,
+          Fname: this.fname,
+          Lname: this.lname,
+          Degree_Type: this.degreeType,
+          schoolName: this.schoolName,
+        }),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
+      const data = await res.json();
+      this.afterLogin(data);
+    },
+    logout() {
+      localStorage.removeItem('User_ID');
+      localStorage.removeItem('School_ID');
+      localStorage.removeItem('isAdmin');
+      this.$router.go();
+    },
+  },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem('User_ID');
     },
   },
 };
@@ -144,5 +201,9 @@ export default {
 <style scoped>
 .modal-content, .modal:nth-child(2), .card {
   overflow: scroll;
+}
+
+.double-button-container {
+  display: flex;
 }
 </style>
