@@ -50,13 +50,19 @@ const deleteComment = async (request) => {
     `DELETE FROM COMMENT 
     WHERE Comment_ID = '${commentID}'`,
   );
-  console.log(result);
 
   return;
 }
 
 const getComments = async (request) => {
+  let postID = request.query.postID;
 
+  const result = await db.query(
+    `SELECT * FROM COMMENT 
+    WHERE Post_ID = '${postID}'`,
+  );
+
+  return {...result};
 }
 
 //IF YOU MAKE A NEW FUNCTION, ADD IT HERE OR IT WONT WORK

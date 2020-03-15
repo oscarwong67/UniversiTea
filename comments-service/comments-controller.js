@@ -61,6 +61,22 @@ exports.plugin = {
             }
         });
 
+        // Getting comments from the current state of comments table
+        // Input: Post ID
+        // Output: Comments of a Post
+        server.route({
+            method: 'GET',
+            path: '/api/getComments',
+            handler: async function (request, h) {
+                try {
+                    // await commandModel.getComments(request);
+                    const result = await queryModel.getComments(request);
+                    return {...result};
+                } catch(err) {
+                    return helper.badResponse(h, err);
+                }
+            }
+        });
                 
         //COMMENT QUERY FOR TESTING
         // server.route({
