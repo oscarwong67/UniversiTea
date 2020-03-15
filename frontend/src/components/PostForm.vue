@@ -69,6 +69,7 @@ export default {
     this.content = this.$props.oldContent;
     if (this.$props.oldMediaUrls !== undefined) {
       this.mediaUrls = this.$props.oldMediaUrls;
+      // console.log(this.mediaUrls);
     }
     this.isAnonymous = this.$props.oldAnonymous;
   },
@@ -81,7 +82,10 @@ export default {
     },
     handleAddMediaChange() {
       this.$emit('mediaAdd', this.currentMediaUrl);
-      this.addMediaUrl();
+      if (this.$props.oldTitle === undefined) {
+        this.addMediaUrl();
+      }
+      this.currentMediaUrl = '';
     },
     handleRmMediaChange(index) {
       this.$emit('mediaRm', index);
@@ -103,7 +107,7 @@ export default {
         url: this.currentMediaUrl,
         type,
       });
-      this.currentMediaUrl = '';
+      console.log('in postform');
     },
   },
 };

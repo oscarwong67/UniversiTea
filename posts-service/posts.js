@@ -71,7 +71,7 @@ exports.plugin = {
               WHERE P.Post_ID=${ postid } AND P.User_ID=U.User_ID AND P.School_ID=S.School_ID
             `);
             const media = await db.query(`
-              SELECT *
+              SELECT Source_URL AS 'url', Type AS 'type'
               FROM MEDIA
               WHERE Post_ID=${ postid }
             `)
@@ -126,11 +126,11 @@ exports.plugin = {
               DELETE FROM MEDIA
               WHERE Post_ID=${ postid }
             `);
-            if (!postResult.insertId) throw new Error('Failed to insert post');
             mediaUrls.forEach(async (mediaUrl) => {
+              console.log('here');
               const mediaInsertResult = await db.query(
                 'INSERT INTO MEDIA SET ?',
-                {Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postResult.insertId}
+                {Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postid}
               )
               if (!mediaInsertResult.insertId) throw new Error('Failed to insert media');
             });

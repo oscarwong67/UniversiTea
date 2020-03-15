@@ -1,6 +1,5 @@
 <template>
 <div class='viewpost'>
-<hr/>
   <div class= "view container" v-if="!isEditing">
     <div class = 'posts container' v-if="postExists">
       <Post
@@ -12,6 +11,15 @@
         }"
         :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
       />
+      <div class='media container' v-if='hasMedia'>
+        <b-carousel :autoplay='false' :indicator-inside="false">
+            <b-carousel-item v-for="image in media" :key="image">
+                <span class="image">
+                  <img :src="image.url">
+                </span>
+            </b-carousel-item>
+        </b-carousel>
+      </div>
       <div class = 'buttons container level-right' v-if="isOP">
         <b-button @click='handleEdit'>Edit</b-button>
         <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
@@ -25,7 +33,7 @@
     <EditPost
       :oldTitle="post[0].Title"
       :oldContent="post[0].Content"
-      :oldMediaUrls="post[0].mediaUrls"
+      :oldMediaUrls="media"
       :oldAnonymous="post[0].isAnonymous"
     />
   </div>
@@ -41,6 +49,7 @@ export default {
   name: 'ViewPost',
   data: () => ({
     post: [],
+    media: [],
     isEditing: false,
   }),
   components: {
@@ -51,7 +60,7 @@ export default {
     const id = this.$route.params.postid;
     const res = await fetch(`${API_ADDRESS}/api/getPost/?postid=${id}`);
     const data = await res.json();
-    console.log(data);
+    this.media = data.media;
     this.post = data.post;
   },
   methods: {
@@ -87,6 +96,12 @@ export default {
       }
       return false;
     },
+    hasMedia() {
+      if (this.media[0] !== undefined) {
+        return true;
+      }
+      return false;
+    },
     postExists() {
       if (this.post[0] === undefined) {
         return false;
@@ -98,6 +113,9 @@ export default {
 </script>
 
 <style scoped>
+.viewpost{
+  padding-top: 3em;
+}
 .buttons {
   padding: 1em;
   background-color: white;
@@ -108,6 +126,21 @@ export default {
 .posts {
   border-radius: 6px;
   background-color: white;
+}
+.carousel{
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  /* max-height: 500px!important; */
+  /* height: 500px!important; */
+  width: 500px!important;
+}
+.carousel-item {
+  display: flex;
+  height: 500px!important;
+  align-items: center;
+  object-fit: contain;
 }
 .nopost {
   background-color: white;

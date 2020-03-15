@@ -7,6 +7,7 @@
     :oldMediaUrls="this.mediaUrls" :oldAnonymous="this.isAnonymous"
     @titleChange='updateTitle($event)'
     @contentChange='updateContent($event)'
+    @mediaAdd='addMediaUrl($event)'
     @mediaRm='removeMediaUrl($event)'
     @anonChange='updateAnon($event)'
   />
@@ -62,10 +63,10 @@ export default {
         url: currentMediaUrl,
         type,
       });
-      console.log(this.mediaUrls);
+      // console.log(this.mediaUrls);
     },
     removeMediaUrl(index) {
-      console.log(this.mediaUrls);
+      // console.log(this.mediaUrls);
       this.mediaUrls.splice(index);
     },
     updateAnon(newAnonymous) {
@@ -91,7 +92,6 @@ export default {
       const mediaUrls = this.mediaUrls.map((mediaUrl) => ({
         ...mediaUrl,
       }));
-      console.log('here');
       const res = await fetch(`${API_ADDRESS}/api/editPost/`, {
         method: 'POST',
         body: JSON.stringify({
