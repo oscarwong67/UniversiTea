@@ -13,9 +13,10 @@
       />
       <div class='media container' v-if='hasMedia'>
         <b-carousel :autoplay='false' :indicator-inside="false">
-            <b-carousel-item v-for="image in media" :key="image">
-                <span class="image">
-                  <img :src="image.url">
+            <b-carousel-item v-for="media in mediaList" :key="media.id">
+                <span class='media'>
+                  <img :src="media.url" v-if='media.type === "image"'/>
+                  <video :src="media.url" v-else controls/>
                 </span>
             </b-carousel-item>
         </b-carousel>
@@ -33,7 +34,7 @@
     <EditPost
       :oldTitle="post[0].Title"
       :oldContent="post[0].Content"
-      :oldMediaUrls="media"
+      :oldMediaUrls="mediaList"
       :oldAnonymous="post[0].isAnonymous"
     />
   </div>
@@ -49,7 +50,7 @@ export default {
   name: 'ViewPost',
   data: () => ({
     post: [],
-    media: [],
+    mediaList: [],
     isEditing: false,
   }),
   components: {
@@ -60,7 +61,7 @@ export default {
     const id = this.$route.params.postid;
     const res = await fetch(`${API_ADDRESS}/api/getPost/?postid=${id}`);
     const data = await res.json();
-    this.media = data.media;
+    this.mediaList = data.media;
     this.post = data.post;
   },
   methods: {
@@ -97,7 +98,7 @@ export default {
       return false;
     },
     hasMedia() {
-      if (this.media[0] !== undefined) {
+      if (this.mediaList[0] !== undefined) {
         return true;
       }
       return false;

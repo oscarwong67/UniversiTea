@@ -22,7 +22,7 @@
           class='url-input'
         >
           <div class='break' />
-          <p class='break' v-for="(mediaUrl, idx) in mediaUrls" :key="mediaUrl">
+          <p class='break' v-for="(mediaUrl, idx) in mediaUrls" :key="idx">
             {{mediaUrl}}
             <b-button outlined @click='handleRmMediaChange(idx)'>x</b-button>
           </p>
