@@ -33,6 +33,7 @@ export default {
     content: '',
     mediaUrls: [],
     isAnonymous: '',
+    currentMediaUrl: '',
   }),
   created() {
     this.title = this.$props.oldTitle;
@@ -49,21 +50,37 @@ export default {
     updateContent(newContent) {
       this.content = newContent;
     },
-    // NOTE: i dont think we need addMediaUrl anymore but gonna leave it here just incase
     addMediaUrl(currentMediaUrl) {
-      // eslint-disable-next-line no-useless-escape
-      const extension = currentMediaUrl.split(/\#|\?/)[0].split('.').pop().trim().toLowerCase();
+      this.currentMediaUrl = currentMediaUrl;
       let type = 'invalid media URL';
-      if (extension === 'jpg' || extension === 'png' || extension === 'jpeg' || extension === 'tiff' || extension === 'gif' || extension === 'webp') {
-        type = 'image';
-      } else if (extension === 'mp4' || extension === 'webm') {
-        type = 'video';
+      if (this.validYouTubeUrl(this.currentMediaUrl)) {
+        type = 'youtube';
+      } else {
+        // eslint-disable-next-line no-useless-escape
+        const extension = this.currentMediaUrl.split(/\#|\?/)[0].split('.').pop().trim().toLowerCase();
+        if (extension === 'jpg' || extension === 'png' || extension === 'jpeg' || extension === 'tiff' || extension === 'gif' || extension === 'webp') {
+          type = 'image';
+        } else if (extension === 'mp4' || extension === 'webm') {
+          type = 'video';
+        }
       }
       this.mediaUrls.push({
-        url: currentMediaUrl,
+        url: this.currentMediaUrl,
         type,
       });
-      // console.log(this.mediaUrls);
+    },
+    validYouTubeUrl(url) {
+      if (url !== undefined || url !== '') {
+        // eslint-disable-next-line no-useless-escape
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        if (match && match[2].length === 11) {
+          // change to embedded
+          this.currentMediaUrl = `https://www.youtube.com/embed/${match[2]}`;
+          return true;
+        }
+      }
+      return false;
     },
     removeMediaUrl(index) {
       // console.log(this.mediaUrls);
