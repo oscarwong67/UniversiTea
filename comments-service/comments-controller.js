@@ -18,9 +18,8 @@ exports.plugin = {
             handler: async function (request, h) {
                 try {
                     await commandModel.addComment(request);
-                    await queryModel.addComment(request);
+                    await queryModel.addComment();
                     return helper.goodResponse(h, null);
-                    //Call function for adding to current state database
                 } catch(err) {
                     return helper.badResponse(h, err);
                 }
@@ -36,7 +35,7 @@ exports.plugin = {
             handler: async function (request, h) {
                 try {
                     await commandModel.editComment(request);
-                    await queryModel.editComment(request);
+                    await queryModel.editComment();
                     return helper.goodResponse(h, null);
                 } catch(err) {
                     return helper.badResponse(h, err);
@@ -53,7 +52,7 @@ exports.plugin = {
             handler: async function (request, h) {
                 try {
                     await commandModel.deleteComment(request);
-                    await queryModel.deleteComment(request);
+                    await queryModel.deleteComment();
                     return helper.goodResponse(h, null);
                 } catch(err) {
                     return helper.badResponse(h, err);

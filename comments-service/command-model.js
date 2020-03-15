@@ -12,7 +12,6 @@ const addComment = async (request) => {
     let parentID = request.payload.parentID == undefined ? null : request.payload.parentID;
     let event = {
         "Action" : "addComment",
-        "Comment_ID": commentID,
         "Content" : content,
         "User_ID" : userID,
         "Post_ID" : postID,

@@ -4,19 +4,25 @@ const db = require('./db');
 const helper = require('./helper');
 
 
-const addComment = async (request) => {
-  let commentID = request.payload.commentID;
-  let content = request.payload.content;
-  let userID = request.payload.userID;
-  let postID = request.payload.postID;
-  let parentID = request.payload.parentID == undefined ? null : request.payload.parentID;
+const addComment = async () => {
+
+  let eventContent = await db.query(
+    'SELECT Content FROM EVENT WHERE Timestamp = (SELECT MAX(Timestamp) FROM EVENT)'
+  );
+
+  eventContent = eventContent[0]['Content'];
+  eventContent = await JSON.parse(eventContent);
+
+  let content = eventContent['Content'];
+  let userID = eventContent['User_ID'];
+  let postID = eventContent['Post_ID'];
+  let parentID = eventContent['Parent_ID'];
 
   let ver = 1;
 
   await db.query(
     'INSERT INTO COMMENT SET ?',
     { 
-      Comment_ID: commentID,
       Version: ver, 
       User_ID: userID,
       Content: content,
@@ -28,9 +34,16 @@ const addComment = async (request) => {
   return;
 }
 
-const editComment = async (request) => {
-  let commentID = request.payload.commentID;
-  let newContent = request.payload.newContent;
+const editComment = async () => {
+  let eventContent = await db.query(
+    'SELECT Content FROM EVENT WHERE Timestamp = (SELECT MAX(Timestamp) FROM EVENT)'
+  );
+
+  eventContent = eventContent[0]['Content'];
+  eventContent = await JSON.parse(eventContent);
+
+  let commentID = eventContent['Comment_ID'];
+  let newContent = eventContent['Content'];
 
   await db.query(
     `UPDATE COMMENT SET Content = '${newContent}' WHERE Comment_ID = '${commentID}'`,
@@ -43,8 +56,15 @@ const editComment = async (request) => {
   return;
 }
 
-const deleteComment = async (request) => {
-  let commentID = request.payload.commentID;
+const deleteComment = async () => {
+  let eventContent = await db.query(
+    'SELECT Content FROM EVENT WHERE Timestamp = (SELECT MAX(Timestamp) FROM EVENT)'
+  );
+
+  eventContent = eventContent[0]['Content'];
+  eventContent = await JSON.parse(eventContent);
+
+  let commentID = eventContent['Comment_ID'];
 
   let result = await db.query(
     `DELETE FROM COMMENT 
