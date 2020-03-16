@@ -45,11 +45,7 @@
          </div>
           <div v-else class='navbar-item double-button-container'>
             <div class='left-button'>
-              <b-button
-                type="is-primary"
-                outlined
-                @click="isLoginModalActive=true"
-              >
+              <b-button type="is-primary" outlined @click="isLoginModalActive=true">
                 Log In
               </b-button>
             </div>
@@ -96,8 +92,7 @@
                       <b-dropdown-item
                         :value="degreeType"
                         aria-role="listitem"
-                        v-for="degreeType in degreeTypes"
-                        :key="degreeType"
+                        v-for="degreeType in degreeTypes" :key="degreeType"
                       >
                         {{degreeType}}
                       </b-dropdown-item>

@@ -1,5 +1,4 @@
 <template>
-<div class='viewpost'>
   <div class= "view container" v-if="!isEditing">
     <div class = 'posts container' v-if="postExists">
       <Post
@@ -27,14 +26,7 @@
         <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
       </div>
     </div>
-    <div class='nopost container' v-else>
-      <header><strong>Sorry, the post you're looking for can't be found :(</strong></header>
-      <span>Perhaps the post you were looking for has been deleted or moved.</span>
-      <header/>
-      <div class='home-button container'>
-        <b-button type='is-primary' outlined @click="redirectHome">Back to Home</b-button>
-      </div>
-    </div>
+    <NotFoundMessage :type='"post"'  v-else/>
   </div>
   <div class='edit container' v-else>
     <EditPost
@@ -42,12 +34,12 @@
       :oldMediaUrls="mediaList" :oldAnonymous="post[0].isAnonymous"
     />
   </div>
-</div>
 </template>
 
 <script>
 import Post from '../components/Post.vue';
 import EditPost from '../components/EditPost.vue';
+import NotFoundMessage from '../components/NotFoundMessage.vue';
 import { API_ADDRESS } from '../constants';
 
 export default {
@@ -60,6 +52,7 @@ export default {
   components: {
     Post,
     EditPost,
+    NotFoundMessage,
   },
   async created() {
     const id = this.$route.params.postid;
@@ -121,8 +114,8 @@ export default {
 </script>
 
 <style scoped>
-.viewpost{
-  padding-top: 3em;
+.view{
+  padding-top: 1em;
 }
 .buttons {
   padding: 1em;
@@ -130,9 +123,6 @@ export default {
   border: none;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-}
-.home-button {
-  padding-top: 2em;
 }
 .posts {
   border-radius: 6px;
@@ -164,10 +154,5 @@ export default {
 .yt-video {
   width: 600px;
   height: 500px;
-}
-.nopost {
-  background-color: white;
-  border-radius: 6px;
-  padding: 1em;
 }
 </style>

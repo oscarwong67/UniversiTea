@@ -2,10 +2,8 @@
 <div class='create-post container'>
   <div class='header'><b>Create a post</b></div>
   <PostForm class='form'
-    @titleChange='updateTitle($event)'
-    @contentChange='updateContent($event)'
-    @mediaAdd='addMediaUrl($event)'
-    @mediaRm='removeMediaUrl($event)'
+    @titleChange='updateTitle($event)' @contentChange='updateContent($event)'
+    @mediaAdd='addMediaUrl($event)' @mediaRm='removeMediaUrl($event)'
     @anonChange='updateAnon($event)'
   />
   <div class='buttons container'>
