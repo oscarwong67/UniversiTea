@@ -15,19 +15,11 @@
         <b-carousel :autoplay='false' :indicator-inside="false">
             <b-carousel-item v-for="media in mediaList" :key="media.id">
                 <span class='media'>
-                  <img class='image'
-                    :src="media.url"
-                    v-if='media.type === "image"'
+                  <img class='image' :src="media.url" v-if='media.type === "image"'/>
+                  <video class='video' :src="media.url"
+                    v-else-if='media.type === "video"' controls
                   />
-                  <video
-                    :src="media.url"
-                    v-else-if='media.type === "video"'
-                    controls
-                  />
-                  <iframe class='yt-video'
-                    :src="media.url"
-                    v-else-if='media.type === "youtube"'
-                  />
+                  <iframe class='yt-video' :src="media.url" v-else-if='media.type === "youtube"'/>
                 </span>
             </b-carousel-item>
         </b-carousel>
@@ -158,6 +150,10 @@ export default {
   margin: 0 auto;
 }
 .image {
+  width: 600px;
+  height: auto;
+}
+.video {
   width: 600px;
   height: auto;
 }
