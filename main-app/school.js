@@ -10,7 +10,7 @@ module.exports = [
     handler: async function (request, h) {
       try {
         const schools = await db.query('SELECT SchoolName, School_ID FROM SCHOOL');
-        if (!schoolNames.length) throw new Error('Error getting school names!');
+        if (!schools.length) throw new Error('Error getting school names!');
         return helper.goodResponse(h, schools);
       } catch (err) {
         return helper.badResponse(h, err);

@@ -68,7 +68,7 @@ exports.plugin = {
             let postid = parseInt(request.query.postid);
             console.log(postid);
             const post = await db.query(`
-              SELECT P.*, S.SchoolName, U.FName, U.User_ID, U.Degree_Type
+              SELECT P.*, S.SchoolName, S.School_ID, U.FName, U.User_ID, U.Degree_Type
               FROM POSTS AS P, USER AS U, SCHOOL AS S
               WHERE P.Post_ID=${ postid } AND P.User_ID=U.User_ID AND P.School_ID=S.School_ID
             `);

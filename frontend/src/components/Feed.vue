@@ -33,12 +33,18 @@ export default {
     CreatePost,
     Post,
   },
+  props: ['schoolid'],
   data: () => ({
     posts: [],
   }),
   async mounted() {
     // TODO: add query parameters similar to how I did it in the job board
-    const res = await fetch(`${API_ADDRESS}/api/feed/?page=1&limit=9`);
+    let res;
+    if (this.$props.schoolid === undefined) {
+      res = await fetch(`${API_ADDRESS}/api/feed/?page=1&limit=9`);
+    } else {
+      res = await fetch(`${API_ADDRESS}/api/feed/?page=1&limit=9&schoolID=${this.$props.schoolid}`);
+    }
     const data = await res.json();
     // console.log(data.posts);
     this.posts = data.posts;

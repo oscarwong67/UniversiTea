@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import ViewPost from '../views/ViewPost.vue';
 
 Vue.use(VueRouter);
 
@@ -20,9 +19,24 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
+    path: '/school/:schoolid',
+    name: 'School',
+    component: () => import(/* webpackChunkName: "about" */ '../views/School.vue'),
+  },
+  {
+    path: '/school/:schoolid/viewpost/:postid',
+    name: 'School Post',
+    component: () => import(/* webpackChunkName: "about" */ '../views/ViewPost.vue'),
+  },
+  {
     path: '/viewpost/:postid',
-    name: 'ViewPost',
-    component: ViewPost,
+    name: 'View Post',
+    component: () => import(/* webpackChunkName: "about" */ '../views/ViewPost.vue'),
+  },
+  {
+    path: '*',
+    name: 'Not Found',
+    component: () => import(/* webpackChunkName: "about" */ '../views/NotFound.vue'),
   },
 ];
 

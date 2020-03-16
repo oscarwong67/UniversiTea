@@ -78,7 +78,6 @@ module.exports = [
     },
   },
 
-  // TODO: test this after anon posts is fixed
   {
     method: 'POST',
     path: '/api/editPost/',

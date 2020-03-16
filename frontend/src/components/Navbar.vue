@@ -21,6 +21,13 @@
         <div class='navbar-start'>
           <router-link class='navbar-item' to="/">Home</router-link>
           <router-link class='navbar-item' to="/about">About</router-link>
+          <b-navbar-dropdown label="Schools" :hoverable='true'>
+            <div class='school-link' v-for="school in allSchools" :key='school.School_ID'>
+              <b-navbar-item :href="`/school/${school.School_ID}`" noreferrer>
+                {{ school.SchoolName }}
+              </b-navbar-item>
+            </div>
+          </b-navbar-dropdown>
         </div>
        <div class='navbar-end'>
          <div class='double-button-container navbar-item' v-if="isLoggedIn">
@@ -134,7 +141,13 @@ export default {
       'M.D.',
       'DDS',
     ],
+    allSchools: [],
   }),
+  async mounted() {
+    const res = await fetch(`${API_ADDRESS}/api/getSchools`);
+    const data = await res.json();
+    this.allSchools = data;
+  },
   methods: {
     updateEmailPassword(email, password) {
       this.email = email;

@@ -30,7 +30,12 @@
       </div>
     </div>
     <div class='nopost container' v-else>
-      <header>Sorry, the post you're looking for can't be found :(</header>
+      <header><strong>Sorry, the post you're looking for can't be found :(</strong></header>
+      <span >Perhaps the post you were looking for has been deleted or moved.</span>
+      <header/>
+      <div class='home-button container'>
+        <b-button type='is-primary' outlined @click="redirectHome">Back to Home</b-button>
+      </div>
     </div>
   </div>
   <div class='edit container' v-else>
@@ -68,6 +73,9 @@ export default {
     this.post = data.post;
   },
   methods: {
+    redirectHome() {
+      this.$router.push('/');
+    },
     handleEdit() {
       this.isEditing = true;
     },
@@ -126,6 +134,9 @@ export default {
   border: none;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
+}
+.home-button {
+  padding-top: 2em;
 }
 .posts {
   border-radius: 6px;
