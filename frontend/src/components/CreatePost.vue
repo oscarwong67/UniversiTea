@@ -9,7 +9,7 @@
     @anonChange='updateAnon($event)'
   />
   <div class='buttons container'>
-    <b-button type="is-primary" @click='handleSavingContent'>Post</b-button>
+    <b-button type="is-primary" outlined @click='handleSavingContent'>Post</b-button>
   </div>
 </div>
 </template>
@@ -38,13 +38,9 @@ export default {
       this.content = newContent;
     },
     updateMedia(newMedia) {
-      // TODO: fix warning:
-      // [Vue warn]: Avoid using non-primitive value as key, use string/number value instead.
       this.mediaUrls = newMedia;
     },
     updateAnon(newAnonymous) {
-      // TODO: fix warning:
-      // [Vue warn]: Avoid using non-primitive value as key, use string/number value instead.
       this.isAnonymous = newAnonymous;
     },
     addMediaUrl(currentMediaUrl) {

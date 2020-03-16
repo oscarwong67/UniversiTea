@@ -16,5 +16,20 @@ module.exports = [
         return helper.badResponse(h, err);
       }
     }
+  },
+
+  {
+    method: 'GET',
+    path: '/api/getSchoolName/',
+    handler: async function (request, h) {
+      try {
+        let id = parseInt(request.query.schoolid);
+        const schools = await db.query('SELECT SchoolName FROM SCHOOL WHERE ?', {School_ID:id});
+        if (!schools.length) throw new Error('Error getting school names!');
+        return helper.goodResponse(h, schools);
+      } catch (err) {
+        return helper.badResponse(h, err);
+      }
+    }
   }
 ]

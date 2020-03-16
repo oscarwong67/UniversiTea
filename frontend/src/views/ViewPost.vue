@@ -5,23 +5,21 @@
       <Post
         :key='post[0].Post_ID'
         :poster="{
-          name: post[0].FName,
-          degreeType: post[0].Degree_Type,
-          isAnonymous: post[0].Is_Anonymous
+          name: post[0].FName, degreeType: post[0].Degree_Type, isAnonymous: post[0].Is_Anonymous
         }"
         :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
       />
       <div class='media container' v-if='hasMedia'>
         <b-carousel :autoplay='false' :indicator-inside="false">
-            <b-carousel-item v-for="media in mediaList" :key="media.id">
-                <span class='media'>
-                  <img class='image' :src="media.url" v-if='media.type === "image"'/>
-                  <video class='video' :src="media.url"
-                    v-else-if='media.type === "video"' controls
-                  />
-                  <iframe class='yt-video' :src="media.url" v-else-if='media.type === "youtube"'/>
-                </span>
-            </b-carousel-item>
+          <b-carousel-item v-for="media in mediaList" :key="media.id">
+            <span class='media'>
+              <img class='image' :src="media.url" v-if='media.type === "image"'/>
+              <video class='video' :src="media.url"
+                v-else-if='media.type === "video"' controls
+              />
+              <iframe class='yt-video' :src="media.url" v-else-if='media.type === "youtube"'/>
+            </span>
+          </b-carousel-item>
         </b-carousel>
       </div>
       <div class = 'buttons container level-right' v-if="isOP">
@@ -31,7 +29,7 @@
     </div>
     <div class='nopost container' v-else>
       <header><strong>Sorry, the post you're looking for can't be found :(</strong></header>
-      <span >Perhaps the post you were looking for has been deleted or moved.</span>
+      <span>Perhaps the post you were looking for has been deleted or moved.</span>
       <header/>
       <div class='home-button container'>
         <b-button type='is-primary' outlined @click="redirectHome">Back to Home</b-button>
@@ -40,10 +38,8 @@
   </div>
   <div class='edit container' v-else>
     <EditPost
-      :oldTitle="post[0].Title"
-      :oldContent="post[0].Content"
-      :oldMediaUrls="mediaList"
-      :oldAnonymous="post[0].isAnonymous"
+      :oldTitle="post[0].Title" :oldContent="post[0].Content"
+      :oldMediaUrls="mediaList" :oldAnonymous="post[0].isAnonymous"
     />
   </div>
 </div>
@@ -65,7 +61,7 @@ export default {
     Post,
     EditPost,
   },
-  async mounted() {
+  async created() {
     const id = this.$route.params.postid;
     const res = await fetch(`${API_ADDRESS}/api/getPost/?postid=${id}`);
     const data = await res.json();

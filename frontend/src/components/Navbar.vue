@@ -1,5 +1,5 @@
 <template>
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation" fixed-top>
       <div class='navbar-brand'>
         <h1 class='navbar-item'>
           UniversiTea
@@ -31,24 +31,28 @@
         </div>
        <div class='navbar-end'>
          <div class='double-button-container navbar-item' v-if="isLoggedIn">
-           <b-button
-            type="is-info"
-            icon-left="bell"
-            outlined
-            @click="isNotificationPopupActive=true"
-          >
-            Notifications
-          </b-button>
+           <div class='left-button'>
+            <b-button
+              type="is-info"
+              icon-left="bell"
+              outlined
+              @click="isNotificationPopupActive=true"
+            >
+              Notifications
+            </b-button>
+           </div>
           <b-button outlined @click='logout'>Log Out</b-button>
          </div>
           <div v-else class='navbar-item double-button-container'>
-            <b-button
-              type="is-primary"
-              outlined
-              @click="isLoginModalActive=true"
-            >
-              Log In
-            </b-button>
+            <div class='left-button'>
+              <b-button
+                type="is-primary"
+                outlined
+                @click="isLoginModalActive=true"
+              >
+                Log In
+              </b-button>
+            </div>
             <b-button type="is-primary" @click="isSignupModalActive=true">
               Signup
             </b-button>
@@ -213,10 +217,14 @@ export default {
 
 <style scoped>
 .modal-content, .modal:nth-child(2), .card {
-  overflow: scroll;
+  overflow: auto;
 }
 
 .double-button-container {
   display: flex;
+}
+
+.left-button {
+  padding-right: 0.5em;
 }
 </style>
