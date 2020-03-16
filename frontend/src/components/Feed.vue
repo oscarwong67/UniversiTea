@@ -4,14 +4,20 @@
     <h3 v-else>Log In to Post and Comment!</h3>
     <hr/>
     <section class='posts'>
-      <Post
-        class='post'
-        @click.native='redirectToPost(post.Post_ID)'
+      <a
+        :href="`./viewpost/${post.Post_ID}`"
         v-for='post in posts'
         :key='post.Post_ID'
-        :poster="{name: post.Fname, degreeType: post.Degree_Type, isAnonymous: post.Is_Anonymous}"
-        :title="post.Title" :content="post.Content" :school="post.SchoolName"
-      />
+        target="_blank"
+        noreferrer
+        class='post-wrapper'
+      >
+        <Post
+          class='post'
+          :poster="{name: post.Fname, degreeType: post.Degree_Type, isAnonymous: post.Is_Anonymous}"
+          :title="post.Title" :content="post.Content" :school="post.SchoolName"
+        />
+      </a>
     </section>
   </section>
 </template>
@@ -37,11 +43,6 @@ export default {
     // console.log(data.posts);
     this.posts = data.posts;
   },
-  methods: {
-    redirectToPost(postid) {
-      this.$router.push(`./viewpost/${postid}`);
-    },
-  },
   computed: {
     isLoggedIn() {
       return localStorage.getItem('User_ID');
@@ -59,8 +60,15 @@ export default {
   align-items: center;
 }
 
-.post {
+.post-wrapper {
+  cursor: pointer;
   width: 100%;
   margin-bottom: 1em;
+  color:inherit;
+  text-decoration: none;
+}
+
+.post:hover {
+  background-color: #ededed;
 }
 </style>
