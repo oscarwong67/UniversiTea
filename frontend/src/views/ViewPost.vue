@@ -102,7 +102,6 @@ export default {
     },
     hasMedia() {
       if (this.mediaList[0] !== undefined) {
-        console.log(this.mediaList);
         return true;
       }
       return false;
@@ -137,8 +136,6 @@ export default {
   align-items: center;
   margin-left: auto;
   margin-right: auto;
-  /* max-height: 500px!important; */
-  /* height: 500px!important; */
   max-width: 800px;
   width: 600px;
 }

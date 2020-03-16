@@ -87,7 +87,7 @@ export default {
       const mediaUrls = this.mediaUrls.map((mediaUrl) => ({
         ...mediaUrl,
       }));
-      const res = await fetch(`${API_ADDRESS}/api/addPost/`, {
+      await fetch(`${API_ADDRESS}/api/addPost/`, {
         method: 'POST',
         body: JSON.stringify({
           title: this.title,
@@ -101,7 +101,7 @@ export default {
           'Content-Type': 'application/json',
         },
       });
-      console.log(res);
+      this.$buefy.toast.open('Post created!');
       this.$router.go();
     },
   },

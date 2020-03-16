@@ -109,7 +109,7 @@ export default {
       const mediaUrls = this.mediaUrls.map((mediaUrl) => ({
         ...mediaUrl,
       }));
-      const res = await fetch(`${API_ADDRESS}/api/editPost/`, {
+      await fetch(`${API_ADDRESS}/api/editPost/`, {
         method: 'POST',
         body: JSON.stringify({
           postid: id,
@@ -122,8 +122,7 @@ export default {
           'Content-Type': 'application/json',
         },
       });
-      const data = await res.json();
-      console.log(data);
+      this.$buefy.toast.open('Post updated!');
       this.$router.go();
     },
   },
