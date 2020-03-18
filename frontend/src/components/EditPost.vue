@@ -5,10 +5,8 @@
     class='form'
     :oldTitle="this.title" :oldContent="this.content"
     :oldMediaUrls="this.mediaUrls" :oldAnonymous="this.isAnonymous"
-    @titleChange='updateTitle($event)'
-    @contentChange='updateContent($event)'
-    @mediaAdd='addMediaUrl($event)'
-    @mediaRm='removeMediaUrl($event)'
+    @titleChange='updateTitle($event)' @contentChange='updateContent($event)'
+    @mediaAdd='addMediaUrl($event)' @mediaRm='removeMediaUrl($event)'
     @anonChange='updateAnon($event)'
   />
   <div class='buttons container'>
@@ -21,6 +19,7 @@
 <script>
 import PostForm from './PostForm.vue';
 import { API_ADDRESS } from '../constants';
+import { getMediaType } from '../helper';
 
 export default {
   name: 'EditPost',
@@ -33,7 +32,6 @@ export default {
     content: '',
     mediaUrls: [],
     isAnonymous: '',
-    currentMediaUrl: '',
   }),
   created() {
     this.title = this.$props.oldTitle;
@@ -51,44 +49,31 @@ export default {
       this.content = newContent;
     },
     addMediaUrl(currentMediaUrl) {
-      this.currentMediaUrl = currentMediaUrl;
-      let type = 'invalid media URL';
-      if (this.validYouTubeUrl(this.currentMediaUrl)) {
-        type = 'youtube';
+      const mediaInfo = getMediaType(currentMediaUrl);
+      if (String(mediaInfo[1]) !== 'invalid media URL') {
+        this.mediaUrls.push({
+          url: mediaInfo[0],
+          type: mediaInfo[1],
+        });
       } else {
-        // eslint-disable-next-line no-useless-escape
-        const extension = this.currentMediaUrl.split(/\#|\?/)[0].split('.').pop().trim().toLowerCase();
-        if (extension === 'jpg' || extension === 'png' || extension === 'jpeg' || extension === 'tiff' || extension === 'gif' || extension === 'webp') {
-          type = 'image';
-        } else if (extension === 'mp4' || extension === 'webm') {
-          type = 'video';
+        this.$buefy.dialog.alert({
+          message: 'The URL you entered is invalid!',
+          type: 'is-warning',
+        });
+      }
+    },
+    removeMediaUrl(media) {
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < this.mediaUrls.length; i++) {
+        console.log(i);
+        if (this.mediaUrls[i] === media) {
+          console.log(this.mediaUrls[i]);
+          this.mediaUrls.splice(i, 1);
+          break;
         }
       }
-      this.mediaUrls.push({
-        url: this.currentMediaUrl,
-        type,
-      });
-    },
-    validYouTubeUrl(url) {
-      if (url !== undefined || url !== '') {
-        // eslint-disable-next-line no-useless-escape
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        if (match && match[2].length === 11) {
-          // change to embedded
-          this.currentMediaUrl = `https://www.youtube.com/embed/${match[2]}`;
-          return true;
-        }
-      }
-      return false;
-    },
-    removeMediaUrl(index) {
-      // console.log(this.mediaUrls);
-      this.mediaUrls.splice(index);
     },
     updateAnon(newAnonymous) {
-      // TODO: fix warning:
-      // [Vue warn]: Avoid using non-primitive value as key, use string/number value instead.
       this.isAnonymous = newAnonymous;
     },
     handleCancel() {

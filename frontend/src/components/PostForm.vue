@@ -22,9 +22,9 @@
           class='url-input'
         >
           <div class='break' />
-          <p class='break' v-for="(mediaUrl, idx) in mediaUrls" :key="idx">
-            {{mediaUrl}}
-            <b-button outlined @click='handleRmMediaChange(idx)'>x</b-button>
+          <p class='break' v-for="media in mediaUrls" :key="media.url">
+            <strong>url:</strong> {{media.url}}, <strong>type:</strong> {{media.type}}
+            <b-button outlined @click='handleRmMediaChange(media)'>x</b-button>
           </p>
           <b-input
             v-model="currentMediaUrl"
@@ -45,6 +45,7 @@
 
 <script>
 import { VueEditor } from 'vue2-editor';
+import { getMediaType } from '../helper';
 
 export default {
   name: 'PostForm',
@@ -69,7 +70,6 @@ export default {
     this.content = this.$props.oldContent;
     if (this.$props.oldMediaUrls !== undefined) {
       this.mediaUrls = this.$props.oldMediaUrls;
-      // console.log(this.mediaUrls);
     }
     this.isAnonymous = this.$props.oldAnonymous;
   },
@@ -87,43 +87,27 @@ export default {
       }
       this.currentMediaUrl = '';
     },
-    handleRmMediaChange(index) {
-      this.$emit('mediaRm', index);
-      this.mediaUrls.splice(index);
+    handleRmMediaChange(media) {
+      this.$emit('mediaRm', media);
+      // eslint-disable-next-line no-plusplus
+      for (let i = 0; i < this.mediaUrls.length; i++) {
+        if (this.mediaUrls[i] === media) {
+          this.mediaUrls.splice(i, 1);
+          break;
+        }
+      }
     },
     handleAnonChange() {
       this.$emit('anonChange', this.isAnonymous);
     },
     addMediaUrl() {
-      let type = 'invalid media URL';
-      if (this.validYouTubeUrl(this.currentMediaUrl)) {
-        type = 'youtube';
-      } else {
-        // eslint-disable-next-line no-useless-escape
-        const extension = this.currentMediaUrl.split(/\#|\?/)[0].split('.').pop().trim().toLowerCase();
-        if (extension === 'jpg' || extension === 'png' || extension === 'jpeg' || extension === 'tiff' || extension === 'gif' || extension === 'webp') {
-          type = 'image';
-        } else if (extension === 'mp4' || extension === 'webm') {
-          type = 'video';
-        }
+      const mediaInfo = getMediaType(this.currentMediaUrl);
+      if (String(mediaInfo[1]) !== 'invalid media URL') {
+        this.mediaUrls.push({
+          url: mediaInfo[0],
+          type: mediaInfo[1],
+        });
       }
-      this.mediaUrls.push({
-        url: this.currentMediaUrl,
-        type,
-      });
-    },
-    validYouTubeUrl(url) {
-      if (url !== undefined || url !== '') {
-        // eslint-disable-next-line no-useless-escape
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        if (match && match[2].length === 11) {
-          // change to embedded
-          this.currentMediaUrl = `https://www.youtube.com/embed/${match[2]}`;
-          return true;
-        }
-      }
-      return false;
     },
   },
 };
@@ -133,6 +117,7 @@ export default {
 .create-post {
   background-color: white;
   order: 2px solid white;
+  padding-top: 1em;
   padding: 1em;
 }
 .url-input {

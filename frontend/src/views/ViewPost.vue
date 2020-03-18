@@ -115,7 +115,7 @@ export default {
 
 <style scoped>
 .view{
-  padding-top: 1em;
+  padding-top: 3em;
 }
 .buttons {
   padding: 1em;
