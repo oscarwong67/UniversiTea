@@ -66,12 +66,10 @@ export default {
   }),
   props: ['oldTitle', 'oldContent', 'oldMediaUrls', 'oldAnonymous'],
   created() {
-    this.title = this.$props.oldTitle;
-    this.content = this.$props.oldContent;
-    if (this.$props.oldMediaUrls !== undefined) {
-      this.mediaUrls = this.$props.oldMediaUrls;
-    }
-    this.isAnonymous = this.$props.oldAnonymous;
+    this.title = this.$props.oldTitle || '';
+    this.content = this.$props.oldContent || '';
+    this.mediaUrls = this.$props.oldMediaUrls || [];
+    this.isAnonymous = this.$props.oldAnonymous || '';
   },
   methods: {
     handleTitleChange() {
@@ -83,31 +81,29 @@ export default {
     handleAddMediaChange() {
       this.$emit('mediaAdd', this.currentMediaUrl);
       if (this.$props.oldTitle === undefined) {
-        this.addMediaUrl();
+        const mediaInfo = getMediaType(this.currentMediaUrl);
+        if (String(mediaInfo[1]) !== 'invalid media URL') {
+          this.mediaUrls.push({
+            url: mediaInfo[0],
+            type: mediaInfo[1],
+          });
+        }
       }
       this.currentMediaUrl = '';
     },
     handleRmMediaChange(media) {
-      this.$emit('mediaRm', media);
+      let i;
       // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < this.mediaUrls.length; i++) {
+      for (i = 0; i < this.mediaUrls.length; i++) {
         if (this.mediaUrls[i] === media) {
           this.mediaUrls.splice(i, 1);
           break;
         }
       }
+      this.$emit('mediaRm', i);
     },
     handleAnonChange() {
       this.$emit('anonChange', this.isAnonymous);
-    },
-    addMediaUrl() {
-      const mediaInfo = getMediaType(this.currentMediaUrl);
-      if (String(mediaInfo[1]) !== 'invalid media URL') {
-        this.mediaUrls.push({
-          url: mediaInfo[0],
-          type: mediaInfo[1],
-        });
-      }
     },
   },
 };
@@ -116,7 +112,6 @@ export default {
 <style scoped>
 .create-post {
   background-color: white;
-  order: 2px solid white;
   padding-top: 1em;
   padding: 1em;
 }

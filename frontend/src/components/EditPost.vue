@@ -62,16 +62,8 @@ export default {
         });
       }
     },
-    removeMediaUrl(media) {
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < this.mediaUrls.length; i++) {
-        console.log(i);
-        if (this.mediaUrls[i] === media) {
-          console.log(this.mediaUrls[i]);
-          this.mediaUrls.splice(i, 1);
-          break;
-        }
-      }
+    removeMediaUrl(index) {
+      this.mediaUrls.splice(index, 1);
     },
     updateAnon(newAnonymous) {
       this.isAnonymous = newAnonymous;

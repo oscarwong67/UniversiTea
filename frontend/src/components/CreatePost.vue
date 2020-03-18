@@ -27,7 +27,6 @@ export default {
     content: '',
     mediaUrls: [],
     isAnonymous: '',
-    currentMediaUrl: '',
   }),
   methods: {
     updateTitle(newTitle) {
@@ -56,14 +55,8 @@ export default {
         });
       }
     },
-    removeMediaUrl(media) {
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < this.mediaUrls.length; i++) {
-        if (this.mediaUrls[i] === media) {
-          this.mediaUrls.splice(i, 1);
-          break;
-        }
-      }
+    removeMediaUrl(index) {
+      this.mediaUrls.splice(index, 1);
     },
     async handleSavingContent() {
       // You have the content to save
