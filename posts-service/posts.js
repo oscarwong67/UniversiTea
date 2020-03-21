@@ -87,13 +87,13 @@ exports.plugin = {
               let comment_user_id = res[0].User_ID;
 
               //API call to notifications service to insert receive notifications rows
-              const res = await fetch(notifications_url, {
+              const res2 = await fetch(notifications_url, {
                 method: 'POST',
                 body: {"Notification_ID":original_post.notificationID, "User_ID":post_user_id},
                 headers: { 'Content-Type': 'application/json' },
               })
 
-              const res = await fetch(notifications_url, {
+              const res3 = await fetch(notifications_url, {
                 method: 'POST',
                 body: {"Notification_ID":comment.notificationID, "User_ID":comment_user_id},
                 headers: { 'Content-Type': 'application/json' },
