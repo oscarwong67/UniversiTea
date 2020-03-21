@@ -2,6 +2,8 @@
 
 const db = require('./db');
 const helper = require('./helper');
+const commentsMicroserviceHost = 'localhost:3002';
+const notificationsMicroserviceHost = 'localhost:3003';
 
 exports.plugin = {
     pkg: require('./package.json'),
@@ -56,6 +58,52 @@ exports.plugin = {
               return helper.badResponse(h, err);
             }
           }
+      });
+
+      server.route({
+        method:'POST',
+        path: '/api/addReceiveNotification',
+        handler: async function (request, h){
+          const comments_url = `http://${commentsMicroserviceHost}/api/getComment`;
+          const notifications_url = `http://${notificationsMicroserviceHost}/api/addReceiveNotification`;
+          try{
+              let original_post = request.payload.original_post;
+              let comment = request.payload.comment;
+
+              //Query to find Post_User_ID
+              const posts = await db.query(`
+              SELECT * 
+              FROM POSTS
+              WHERE Posts_ID = ?`, [original_post.Post_ID]);
+
+              let post_user_id = posts[0].User_ID;
+              
+              //API call to comments service to find Comment_User_ID
+              const res = await fetch(comments_url, {
+                method: 'GET',
+                body: {"Comment_ID":commentID},
+                headers: { 'Content-Type': 'application/json' },
+              })
+              let comment_user_id = res[0].User_ID;
+
+              //API call to notifications service to insert receive notifications rows
+              const res = await fetch(notifications_url, {
+                method: 'POST',
+                body: {"Notification_ID":original_post.notificationID, "User_ID":post_user_id},
+                headers: { 'Content-Type': 'application/json' },
+              })
+
+              const res = await fetch(notifications_url, {
+                method: 'POST',
+                body: {"Notification_ID":comment.notificationID, "User_ID":comment_user_id},
+                headers: { 'Content-Type': 'application/json' },
+              })
+              return helper.goodResponse(h);
+          }
+          catch(err){
+            return helper.badResponse(h, err);
+          }
+        }
       });
     }
 };

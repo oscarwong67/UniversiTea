@@ -1,6 +1,8 @@
 
 const fetch = require('node-fetch');
+const notificationsMicroserviceHost = 'localhost:3003';
 const commentsMicroserviceHost = 'localhost:3002';
+const postsMicroserviceHost = 'localhost:3001';
 
 exports.plugin = {
   pkg: require('./package.json'),
@@ -24,7 +26,6 @@ exports.plugin = {
         console.log(request.payload);
         const res = await fetch(url, {
           method: 'POST',
-          // body: JSON.stringify(request.payload),
           body: request.payload,
           headers: { 'Content-Type': 'application/json' },
         })
@@ -32,35 +33,36 @@ exports.plugin = {
             function(response){
                 response.json().then(function(data) {
                     const userID = data.User_ID; //User who made the new comment
-                    const commentID = data.Comment_ID; //The new comment
-                    const commentContent = data.Content;
-                    const parentComments = [];
-                    const parentUsers = [];
-                    const parentCommentsContents = [];
-                    const parentID = data.Parent_ID;
+                    const commentID = data.Comment_ID; //The new comment ID
+                    const postID = data.postID; //The id of the first post in the thread
+                    const parentID = data.Parent_ID; //The id of the parent comment if in 
+                                                     //a nested thread
 
-                    //While there is a parentID, find the id of the parent and the user who posted it
-                    //An alternative to speed this up would be to put another function in the comment service 
-                    //that returns a large list of everything necessary.
-                    //This would reduce overhead of making an HTTP request for every nested comment.
-                    while(parentID != null && parentID != 0){
-                        parentComments.add(parentID);
-                        const getParentURL = `http://${commentsMicroserviceHost}/api/getComment`;
-                        const getParentRes = await fetch(url, {
-                            method: 'GET',
-                            body: {"Comment_ID" : parentID},
-                            headers: { 'Content-Type': 'application/json' },
+
+                    //We need to create a notification object in the DB and return the Notification_ID
+                    const url = `http://${notificationsMicroserviceHost}/api/addNotification`;
+                    console.log(request.payload);
+                    const res = await fetch(url, {
+                      method: 'POST',
+                      body: {"Comment_ID":commentID, "User_ID":userID},
+                      headers: { 'Content-Type': 'application/json' },
+                    })
+
+                    //This API call should use the Post_ID JSON field to query posts for the user ids, then
+                    //use the Notification_ID and User_IDs to add appropriate rows to the 
+                    //RECEIVE_NOTIFICATION table
+                    .then(
+                      response.json().then(function(data){
+                        const notificationID = data.Notification_ID;
+                        const url = `http://${postsMicroserviceHost}/api/addReceiveNotification`;
+                        console.log(request.payload);
+                        const res = await fetch(url, {
+                          method: 'POST',
+                          body: {"Receive_Notifications":{"original_post":{"Notification_ID":notificationID, "Post_ID":postID},"comment":{"Notification_ID":notificationID, "Post_ID":parentID}}},
+                          headers: { 'Content-Type': 'application/json' },
                         })
-                        .then(function(response){
-                            parentUsers.add(response.User_ID);
-                            parentCommentsContents.add(resonse.Content);
-                            parentID = response.Parent_ID;
-                        });   
-                    }
-
-                    //Notify all users in the parentUsers list
-                    //that their comment with id and contents (at same index in parentComments list)
-                    //had a reply by userID saying commentContent
+                      })
+                    )
                 });
             }
         );
