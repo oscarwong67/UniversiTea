@@ -9,7 +9,7 @@ const init = async () => {
     host: 'localhost'
   });
 
-  await server.register(require('./posts')); // register the routes in posts.js
+  await server.register(require('./notifications')); // register the routes in notifications.js
 
   const start = async function () {
     try {
