@@ -7,6 +7,58 @@ exports.plugin = {
     pkg: require('./package.json'),
     register: async function (server, options) {
         server.route({
+            method: 'GET',
+            path: '/api/getNotifications/',
+            handler: async function (request, h) {
+                let notification_id = request.payload.Notification_ID;
+                try {
+                    const notifications = await db.query(`
+                    SELECT * 
+                    FROM NOTIFICATION
+                    WHERE Notification_ID = ?`, [notification_id]);
+                    return { notifications };
+                } catch(err) {
+                    console.log(err);
+                }
+            }
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/api/getReceiveNotificationByUser/',
+            handler: async function (request, h) {
+                let user_id = request.payload.User_ID;
+                try {
+                    const receive_notifications = await db.query(`
+                    SELECT * 
+                    FROM RECEIVE_NOTIFICATION
+                    WHERE User_ID = ?`, [user_id]);
+                    return { receive_notifications };
+                } catch(err) {
+                    console.log(err);
+                }
+            }
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/api/getReceiveNotificationByNotification/',
+            handler: async function (request, h) {
+                let notification_id = request.payload.Notification_ID;
+                try {
+                    const receive_notifications = await db.query(`
+                    SELECT * 
+                    FROM RECEIVE_NOTIFICATION
+                    WHERE Notification_ID = ?`, [notification_id]);
+                    return { receive_notifications };
+                } catch(err) {
+                    console.log(err);
+                }
+            }
+        });
+
+
+        server.route({
           method: 'POST',
           path: '/api/addNotification',
           handler: async function (request, h) {
