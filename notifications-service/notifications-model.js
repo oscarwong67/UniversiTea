@@ -31,7 +31,7 @@ const addNotificationsForComment = async(commentId) => {
     'FROM POSTS AS P, COMMENT AS C ' +
     'WHERE P.Post_ID=C.Post_ID AND C.Comment_ID=?', [commentId]
   );
-  if (!commentParentInfo.length) throw new Error(`Unable to fetch parent info for comment with id: ${commentId}`);
+  if (!commentParentPostAndCommentInfo.length) throw new Error(`Unable to fetch parent info for comment with id: ${commentId}`);
   let originalPosterId = commentParentPostAndCommentInfo[0].User_ID;
   let parentCommentId = commentParentPostAndCommentInfo[0].Parent_ID;
 
