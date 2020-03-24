@@ -1,9 +1,9 @@
 'use strict';
 
 const helper = require('./helper');
-
 const commandModel = require('./command-model');
 const queryModel = require('./query-model');
+const notificationController = require('./notifications-controller');
 
 exports.plugin = {
     pkg: require('./package.json'),
@@ -18,7 +18,9 @@ exports.plugin = {
             handler: async function (request, h) {
                 try {
                     await commandModel.addComment(request);
-                    await queryModel.addComment();
+                    const commentId = await queryModel.addComment();
+                     // no await - if notifications doesn't work, comment should still be posted
+                    notificationController.addNotificationForComment(commentId);
                     return helper.goodResponse(h, null);
                 } catch(err) {
                     return helper.badResponse(h, err);

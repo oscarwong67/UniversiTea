@@ -5,7 +5,7 @@ const postsMicroserviceHost = 'localhost:3001';
 module.exports = [
   {
     method: 'GET',
-    path: '/api/feed/',
+    path: '/api/feed',
     async handler(request, h) {
       const url = `http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`;
       const res = await fetch(url);

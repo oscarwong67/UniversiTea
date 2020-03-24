@@ -19,11 +19,11 @@ const addComment = async (request) => {
     };
     
     event = JSON.stringify(event);
-    await db.query(
+    const result = await db.query(
         'INSERT INTO EVENT SET ?',
         { Content : event } 
     );
-    return;
+    return result.insertId;
 }
 
 // editing a comment in the event store database

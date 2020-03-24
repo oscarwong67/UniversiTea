@@ -39,13 +39,13 @@
               aria-role="listitem"
               v-for="notification in notifications"
               :key="notification.Notification_ID"
-              @click="redirectToPost(notification.postId)"
+              @click="redirectToPost(notification.Post_ID)"
               >
               <div class='container'>
-                {{ notification.parentComment ?
+                {{ notification.Parent_ID ?
                 'New reply to your comment!'
                 : 'New reply on your post!' }}
-                <div>On "{{ notification.postTitle }}"</div>
+                <div>On "{{ notification.Title }}"</div>
                 <div><b-icon icon="reply" size="is-small"/>&nbsp;{{notification.ageString}}</div>
               </div>
             </b-dropdown-item>
@@ -209,22 +209,18 @@ export default {
       this.$router.go();
     },
     async fetchNotifications() {
-      // TODO: fetch notifications (let's say like last 25)
-      // if i'm feeling really extra, only do it if I haven't fetched them in x amount of time
-      const mockedNotifications = [
-        {
-          parentComment: 2,
-          postTitle: 'Download Swip',
-          ageString: '1 day ago',
-          postId: 1,
-        },
-        {
-          postTitle: 'Eat UToppings',
-          ageString: '2 days ago',
-          postId: 2,
-        },
-      ];
-      this.notifications = mockedNotifications;
+      // const mockedNotifications = [
+      //   {
+      //     Parent_ID: 2,
+      //     Title: 'Download Swip',
+      //     ageString: '1 day ago',
+      //     Post_ID: 1,
+      //     Notification_ID: 0,
+      // ];
+      // this.notifications = mockedNotifications;
+      const res = await fetch(`${API_ADDRESS}/api/getNotifications?userId=${localStorage.getItem('User_ID')}&limit=25`);
+      const data = await res.json();
+      this.notifications = data;
     },
     redirectToPost(postId) {
       this.$router.push(`./viewpost/${postId}`);

@@ -1,5 +1,4 @@
 'use strict'
-require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 
 const init = async () => {
@@ -9,7 +8,7 @@ const init = async () => {
     host: 'localhost'
   });
 
-  await server.register(require('./notifications')); // register the routes in notifications.js
+  await server.register(require('./notifications-controller')); // register the routes in notifications.js
 
   const start = async function () {
     try {
