@@ -1,5 +1,5 @@
 <template>
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation" fixed-top>
       <div class='navbar-brand'>
         <h1 class='navbar-item'>
           UniversiTea
@@ -21,12 +21,19 @@
         <div class='navbar-start'>
           <router-link class='navbar-item' to="/">Home</router-link>
           <router-link class='navbar-item' to="/about">About</router-link>
+          <b-navbar-dropdown label="Schools" :hoverable='true'>
+            <div class='school-link' v-for="school in allSchools" :key='school.School_ID'>
+              <b-navbar-item :href="`/school/${school.School_ID}`" noreferrer>
+                {{ school.SchoolName }}
+              </b-navbar-item>
+            </div>
+          </b-navbar-dropdown>
         </div>
        <div class='navbar-end'>
-         <div class='double-button-container navbar-item' v-if="isLoggedIn">
-           <NotificationDropdown />
-          <b-button outlined @click='logout'>Log Out</b-button>
-         </div>
+          <div class='double-button-container navbar-item' v-if="isLoggedIn">
+            <NotificationDropdown />
+            <b-button outlined @click='logout'>Log Out</b-button>
+          </div>
           <div v-else class='navbar-item double-button-container'>
             <b-button
               type="is-primary"
@@ -78,8 +85,7 @@
                       <b-dropdown-item
                         :value="degreeType"
                         aria-role="listitem"
-                        v-for="degreeType in degreeTypes"
-                        :key="degreeType"
+                        v-for="degreeType in degreeTypes" :key="degreeType"
                       >
                         {{degreeType}}
                       </b-dropdown-item>
@@ -129,7 +135,13 @@ export default {
       'M.D.',
       'DDS',
     ],
+    allSchools: [],
   }),
+  async mounted() {
+    const res = await fetch(`${API_ADDRESS}/api/getSchools`);
+    const data = await res.json();
+    this.allSchools = data;
+  },
   methods: {
     updateEmailPassword(email, password) {
       this.email = email;
@@ -195,16 +207,14 @@ export default {
 
 <style scoped>
 .modal-content, .modal:nth-child(2), .card {
-  overflow: overlay;
+  overflow: auto;
 }
 
 .double-button-container {
   display: flex;
 }
 
-.dropdown-menu {
-  max-height: 40vh;
-  overflow: auto;
-  height: auto;
+.left-button {
+  padding-right: 0.5em;
 }
 </style>
