@@ -44,9 +44,9 @@ export default {
     // TODO: add query parameters similar to how I did it in the job board
     let res;
     if (this.$props === undefined) {
-      res = await fetch(`${API_ADDRESS}/api/feed/?page=1&limit=9`);
+      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9`);
     } else {
-      res = await fetch(`${API_ADDRESS}/api/feed/?page=1&limit=9&schoolID=${this.$props.schoolid}`);
+      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&schoolID=${this.$props.schoolid}`);
     }
     const data = await res.json();
     // console.log(data.posts);
