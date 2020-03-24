@@ -34,12 +34,10 @@ export default {
     isAnonymous: '',
   }),
   created() {
-    this.title = this.$props.oldTitle;
-    this.content = this.$props.oldContent;
-    if (this.$props.oldMediaUrls !== undefined) {
-      this.mediaUrls = this.$props.oldMediaUrls;
-    }
-    this.isAnonymous = this.$props.oldAnonymous;
+    this.title = this.$props.oldTitle || '';
+    this.content = this.$props.oldContent || '';
+    this.mediaUrls = this.$props.oldMediaUrls || [];
+    this.isAnonymous = this.$props.oldAnonymous || '';
   },
   methods: {
     updateTitle(newTitle) {
