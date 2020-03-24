@@ -1,15 +1,14 @@
 'use strict'
-require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 
 const init = async () => {
 
   const server = Hapi.server({
-    port: 3001,
+    port: 3003,
     host: 'localhost'
   });
 
-  await server.register(require('./posts')); // register the routes in posts.js
+  await server.register(require('./notifications-controller')); // register the routes in notifications.js
 
   const start = async function () {
     try {

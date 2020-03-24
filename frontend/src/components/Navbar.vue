@@ -23,12 +23,47 @@
           <router-link class='navbar-item' to="/about">About</router-link>
         </div>
        <div class='navbar-end'>
-          <b-button class='navbar-item' type="is-primary" outlined @click="isLoginModalActive=true">
-            Log In
-          </b-button>
-          <b-button class='navbar-item' type="is-primary" @click="isSignupModalActive=true">
-            Signup
-          </b-button>
+         <div class='double-button-container navbar-item' v-if="isLoggedIn">
+           <b-dropdown aria-role="list">
+             <b-button
+              type="is-info"
+              icon-left="bell"
+              outlined
+              slot="trigger" slot-scope="{ active }"
+              @click="isNotificationPopupActive=true"
+            >
+              <span>Notifications</span>
+              <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
+            </b-button>
+            <b-dropdown-item
+              aria-role="listitem"
+              v-for="notification in notifications"
+              :key="notification.Notification_ID"
+              @click="redirectToPost(notification.Post_ID)"
+              >
+              <div class='container'>
+                {{ notification.Parent_ID ?
+                'New reply to your comment!'
+                : 'New reply on your post!' }}
+                <div>On "{{ notification.Title }}"</div>
+                <div><b-icon icon="reply" size="is-small"/>&nbsp;{{notification.ageString}}</div>
+              </div>
+            </b-dropdown-item>
+           </b-dropdown>
+          <b-button outlined @click='logout'>Log Out</b-button>
+         </div>
+          <div v-else class='navbar-item double-button-container'>
+            <b-button
+              type="is-primary"
+              outlined
+              @click="isLoginModalActive=true"
+            >
+              Log In
+            </b-button>
+            <b-button type="is-primary" @click="isSignupModalActive=true">
+              Signup
+            </b-button>
+          </div>
           <b-modal class='modal' :active.sync="isLoginModalActive">
             <section class="section card">
                 <h2>Log In</h2>
@@ -65,7 +100,12 @@
                           <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
                       </button>
 
-                      <b-dropdown-item :value="degreeType" aria-role="listitem" v-for="degreeType in degreeTypes" :key="degreeType">
+                      <b-dropdown-item
+                        :value="degreeType"
+                        aria-role="listitem"
+                        v-for="degreeType in degreeTypes"
+                        :key="degreeType"
+                      >
                         {{degreeType}}
                       </b-dropdown-item>
                     </b-dropdown>
@@ -81,6 +121,7 @@
 </template>
 <script>
 import LoginForm from './LoginForm.vue';
+import { API_ADDRESS } from '../constants';
 
 export default {
   name: 'Navbar',
@@ -111,17 +152,86 @@ export default {
       'M.D.',
       'DDS',
     ],
+    notifications: [],
   }),
   methods: {
     updateEmailPassword(email, password) {
       this.email = email;
       this.password = password;
     },
-    handleLogin() {
-
+    afterLogin(data) {
+      if (data.isValid) {
+        localStorage.setItem('User_ID', data.User_ID);
+        localStorage.setItem('School_ID', data.School_ID);
+        localStorage.setItem('isAdmin', data.isAdmin);
+        this.$router.go();
+      }
     },
-    handleSignup() {
+    async handleLogin() {
+      const res = await fetch(`${API_ADDRESS}/api/authentication/login`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: this.email,
+          password: this.password,
+        }),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await res.json();
+      this.afterLogin(data);
+    },
+    async handleSignup() {
+      const res = await fetch(`${API_ADDRESS}/api/authentication/signup`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: this.email,
+          password: this.password,
+          Fname: this.fname,
+          Lname: this.lname,
+          Degree_Type: this.degreeType,
+          schoolName: this.schoolName,
+        }),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
+      const data = await res.json();
+      this.afterLogin(data);
+    },
+    logout() {
+      localStorage.removeItem('User_ID');
+      localStorage.removeItem('School_ID');
+      localStorage.removeItem('isAdmin');
+      this.$router.go();
+    },
+    async fetchNotifications() {
+      // const mockedNotifications = [
+      //   {
+      //     Parent_ID: 2,
+      //     Title: 'Download Swip',
+      //     ageString: '1 day ago',
+      //     Post_ID: 1,
+      //     Notification_ID: 0,
+      // ];
+      // this.notifications = mockedNotifications;
+      const res = await fetch(`${API_ADDRESS}/api/getNotifications?userId=${localStorage.getItem('User_ID')}&limit=25`);
+      const data = await res.json();
+      this.notifications = data;
+    },
+    redirectToPost(postId) {
+      this.$router.push(`./viewpost/${postId}`);
+    },
+  },
+  mounted() {
+    this.fetchNotifications();
+  },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem('User_ID');
     },
   },
 };
@@ -129,6 +239,16 @@ export default {
 
 <style scoped>
 .modal-content, .modal:nth-child(2), .card {
-  overflow: scroll;
+  overflow: overlay;
+}
+
+.double-button-container {
+  display: flex;
+}
+
+.dropdown-menu {
+  max-height: 40vh;
+  overflow: auto;
+  height: auto;
 }
 </style>

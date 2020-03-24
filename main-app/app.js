@@ -1,4 +1,3 @@
-
 const Hapi = require('@hapi/hapi');
 
 const init = async () => {
@@ -7,23 +6,27 @@ const init = async () => {
     host: 'localhost',
   });
 
-  await server.register([{
-    plugin: require('./apiExample'),
-    plugin: require('./posts')
-  }]); // register the routes in apiExample.js
+  server.state('session', {
+    ttl: 1000 * 60 * 60,
+    encoding: 'base64json'
+  });
 
   const start = async function () {
     try {
       await server.register([
-        { plugin: require('./apiExample'), options: {} },
-        { plugin: require('./authentication'), options: {} },
         {
           plugin: require('hapi-cors'),
           options: {
             origins: ['http://localhost:8080']
           }
-        }
+        },
+        {
+          plugin: require('hapi-auth-cookie'),
+          options: {}
+        },
       ]);
+
+      server.route(require('./routes'));
 
       await server.start();
     } catch (err) {
