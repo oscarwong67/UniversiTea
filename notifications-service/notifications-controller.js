@@ -36,5 +36,19 @@ exports.plugin = {
             }
           }
       });
+
+      server.route({
+        method: 'POST',
+        path: '/api/markNotificationsAsRead',
+        handler: async function (request, h) {
+          try {
+            let { userId } = request.payload;
+            await notificationsModel.markNotificationsAsRead(userId);
+            return helper.goodResponse(h);
+          } catch(err) {
+            return helper.badResponse(h, err);
+          }
+        }
+      })
     }
 };
