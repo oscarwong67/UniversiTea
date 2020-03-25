@@ -1,5 +1,6 @@
 <template>
-    <section class="create-post section">
+    <section class="post section">
+      <div class='header'><b>{{this.$props.header}}</b></div>
       <div class='container'>
         <b-field>
           <b-input
@@ -9,17 +10,13 @@
         </b-field>
         <b-field>
           <vue-editor
-            v-model="content"
-            placeholder='Start typing!'
-            :editor-toolbar="customToolbar"
-            @input='handleContentChange'
+            v-model="content" placeholder='Start typing!'
+            :editor-toolbar="customToolbar" @input='handleContentChange'
           />
         </b-field>
         <b-field
-          grouped
-          label="Image/Video URLs"
-          custom-class="url-input"
-          class='url-input'
+          grouped label="Image/Video URLs"
+          custom-class="url-input" class='url-input'
         >
           <div class='break' />
           <p class='break' v-for="media in mediaUrls" :key="media.url">
@@ -27,18 +24,17 @@
             <b-button outlined @click='handleRmMediaChange(media)'>x</b-button>
           </p>
           <b-input
-            v-model="currentMediaUrl"
-            placeholder="https://example.com"
-            type="text"
-            maxlength='200'
-            expanded
+            v-model="currentMediaUrl" placeholder="https://example.com" type="text"
+            maxlength='200' expanded
           />
           <b-button outlined
             @click='handleAddMediaChange'
             v-if='currentMediaUrl.length > 0'
           >+</b-button>
         </b-field>
-        <b-checkbox v-model='isAnonymous' @input='handleAnonChange'>Post Anonymously</b-checkbox>
+        <b-checkbox class='checkbox' v-model='isAnonymous' @input='handleAnonChange'>
+          Post Anonymously
+        </b-checkbox>
       </div>
     </section>
 </template>
@@ -64,7 +60,7 @@ export default {
     currentMediaUrl: '',
     isAnonymous: false,
   }),
-  props: ['oldTitle', 'oldContent', 'oldMediaUrls', 'oldAnonymous'],
+  props: ['header', 'oldTitle', 'oldContent', 'oldMediaUrls', 'oldAnonymous'],
   created() {
     this.title = this.$props.oldTitle || '';
     this.content = this.$props.oldContent || '';
@@ -110,10 +106,14 @@ export default {
 
 </script>
 <style scoped>
-.create-post {
+.header {
+  padding-bottom: 1em;
+}
+.post {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
   background-color: white;
   padding-top: 1em;
-  padding: 1em;
 }
 .url-input {
   flex-wrap: wrap;
@@ -123,8 +123,6 @@ export default {
   flex-basis: 100%;
 }
 .checkbox {
-  padding: .5em;
-  padding-top: 0px;
-  padding-left: none;
+  padding-left: .5em;
 }
 </style>
