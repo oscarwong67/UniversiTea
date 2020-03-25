@@ -17,6 +17,7 @@ const addComment = async () => {
   let userID = eventContent['User_ID'];
   let postID = eventContent['Post_ID'];
   let parentID = eventContent['Parent_ID'];
+  let isAnon = eventContent['isAnonymous'];
 
   let ver = 1;
 
@@ -27,7 +28,8 @@ const addComment = async () => {
       User_ID: userID,
       Content: content,
       Post_ID: postID,
-      Parent_ID: parentID
+      Parent_ID: parentID,
+      isAnonymous: isAnon
     }
   );
 

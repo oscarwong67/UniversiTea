@@ -10,12 +10,15 @@ const addComment = async (request) => {
     let userID = request.payload.userID;
     let postID = request.payload.postID;
     let parentID = request.payload.parentID == undefined ? null : request.payload.parentID;
+    let isAnon = request.payload.isAnon; 
+    
     let event = {
         "Action" : "addComment",
         "Content" : content,
         "User_ID" : userID,
         "Post_ID" : postID,
-        "Parent_ID" : parentID
+        "Parent_ID" : parentID,
+        "isAnonymous": isAnon
     };
     
     event = JSON.stringify(event);
