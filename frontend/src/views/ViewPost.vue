@@ -11,19 +11,21 @@
       <div class='media container' v-if='hasMedia'>
         <b-carousel :autoplay='false' :indicator-inside="false">
           <b-carousel-item v-for="media in mediaList" :key="media.id">
-            <span class='media'>
-              <img class='image' :src="media.url" v-if='media.type === "image"'/>
-              <video class='video' :src="media.url"
-                v-else-if='media.type === "video"' controls
-              />
-              <iframe class='yt-video' :src="media.url" v-else-if='media.type === "youtube"'/>
-            </span>
+            <img class='media image' :src="media.url" v-if='media.type === "image"'/>
+            <video class='media video' :src="media.url"
+              v-else-if='media.type === "video"' controls/>
+            <iframe class='media youtube' :src="media.url" allowfullscreen="allowfullscreen"
+              v-else-if='media.type==="youtube"'/>
           </b-carousel-item>
         </b-carousel>
       </div>
       <div class = 'buttons container level-right' v-if="isOP">
         <b-button @click='handleEdit'>Edit</b-button>
         <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
+      </div>
+      <div class = 'create-comment container' v-else>
+        <hr/>
+        <CreateComment/>
       </div>
     </div>
     <NotFoundMessage :type='"post"'  v-else/>
@@ -39,6 +41,7 @@
 <script>
 import Post from '../components/Post.vue';
 import EditPost from '../components/EditPost.vue';
+import CreateComment from '../components/CreateComment.vue';
 import NotFoundMessage from '../components/NotFoundMessage.vue';
 import { API_ADDRESS } from '../constants';
 
@@ -52,6 +55,7 @@ export default {
   components: {
     Post,
     EditPost,
+    CreateComment,
     NotFoundMessage,
   },
   async created() {
@@ -92,29 +96,20 @@ export default {
   },
   computed: {
     isOP() {
-      if (localStorage.getItem('User_ID') === String(this.post[0].User_ID)) {
-        return true;
-      }
-      return false;
+      return (localStorage.getItem('User_ID') === String(this.post[0].User_ID));
     },
     hasMedia() {
-      if (this.mediaList[0] !== undefined) {
-        return true;
-      }
-      return false;
+      return (this.mediaList[0] !== undefined);
     },
     postExists() {
-      if (this.post[0] === undefined) {
-        return false;
-      }
-      return true;
+      return !(this.post[0] === undefined);
     },
   },
 };
 </script>
 
 <style scoped>
-.view{
+.view {
   padding-top: 3em;
 }
 .buttons {
@@ -143,16 +138,15 @@ export default {
   overflow: hidden;
   margin: 0 auto;
 }
-.image {
+.media {
   width: 600px;
   height: auto;
 }
-.video {
-  width: 600px;
-  height: auto;
-}
-.yt-video {
+.youtube {
   width: 600px;
   height: 500px;
+}
+.create-comment {
+  width: 95%;
 }
 </style>

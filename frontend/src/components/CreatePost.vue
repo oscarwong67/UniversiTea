@@ -1,12 +1,12 @@
 <template>
 <div class='create-post container'>
-  <div class='header'><b>Create a post</b></div>
   <PostForm class='form'
+    :header='"Create a post"'
     @titleChange='updateTitle($event)' @contentChange='updateContent($event)'
     @mediaAdd='addMediaUrl($event)' @mediaRm='removeMediaUrl($event)'
     @anonChange='updateAnon($event)'
   />
-  <div class='buttons container'>
+  <div class='buttons'>
     <b-button type="is-primary" outlined @click='handleSavingContent'>Post</b-button>
   </div>
 </div>
@@ -85,18 +85,14 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  padding: 1em;
-  padding-bottom: 0em;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  background-color: white;
+.form {
+  padding-bottom: 0px;
 }
 .buttons {
-  padding: 1em;
+  padding-left: 1.5em;
   padding-top: 1em;
+  padding-bottom: 1em;
   background-color: white;
-  border: none;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
