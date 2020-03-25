@@ -2,7 +2,7 @@ const db = require('./db');
 
 const getNotifications = async (userId, limit) => {
   const notifications = await db.query(
-    'SELECT N.Comment_ID, N.Notification_ID, P.Post_ID, P.Title, C.Timestamp, C.Parent_ID ' +
+    'SELECT N.Comment_ID, N.Notification_ID, N.Is_Read, P.Post_ID, P.Title, C.Timestamp, C.Parent_ID ' +
     'FROM NOTIFICATION AS N, POSTS AS P, COMMENT AS C ' +
     'WHERE N.User_ID = ? AND N.Comment_ID=C.Comment_ID AND C.Post_ID=P.Post_ID LIMIT ?', [userId, limit]);
   
@@ -27,11 +27,11 @@ const getNotifications = async (userId, limit) => {
 const addNotificationsForComment = async(commentId) => {
   // get original poster's id
   let commentParentPostAndCommentInfo = await db.query(
-    `SELECT P.User_ID, C.Parent_ID
-FROM POSTS AS P, COMMENT AS C
-WHERE P.Post_ID=C.Post_ID AND C.Comment_ID=?`, [commentId]
+    'SELECT P.User_ID, C.Parent_ID ' +
+    'FROM POSTS AS P, COMMENT AS C ' +
+    'WHERE P.Post_ID=C.Post_ID AND C.Comment_ID=?', [commentId]
   );
-  if (!commentParentInfo.length) throw new Error(`Unable to fetch parent info for comment with id: ${commentId}`);
+  if (!commentParentPostAndCommentInfo.length) throw new Error(`Unable to fetch parent info for comment with id: ${commentId}`);
   let originalPosterId = commentParentPostAndCommentInfo[0].User_ID;
   let parentCommentId = commentParentPostAndCommentInfo[0].Parent_ID;
 
@@ -59,4 +59,11 @@ WHERE P.Post_ID=C.Post_ID AND C.Comment_ID=?`, [commentId]
   }
 }
 
-module.exports = { getNotifications, addNotificationsForComment };
+const markNotificationsAsRead = async(userId) => {
+  let updateNotificationResult = await db.query(
+    'UPDATE NOTIFICATION SET Is_Read=1 WHERE User_ID=?', [userId]
+  );
+  if (!updateNotificationResult.affectedRows) throw new Error(`Unable to update notification with ID: ${notificationId}`);
+}
+
+module.exports = { getNotifications, addNotificationsForComment, markNotificationsAsRead };

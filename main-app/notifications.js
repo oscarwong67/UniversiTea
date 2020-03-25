@@ -19,5 +19,20 @@ module.exports = [
         return helper.badResponse(h, err);
       }
     }
+  },
+  {
+    method: 'POST',
+    path: '/api/markNotificationsAsRead',
+    handler: async function(request, h) {
+      const url = `http://${notificationsMicroserviceHost}/api/markNotificationsAsRead`;
+      const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(request.payload),
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      return res;
+    }
   }
 ]

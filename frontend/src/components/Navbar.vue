@@ -1,5 +1,5 @@
 <template>
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation" fixed-top>
       <div class='navbar-brand'>
         <h1 class='navbar-item'>
           UniversiTea
@@ -21,37 +21,19 @@
         <div class='navbar-start'>
           <router-link class='navbar-item' to="/">Home</router-link>
           <router-link class='navbar-item' to="/about">About</router-link>
+          <b-navbar-dropdown label="Schools" :hoverable='true'>
+            <div class='school-link' v-for="school in allSchools" :key='school.School_ID'>
+              <b-navbar-item :href="`/school/${school.School_ID}`" noreferrer>
+                {{ school.SchoolName }}
+              </b-navbar-item>
+            </div>
+          </b-navbar-dropdown>
         </div>
        <div class='navbar-end'>
-         <div class='double-button-container navbar-item' v-if="isLoggedIn">
-           <b-dropdown aria-role="list">
-             <b-button
-              type="is-info"
-              icon-left="bell"
-              outlined
-              slot="trigger" slot-scope="{ active }"
-              @click="isNotificationPopupActive=true"
-            >
-              <span>Notifications</span>
-              <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
-            </b-button>
-            <b-dropdown-item
-              aria-role="listitem"
-              v-for="notification in notifications"
-              :key="notification.Notification_ID"
-              @click="redirectToPost(notification.Post_ID)"
-              >
-              <div class='container'>
-                {{ notification.Parent_ID ?
-                'New reply to your comment!'
-                : 'New reply on your post!' }}
-                <div>On "{{ notification.Title }}"</div>
-                <div><b-icon icon="reply" size="is-small"/>&nbsp;{{notification.ageString}}</div>
-              </div>
-            </b-dropdown-item>
-           </b-dropdown>
-          <b-button outlined @click='logout'>Log Out</b-button>
-         </div>
+          <div class='double-button-container navbar-item' v-if="isLoggedIn">
+            <NotificationDropdown />
+            <b-button outlined @click='logout'>Log Out</b-button>
+          </div>
           <div v-else class='navbar-item double-button-container'>
             <b-button
               type="is-primary"
@@ -103,8 +85,7 @@
                       <b-dropdown-item
                         :value="degreeType"
                         aria-role="listitem"
-                        v-for="degreeType in degreeTypes"
-                        :key="degreeType"
+                        v-for="degreeType in degreeTypes" :key="degreeType"
                       >
                         {{degreeType}}
                       </b-dropdown-item>
@@ -121,12 +102,14 @@
 </template>
 <script>
 import LoginForm from './LoginForm.vue';
+import NotificationDropdown from './NotificationDropdown.vue';
 import { API_ADDRESS } from '../constants';
 
 export default {
   name: 'Navbar',
   components: {
     LoginForm,
+    NotificationDropdown,
   },
   data: () => ({
     isLoginModalActive: false,
@@ -152,8 +135,13 @@ export default {
       'M.D.',
       'DDS',
     ],
-    notifications: [],
+    allSchools: [],
   }),
+  async mounted() {
+    const res = await fetch(`${API_ADDRESS}/api/getSchools`);
+    const data = await res.json();
+    this.allSchools = data;
+  },
   methods: {
     updateEmailPassword(email, password) {
       this.email = email;
@@ -208,26 +196,6 @@ export default {
       localStorage.removeItem('isAdmin');
       this.$router.go();
     },
-    async fetchNotifications() {
-      // const mockedNotifications = [
-      //   {
-      //     Parent_ID: 2,
-      //     Title: 'Download Swip',
-      //     ageString: '1 day ago',
-      //     Post_ID: 1,
-      //     Notification_ID: 0,
-      // ];
-      // this.notifications = mockedNotifications;
-      const res = await fetch(`${API_ADDRESS}/api/getNotifications?userId=${localStorage.getItem('User_ID')}&limit=25`);
-      const data = await res.json();
-      this.notifications = data;
-    },
-    redirectToPost(postId) {
-      this.$router.push(`./viewpost/${postId}`);
-    },
-  },
-  mounted() {
-    this.fetchNotifications();
   },
   computed: {
     isLoggedIn() {
@@ -239,16 +207,14 @@ export default {
 
 <style scoped>
 .modal-content, .modal:nth-child(2), .card {
-  overflow: overlay;
+  overflow: auto;
 }
 
 .double-button-container {
   display: flex;
 }
 
-.dropdown-menu {
-  max-height: 40vh;
-  overflow: auto;
-  height: auto;
+.left-button {
+  padding-right: 0.5em;
 }
 </style>
