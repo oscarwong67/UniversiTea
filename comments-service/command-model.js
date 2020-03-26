@@ -19,7 +19,7 @@ const addComment = async (request) => {
         "User_ID" : userID,
         "Post_ID" : postID,
         "Parent_ID" : parentID,
-        "isAnonymous": isAnon
+        "isAnonymous": isAnon,
     };
     
     event = JSON.stringify(event);
@@ -35,10 +35,12 @@ const addComment = async (request) => {
 // Output: Void
 const editComment = async (request) => {
     let commentID = request.payload.commentID;
+    let isAnon = request.payload.isAnon;
     let newContent = request.payload.newContent;              
     let event = {
         "Action": "editComment",
         "Comment_ID": commentID,
+        "isAnonymous": isAnon,
         "Content" : newContent,
     };
     event = JSON.stringify(event);

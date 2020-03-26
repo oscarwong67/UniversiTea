@@ -5,8 +5,6 @@ const helper = require('./helper');
 
 
 const addComment = async () => {
-  console.log('hi');
-
   let eventContent = await db.query(
     'SELECT Content FROM EVENT WHERE Timestamp = (SELECT MAX(Timestamp) FROM EVENT)'
   );
@@ -47,13 +45,16 @@ const editComment = async () => {
 
   let commentID = eventContent['Comment_ID'];
   let newContent = eventContent['Content'];
+  let isAnon = eventContent['isAnonynous'];
 
   await db.query(
-    `UPDATE COMMENT SET Content = '${newContent}' WHERE Comment_ID = '${commentID}'`,
+    `UPDATE COMMENT SET Content = ?, isAnonymous = ? WHERE Comment_ID = ?`,
+    [newContent, isAnon, commentID]
   );
 
   await db.query(
-    ` UPDATE COMMENT SET Version = Version + 1 WHERE Comment_ID = '${commentID}'`
+    `UPDATE COMMENT SET Version = Version + 1 WHERE Comment_ID = ?`, 
+    [commentID]
   );
 
   return;
@@ -70,8 +71,8 @@ const deleteComment = async () => {
   let commentID = eventContent['Comment_ID'];
 
   let result = await db.query(
-    `DELETE FROM COMMENT 
-    WHERE Comment_ID = '${commentID}'`,
+    `DELETE FROM COMMENT WHERE Comment_ID = ?`,
+    [commentID]
   );
 
   return;
@@ -85,19 +86,18 @@ const getComments = async (request) => {
     result = await db.query(`
       SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
       FROM COMMENT AS C, USER AS U, SCHOOL AS S
-      WHERE C.Post_ID=? AND C.Parent_ID IS NULL AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
-      `, [postID]
+      WHERE C.Post_ID=? AND C.Parent_ID IS NULL AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID`, 
+      [postID]
     );
   } else {
     result = await db.query(`
       SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
       FROM COMMENT AS C, USER AS U, SCHOOL AS S
-      WHERE C.Post_ID=? AND C.Parent_ID=? AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
-      `, [postID, parentID]
+      WHERE C.Post_ID=? AND C.Parent_ID=? AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID`, 
+      [postID, parentID]
     );
   }
   
-
   return {...result};
 }
 
