@@ -48,7 +48,6 @@ const editComment = async () => {
   let isAnon = eventContent['isAnonynous'];
 
   await db.query(
-<<<<<<< HEAD
     `UPDATE COMMENT SET Content = ?, isAnonymous = ? WHERE Comment_ID = ?`,
     [newContent, isAnon, commentID]
   );
@@ -56,15 +55,6 @@ const editComment = async () => {
   await db.query(
     `UPDATE COMMENT SET Version = Version + 1 WHERE Comment_ID = ?`, 
     [commentID]
-=======
-    `UPDATE COMMENT SET Content = ? WHERE Comment_ID = ?`,
-    [newContent, commentID]
-  );
-
-  await db.query(
-    ` UPDATE COMMENT SET Version = Version + 1 WHERE Comment_ID = ?`,
-    commentID
->>>>>>> f890cd28c3b69312e1293c82527f03e18e9edc51
   );
 
   return;
@@ -81,14 +71,8 @@ const deleteComment = async () => {
   let commentID = eventContent['Comment_ID'];
 
   let result = await db.query(
-<<<<<<< HEAD
     `DELETE FROM COMMENT WHERE Comment_ID = ?`,
     [commentID]
-=======
-    `DELETE FROM COMMENT 
-    WHERE Comment_ID = ?`,
-    commentID
->>>>>>> f890cd28c3b69312e1293c82527f03e18e9edc51
   );
 
   return;
