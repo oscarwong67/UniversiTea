@@ -56,6 +56,7 @@ module.exports = [
         if (match) {
           credentials.User_ID = user[0].User_ID;
           credentials.School_ID = user[0].School_ID;
+          credentials.Is_Admin = user[0].Is_Admin;
 
           //cookie creation
           let cookie = request.state.session;

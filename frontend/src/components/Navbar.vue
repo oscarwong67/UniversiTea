@@ -1,104 +1,102 @@
 <template>
-<nav class="navbar" role="navigation" aria-label="main navigation" fixed-top>
-      <div class='navbar-brand'>
-        <h1 class='navbar-item'>
-          UniversiTea
-        </h1>
-        <a
-          role="button"
-          class="navbar-burger"
-          :class="{ 'is-active': showNavMobile }"
-          @click="showNavMobile=!showNavMobile"
-          aria-label="menu"
-          aria-expanded="false"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
+  <nav class="navbar" role="navigation" aria-label="main navigation" fixed-top>
+    <div class="navbar-brand">
+      <h1 class="navbar-item">UniversiTea</h1>
+      <a
+        role="button"
+        class="navbar-burger"
+        :class="{ 'is-active': showNavMobile }"
+        @click="showNavMobile = !showNavMobile"
+        aria-label="menu"
+        aria-expanded="false"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu" :class="{ 'is-active': showNavMobile }">
+      <div class="navbar-start">
+        <router-link class="navbar-item" to="/">Home</router-link>
+        <router-link class="navbar-item" to="/about">About</router-link>
+        <b-navbar-dropdown label="Schools" :hoverable="true">
+          <div class="school-link" v-for="school in allSchools" :key="school.School_ID">
+            <b-navbar-item :href="`/school/${school.School_ID}`" noreferrer>{{
+              school.SchoolName
+            }}</b-navbar-item>
+          </div>
+        </b-navbar-dropdown>
+        <router-link class="navbar-item" to="/administration" v-if="isAdmin">
+          Administration
+        </router-link>
       </div>
-      <div class='navbar-menu' :class="{ 'is-active': showNavMobile }">
-        <div class='navbar-start'>
-          <router-link class='navbar-item' to="/">Home</router-link>
-          <router-link class='navbar-item' to="/about">About</router-link>
-          <b-navbar-dropdown label="Schools" :hoverable='true'>
-            <div class='school-link' v-for="school in allSchools" :key='school.School_ID'>
-              <b-navbar-item :href="`/school/${school.School_ID}`" noreferrer>
-                {{ school.SchoolName }}
-              </b-navbar-item>
-            </div>
-          </b-navbar-dropdown>
+      <div class="navbar-end">
+        <div class="double-button-container navbar-item" v-if="isLoggedIn">
+          <NotificationDropdown />
+          <b-button outlined @click="logout">Log Out</b-button>
         </div>
-       <div class='navbar-end'>
-          <div class='double-button-container navbar-item' v-if="isLoggedIn">
-            <NotificationDropdown />
-            <b-button outlined @click='logout'>Log Out</b-button>
-          </div>
-          <div v-else class='navbar-item double-button-container'>
-            <b-button
-              type="is-primary"
-              outlined
-              @click="isLoginModalActive=true"
-            >
-              Log In
-            </b-button>
-            <b-button type="is-primary" @click="isSignupModalActive=true">
-              Signup
-            </b-button>
-          </div>
-          <b-modal class='modal' :active.sync="isLoginModalActive">
-            <section class="section card">
-                <h2>Log In</h2>
-                <div class="container">
-                    <LoginForm @formChange='updateEmailPassword' />
-                    <b-button class='navbar-item' type="is-primary" @click="handleLogin">
-                      Log In!
-                    </b-button>
-                </div>
-            </section>
-          </b-modal>
-          <b-modal class='modal' :active.sync="isSignupModalActive">
-            <section class="section card">
-                <h2>Signup</h2>
-                <div class="container">
-                    <LoginForm @formChange='updateEmailPassword' />
-                    <b-field label="First Name">
-                      <b-input v-model="fname"></b-input>
-                    </b-field>
-                    <b-field label="Last Name">
-                      <b-input v-model="lname"></b-input>
-                    </b-field>
-                    <b-dropdown v-model="schoolName" aria-role="list">
-                      <button class="button is-light" slot="trigger" slot-scope="{ active }">
-                          <span>{{schoolName ? `School: ${schoolName}` : 'School'}}</span>
-                          <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
-                      </button>
-                      <b-dropdown-item value="TODO" aria-role="listitem">TODO</b-dropdown-item>
-                    </b-dropdown>
+        <div v-else class="navbar-item double-button-container">
+          <b-button type="is-primary" outlined @click="isLoginModalActive = true">Log In</b-button>
+          <b-button type="is-primary" @click="isSignupModalActive = true">Signup</b-button>
+        </div>
+        <b-modal class="modal" :active.sync="isLoginModalActive">
+          <section class="section card">
+            <form @submit.prevent="handleLogin">
+              <h2>Log In</h2>
+              <div class="container">
+                <LoginForm @formChange="updateEmailPassword" />
+                <b-button class="navbar-item" type="is-primary" native-type="submit"
+                  >Log In!</b-button
+                >
+              </div>
+            </form>
+          </section>
+        </b-modal>
+        <b-modal class="modal" :active.sync="isSignupModalActive">
+          <section class="section card">
+            <form @submit.prevent="handleSignup">
+              <h2>Signup</h2>
+              <div class="container">
+                <LoginForm @formChange="updateEmailPassword" />
+                <b-field label="First Name">
+                  <b-input v-model="fname"></b-input>
+                </b-field>
+                <b-field label="Last Name">
+                  <b-input v-model="lname"></b-input>
+                </b-field>
+                <b-dropdown v-model="schoolName" aria-role="list">
+                  <button class="button is-light" slot="trigger" slot-scope="{ active }">
+                    <span>{{ schoolName ? `School: ${schoolName}` : "School" }}</span>
+                    <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
+                  </button>
+                  <b-dropdown-item value="TODO" aria-role="listitem">TODO</b-dropdown-item>
+                </b-dropdown>
+                <b-dropdown v-model="degreeType" aria-role="list">
+                  <button class="button is-light" slot="trigger" slot-scope="{ active }">
+                    <span>
+                      {{ degreeType ? `Degree Type: ${degreeType}` : "Degree Type" }}
+                    </span>
+                    <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
+                  </button>
 
-                    <b-dropdown v-model="degreeType" aria-role="list">
-                      <button class="button is-light" slot="trigger" slot-scope="{ active }">
-                          <span>{{degreeType ? `Degree Type: ${degreeType}` : 'Degree Type'}}</span>
-                          <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
-                      </button>
-
-                      <b-dropdown-item
-                        :value="degreeType"
-                        aria-role="listitem"
-                        v-for="degreeType in degreeTypes" :key="degreeType"
-                      >
-                        {{degreeType}}
-                      </b-dropdown-item>
-                    </b-dropdown>
-                    <b-button class='navbar-item' type="is-primary" @click="handleSignup">
-                      Sign Up!
-                    </b-button>
-                </div>
-            </section>
-          </b-modal>
-       </div>
+                  <b-dropdown-item
+                    :value="degreeType"
+                    aria-role="listitem"
+                    v-for="degreeType in degreeTypes"
+                    :key="degreeType"
+                    >{{ degreeType }}</b-dropdown-item
+                  >
+                </b-dropdown>
+                <b-button class="navbar-item" type="is-primary" native-type="submit">
+                  Sign Up!
+                </b-button>
+              </div>
+            </form>
+          </section>
+        </b-modal>
       </div>
-    </nav>
+    </div>
+  </nav>
 </template>
 <script>
 import LoginForm from './LoginForm.vue';
@@ -151,7 +149,9 @@ export default {
       if (data.isValid) {
         localStorage.setItem('User_ID', data.User_ID);
         localStorage.setItem('School_ID', data.School_ID);
-        localStorage.setItem('isAdmin', data.isAdmin);
+        if (data.Is_Admin) {
+          localStorage.setItem('Is_Admin', data.Is_Admin);
+        }
         this.$router.go();
       }
     },
@@ -193,7 +193,7 @@ export default {
     logout() {
       localStorage.removeItem('User_ID');
       localStorage.removeItem('School_ID');
-      localStorage.removeItem('isAdmin');
+      localStorage.removeItem('Is_Admin');
       this.$router.go();
     },
   },
@@ -201,12 +201,17 @@ export default {
     isLoggedIn() {
       return localStorage.getItem('User_ID');
     },
+    isAdmin() {
+      return localStorage.getItem('Is_Admin');
+    },
   },
 };
 </script>
 
 <style scoped>
-.modal-content, .modal:nth-child(2), .card {
+.modal-content,
+.modal:nth-child(2),
+.card {
   overflow: auto;
 }
 

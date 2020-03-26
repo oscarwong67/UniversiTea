@@ -9,10 +9,23 @@ module.exports = [
         path: '/api/admin/promote',
         handler: async function (request, h) {
             try {
-            const user = request.payload.email;
-            const userToAdmin = await db.query('UPDATE USER SET Admin=1 WHERE Email=?', [user]);
-            if (!userToAdmin.affectedRows) throw new Error('Error setting ${user} to admin');
-            return helper.goodResponse(h, user);
+                const { userId } = request.payload;
+                const userToAdmin = await db.query('UPDATE USER SET Is_Admin=1 WHERE User_ID=?', [userId]);
+                if (!userToAdmin.affectedRows) throw new Error('Error setting ${userId} to admin');
+                return helper.goodResponse(h);
+            } catch(err) {
+                return helper.badResponse(h, err);
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/api/admin/getusers',
+        handler: async function (request, h) {
+            try {
+                const users = await db.query('SELECT * FROM USER');
+                if (!users.length) throw new Error('Unable to fetch users from database.');
+                return helper.goodResponse(h, users);
             } catch(err) {
                 return helper.badResponse(h, err);
             }
@@ -26,7 +39,7 @@ module.exports = [
             try {
                 const schoolName = request.payload.schoolName;
                 const addSchool = await db.query('INSERT INTO SCHOOL SET SchoolName=?', [schoolName]);
-                return helper.goodResponse(h, { schoolID: addSchool.insertId });
+                return helper.goodResponse(h, { School_ID: addSchool.insertId });
             } catch(err) {
                 return helper.badResponse(h, err);
             }
@@ -38,7 +51,10 @@ module.exports = [
         path: '/api/admin/deleteSchool',
         handler: async function (request, h) {
             try {
-                return;
+                const { schoolId } = request.payload;
+                const res = await db.query('DELETE FROM SCHOOL WHERE School_ID=?', [schoolId]);
+                if (!res.affectedRows) throw new Error(`Unable to delete school with ID: ${schoolId}`);
+                return helper.goodResponse(h);
             } catch (err) {
                 return helper.badResponse(h, err);
             }
