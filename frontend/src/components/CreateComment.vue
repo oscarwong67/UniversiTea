@@ -2,7 +2,9 @@
 <div class='create-comment container'>
   <div class='header'><b>Write a comment</b></div>
   <b-input type='textarea' placeholder='Share your thoughts!' v-model="content"/>
-  <b-checkbox class='checkbox' v-model='isAnonymous'>Reply Anonymously</b-checkbox>
+  <b-checkbox class='checkbox' v-model='isAnonymous' :native-value="isAnonymous">
+    Reply Anonymously
+  </b-checkbox>
   <div class='buttons container'>
     <b-button type="is-primary" outlined @click='handleSavingContent' v-if='!this.commentid'>
       Post Comment
@@ -27,7 +29,9 @@ export default {
   }),
   mounted() {
     this.content = this.$props.oldContent;
-    this.isAnonymous = this.$props.oldAnon;
+    if (this.$props.oldAnon) {
+      this.isAnonymous = true;
+    }
   },
   methods: {
     async handleSavingContent() {

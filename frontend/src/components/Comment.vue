@@ -20,7 +20,7 @@
   </div>
   <div v-else>
     <CreateComment
-      :commentid='this.commentID' :oldContent='this.content' :isAnon='this.poster.isAnonymous'
+      :commentid='this.commentID' :oldContent='this.content' :oldAnon='this.poster.isAnonymous'
     />
   </div>
 </template>

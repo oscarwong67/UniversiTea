@@ -3,7 +3,7 @@
   <PostForm
     class='form'
     :header= '"Edit post"' :oldTitle="this.title" :oldContent="this.content"
-    :oldMediaUrls="this.mediaUrls" :oldAnonymous="this.isAnonymous"
+    :oldMediaUrls="this.mediaUrls" :oldAnonymous="this.oldAnonymous"
     @titleChange='updateTitle($event)' @contentChange='updateContent($event)'
     @mediaAdd='addMediaUrl($event)' @mediaRm='removeMediaUrl($event)'
     @anonChange='updateAnon($event)'
@@ -30,13 +30,15 @@ export default {
     title: '',
     content: '',
     mediaUrls: [],
-    isAnonymous: '',
+    isAnonymous: false,
   }),
-  created() {
+  mounted() {
     this.title = this.$props.oldTitle || '';
     this.content = this.$props.oldContent || '';
     this.mediaUrls = this.$props.oldMediaUrls || [];
-    this.isAnonymous = this.$props.oldAnonymous || '';
+    if (this.$props.oldAnonymous) {
+      this.isAnonymous = true;
+    }
   },
   methods: {
     updateTitle(newTitle) {

@@ -32,7 +32,9 @@
             v-if='currentMediaUrl.length > 0'
           >+</b-button>
         </b-field>
-        <b-checkbox class='checkbox' v-model='isAnonymous' @input='handleAnonChange'>
+        <b-checkbox class='checkbox' v-model='isAnonymous'
+          :native-value="isAnonymous" @input='handleAnonChange'
+        >
           Post Anonymously
         </b-checkbox>
       </div>
@@ -61,11 +63,13 @@ export default {
     isAnonymous: false,
   }),
   props: ['header', 'oldTitle', 'oldContent', 'oldMediaUrls', 'oldAnonymous'],
-  created() {
+  mounted() {
     this.title = this.$props.oldTitle || '';
     this.content = this.$props.oldContent || '';
     this.mediaUrls = this.$props.oldMediaUrls || [];
-    this.isAnonymous = this.$props.oldAnonymous || '';
+    if (this.$props.oldAnonymous) {
+      this.isAnonymous = true;
+    }
   },
   methods: {
     handleTitleChange() {

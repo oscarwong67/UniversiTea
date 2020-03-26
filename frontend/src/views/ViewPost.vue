@@ -37,7 +37,7 @@
   <div class='edit container' v-else>
     <EditPost
       :oldTitle="post[0].Title" :oldContent="post[0].Content"
-      :oldMediaUrls="mediaList" :oldAnonymous="post[0].isAnonymous"
+      :oldMediaUrls="mediaList" :oldAnonymous="post[0].Is_Anonymous"
     />
   </div>
 </template>
