@@ -1,15 +1,14 @@
 <template>
 <div class='edit-post container'>
-  <div class='header'><b>Edit post</b></div>
   <PostForm
     class='form'
-    :oldTitle="this.title" :oldContent="this.content"
-    :oldMediaUrls="this.mediaUrls" :oldAnonymous="this.isAnonymous"
+    :header= '"Edit post"' :oldTitle="this.title" :oldContent="this.content"
+    :oldMediaUrls="this.mediaUrls" :oldAnonymous="this.oldAnonymous"
     @titleChange='updateTitle($event)' @contentChange='updateContent($event)'
     @mediaAdd='addMediaUrl($event)' @mediaRm='removeMediaUrl($event)'
     @anonChange='updateAnon($event)'
   />
-  <div class='buttons container'>
+  <div class='buttons'>
     <b-button type="is-primary" @click='handleSavingContent'>Save</b-button>
     <b-button @click='handleCancel'>Cancel</b-button>
   </div>
@@ -31,13 +30,15 @@ export default {
     title: '',
     content: '',
     mediaUrls: [],
-    isAnonymous: '',
+    isAnonymous: false,
   }),
-  created() {
+  mounted() {
     this.title = this.$props.oldTitle || '';
     this.content = this.$props.oldContent || '';
     this.mediaUrls = this.$props.oldMediaUrls || [];
-    this.isAnonymous = this.$props.oldAnonymous || '';
+    if (this.$props.oldAnonymous) {
+      this.isAnonymous = true;
+    }
   },
   methods: {
     updateTitle(newTitle) {
@@ -84,7 +85,7 @@ export default {
       const mediaUrls = this.mediaUrls.map((mediaUrl) => ({
         ...mediaUrl,
       }));
-      await fetch(`${API_ADDRESS}/api/editPost/`, {
+      const res = await fetch(`${API_ADDRESS}/api/editPost/`, {
         method: 'POST',
         body: JSON.stringify({
           postid: id,
@@ -97,26 +98,29 @@ export default {
           'Content-Type': 'application/json',
         },
       });
-      this.$buefy.toast.open('Post updated!');
-      this.$router.go();
+      if (res.status === 200) {
+        this.$buefy.toast.open('Post updated!');
+        this.$router.go();
+      } else {
+        this.$buefy.toast.open('Changes could not be saved. Please try again later');
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-.header {
-  padding: 1em;
-  padding-bottom: 0em;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  background-color: white;
+.edit-post {
+  padding-top: 3em;
+}
+.form {
+  padding-bottom: 0px;
 }
 .buttons {
-  padding: 1em;
+  padding-left: 1.5em;
   padding-top: 1em;
+  padding-bottom: 1em;
   background-color: white;
-  border: none;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }

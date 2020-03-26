@@ -5,17 +5,21 @@ const db = require('./db');
 // Input: Comment ID, Post Content, User ID, Parent ID (if it is a reply)
 // Output: Void
 const addComment = async (request) => {  
+  console.log(request.payload);
     let commentID = request.payload.commentID;
     let content = request.payload.content;
     let userID = request.payload.userID;
     let postID = request.payload.postID;
     let parentID = request.payload.parentID == undefined ? null : request.payload.parentID;
+    let isAnon = request.payload.isAnon; 
+    
     let event = {
         "Action" : "addComment",
         "Content" : content,
         "User_ID" : userID,
         "Post_ID" : postID,
-        "Parent_ID" : parentID
+        "Parent_ID" : parentID,
+        "isAnonymous": isAnon
     };
     
     event = JSON.stringify(event);

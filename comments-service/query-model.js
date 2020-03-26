@@ -5,6 +5,7 @@ const helper = require('./helper');
 
 
 const addComment = async () => {
+  console.log('hi');
 
   let eventContent = await db.query(
     'SELECT Content FROM EVENT WHERE Timestamp = (SELECT MAX(Timestamp) FROM EVENT)'
@@ -17,6 +18,7 @@ const addComment = async () => {
   let userID = eventContent['User_ID'];
   let postID = eventContent['Post_ID'];
   let parentID = eventContent['Parent_ID'];
+  let isAnon = eventContent['isAnonymous'];
 
   let ver = 1;
 
@@ -27,7 +29,8 @@ const addComment = async () => {
       User_ID: userID,
       Content: content,
       Post_ID: postID,
-      Parent_ID: parentID
+      Parent_ID: parentID,
+      isAnonymous: isAnon
     }
   );
 
@@ -76,11 +79,24 @@ const deleteComment = async () => {
 
 const getComments = async (request) => {
   let postID = request.query.postID;
-
-  const result = await db.query(
-    `SELECT * FROM COMMENT 
-    WHERE Post_ID = '${postID}'`,
-  );
+  let parentID = request.query.parentID;
+  let result;
+  if (String(parentID) === String(undefined)) {
+    result = await db.query(`
+      SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
+      FROM COMMENT AS C, USER AS U, SCHOOL AS S
+      WHERE C.Post_ID=? AND C.Parent_ID IS NULL AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
+      `, [postID]
+    );
+  } else {
+    result = await db.query(`
+      SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
+      FROM COMMENT AS C, USER AS U, SCHOOL AS S
+      WHERE C.Post_ID=? AND C.Parent_ID=? AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
+      `, [postID, parentID]
+    );
+  }
+  
 
   return {...result};
 }

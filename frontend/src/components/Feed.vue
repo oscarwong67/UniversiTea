@@ -9,11 +9,8 @@
     <section class='posts'>
       <a
         :href="`/viewpost/${post.Post_ID}`"
-        v-for='post in posts'
-        :key='post.Post_ID'
-        target="_blank"
-        noreferrer
-        class='post-wrapper'
+        v-for='post in posts' :key='post.Post_ID'
+        target="_blank" noreferrer class='post-wrapper'
       >
         <Post
           class='post'

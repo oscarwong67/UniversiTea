@@ -79,7 +79,7 @@ export default {
       }
     },
     redirectToPost(postId) {
-      this.$router.push(`./viewpost/${postId}`);
+      this.$router.push(`/viewpost/${postId}`);
     },
   },
   computed: {
