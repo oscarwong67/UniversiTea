@@ -17,7 +17,7 @@ export default {
   props: ['parentid'],
   data: () => ({
     content: '',
-    isAnonymous: '',
+    isAnonymous: false,
   }),
   methods: {
     async handleSavingContent() {

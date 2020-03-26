@@ -81,10 +81,7 @@ const getComments = async (request) => {
   let postID = request.query.postID;
   let parentID = request.query.parentID;
   let result;
-  console.log(postID);
-  console.log(parentID);
   if (String(parentID) === String(undefined)) {
-    console.log('not parent');
     result = await db.query(`
       SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
       FROM COMMENT AS C, USER AS U, SCHOOL AS S
@@ -92,7 +89,6 @@ const getComments = async (request) => {
       `, [postID]
     );
   } else {
-    console.log('parent');
     result = await db.query(`
       SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
       FROM COMMENT AS C, USER AS U, SCHOOL AS S

@@ -13,11 +13,16 @@
         :parentid='this.commentID' v-if='toggleCreateComment'
       />
     </div>
+    <div class = 'edit-buttons container level-right' v-if="isOP">
+      <b-button @click='handleEdit'>Edit</b-button>
+      <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
+    </div>
   </div>
 </template>
 
 <script>
 import CreateComment from './CreateComment.vue';
+import { API_ADDRESS } from '../constants';
 
 export default {
   name: 'Comment',
@@ -31,6 +36,40 @@ export default {
   methods: {
     handleReply() {
       this.toggleCreateComment = !this.toggleCreateComment;
+    },
+    handleEdit() {
+      this.isEditing = true;
+    },
+    async handleDelete() {
+      this.$buefy.dialog.confirm({
+        message: 'Are you sure you want to <b>delete</b> this comment? This action cannot be undone.',
+        confirmText: 'Delete Comment',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: async () => {
+          const commentid = this.$props.commentID;
+          const res = await fetch(`${API_ADDRESS}/api/deleteComment`, {
+            method: 'POST',
+            body: JSON.stringify({
+              commentID: commentid,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          if (res.status === 200) {
+            this.$buefy.toast.open('Comment deleted!');
+            this.$router.go();
+          } else {
+            this.$buefy.toast.open('Comment could not be deleted. Please try again later!');
+          }
+        },
+      });
+    },
+  },
+  computed: {
+    isOP() {
+      return (localStorage.getItem('User_ID') === String(this.poster.User_ID));
     },
   },
 };

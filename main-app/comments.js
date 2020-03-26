@@ -30,4 +30,19 @@ module.exports = [
       return res;
     }
   },
+
+  {
+    method: 'POST',
+    path: '/api/deleteComment',
+    async handler(request, h) {
+      const url = `http://${commentsMicroserviceHost}/api/deleteComment`;
+      const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(request.payload),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      console.log(res);
+      return res;
+    }
+  },
 ];

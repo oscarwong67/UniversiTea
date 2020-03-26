@@ -20,7 +20,7 @@
             </b-carousel-item>
           </b-carousel>
         </div>
-        <div class = 'buttons container level-right' v-if="isOP">
+        <div class='buttons container level-right' v-if="isOP">
           <b-button @click='handleEdit'>Edit</b-button>
           <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
         </div>
@@ -73,9 +73,6 @@ export default {
     this.post = data.post;
   },
   methods: {
-    redirectHome() {
-      this.$router.push('/');
-    },
     handleEdit() {
       this.isEditing = true;
     },
@@ -86,7 +83,7 @@ export default {
         type: 'is-danger',
         hasIcon: true,
         onConfirm: async () => {
-          await fetch(`${API_ADDRESS}/api/deletePost/`, {
+          const res = await fetch(`${API_ADDRESS}/api/deletePost/`, {
             method: 'POST',
             body: JSON.stringify({
               postid: this.post[0].Post_ID,
@@ -95,8 +92,12 @@ export default {
               'Content-Type': 'application/json',
             },
           });
-          this.$buefy.toast.open('Post deleted!');
-          this.$router.push('/');
+          if (res.status === 200) {
+            this.$buefy.toast.open('Post deleted!');
+            this.$router.push('/');
+          } else {
+            this.$buefy.toast.open('Post could not be deleted. Please try again later');
+          }
         },
       });
     },
