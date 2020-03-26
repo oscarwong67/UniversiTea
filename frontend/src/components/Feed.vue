@@ -16,6 +16,7 @@
           class='post'
           :poster="{name: post.Fname, degreeType: post.Degree_Type, isAnonymous: post.Is_Anonymous}"
           :title="post.Title" :content="post.Content" :school="post.SchoolName"
+          :time="post.Timestamp"
         />
       </a>
     </section>

@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     async handleSavingContent() {
+      console.log(this.content);
       let parent = null;
       if (this.$props !== undefined) {
         parent = this.$props.parentid;

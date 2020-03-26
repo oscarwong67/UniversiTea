@@ -9,6 +9,7 @@
             isAnonymous: comment.isAnonymous, User_ID: comment.User_ID
           }"
           :content="comment.Content" :school="comment.SchoolName" :commentID="comment.Comment_ID"
+          :time="comment.Timestamp"
         />
       </div>
       <CommentFeed class='sub-feed' :postid='postID' :parentid='comment.Comment_ID'/>

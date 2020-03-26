@@ -8,13 +8,24 @@
      </div>
      <h2 class='post-title'>{{this.title}}</h2>
      <section class='body' v-html="content" />
+     <section class='time'>{{formatTime(this.time)}}</section>
  </div>
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
   name: 'Post',
-  props: ['title', 'poster', 'school', 'content'],
+  props: ['title', 'poster', 'school', 'content', 'time'],
+  methods: {
+    formatTime(value) {
+      if (value) {
+        return moment(String(value)).format('MM/DD/YYYY hh:mm A');
+      }
+      return value;
+    },
+  },
 };
 </script>
 

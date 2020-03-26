@@ -7,6 +7,7 @@
       <span class='school'>@ {{this.school}})</span>
     </div>
     <section class='body' v-html="content"/>
+    <section class='time'>{{formatTime(this.time)}}</section>
     <div class='reply'>
       <b-button type='is-info' size="is-small" outlined @click='handleReply'>Reply</b-button>
       <CreateComment class='create'
@@ -26,6 +27,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import CreateComment from './CreateComment.vue';
 import { API_ADDRESS } from '../constants';
 
@@ -34,12 +36,18 @@ export default {
   components: {
     CreateComment,
   },
-  props: ['commentID', 'poster', 'school', 'content'],
+  props: ['commentID', 'poster', 'school', 'content', 'time'],
   data: () => ({
     toggleCreateComment: false,
     isEditing: false,
   }),
   methods: {
+    formatTime(value) {
+      if (value) {
+        return moment(String(value)).format('MM/DD/YYYY hh:mm A');
+      }
+      return value;
+    },
     handleReply() {
       this.toggleCreateComment = !this.toggleCreateComment;
     },
