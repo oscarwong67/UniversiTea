@@ -49,11 +49,13 @@ const editComment = async () => {
   let newContent = eventContent['Content'];
 
   await db.query(
-    `UPDATE COMMENT SET Content = '${newContent}' WHERE Comment_ID = '${commentID}'`,
+    `UPDATE COMMENT SET Content = ? WHERE Comment_ID = ?`,
+    [newContent, commentID]
   );
 
   await db.query(
-    ` UPDATE COMMENT SET Version = Version + 1 WHERE Comment_ID = '${commentID}'`
+    ` UPDATE COMMENT SET Version = Version + 1 WHERE Comment_ID = ?`,
+    commentID
   );
 
   return;
@@ -71,7 +73,8 @@ const deleteComment = async () => {
 
   let result = await db.query(
     `DELETE FROM COMMENT 
-    WHERE Comment_ID = '${commentID}'`,
+    WHERE Comment_ID = ?`,
+    commentID
   );
 
   return;
