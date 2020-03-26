@@ -1,7 +1,7 @@
 <template>
-  <section class='comment-section flexbox'>
+  <section class='comment-section'>
     <section class='comments' v-for='comment in comments' :key='comment.Comment_ID'>
-      <div class='comment-wrapper'>
+      <div class='comment-wrapper container level-right'>
         <Comment
           class='comment'
           :poster="{
@@ -44,13 +44,18 @@ export default {
 </script>
 
 <style scoped>
+/* TODO: rigth justify */
 .comments {
   display: flex;
   flex-direction: column;
-  align-items: right;
+  /* justify-content: flex-end; */
+  /* align-items: right; */
 }
 .comment-wrapper {
+  width: 95%;
+  /* display: flex; */
   padding: .5em;
+  align-items: right;
 }
 .comment {
   cursor: pointer;
