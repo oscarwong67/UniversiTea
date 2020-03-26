@@ -21,7 +21,6 @@ export default {
   }),
   methods: {
     async handleSavingContent() {
-      // TODO: uh dont really know how adding comment works so need to fix this
       let parent = null;
       if (this.$props !== undefined) {
         parent = this.$props.parentid;
@@ -39,13 +38,11 @@ export default {
           'Content-Type': 'application/json',
         },
       });
-      // TODO: check that it was actually successful
-      console.log(res);
       if (res.status === 200) {
         this.$buefy.toast.open('Comment posted!');
         this.$router.go();
       } else {
-        this.$buefy.toast.open('Comment could not be posted. Try again later');
+        this.$buefy.toast.open('Comment could not be posted. Please try again later');
       }
     },
   },

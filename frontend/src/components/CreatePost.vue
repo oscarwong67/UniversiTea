@@ -63,7 +63,7 @@ export default {
       const mediaUrls = this.mediaUrls.map((mediaUrl) => ({
         ...mediaUrl,
       }));
-      await fetch(`${API_ADDRESS}/api/addPost/`, {
+      const res = await fetch(`${API_ADDRESS}/api/addPost/`, {
         method: 'POST',
         body: JSON.stringify({
           title: this.title,
@@ -77,8 +77,12 @@ export default {
           'Content-Type': 'application/json',
         },
       });
-      this.$buefy.toast.open('Post created!');
-      this.$router.go();
+      if (res.status === 200) {
+        this.$buefy.toast.open('Post created!');
+        this.$router.go();
+      } else {
+        this.$buefy.toast.open('Post could not be posted. Please try again later');
+      }
     },
   },
 };

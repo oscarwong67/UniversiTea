@@ -32,7 +32,7 @@
       <NotFoundMessage :type='"post"' v-else/>
     </div>
     <hr/>
-    <CommentSection :postid='this.$route.params.postid'/>
+    <CommentFeed :postid='this.$route.params.postid'/>
   </div>
   <div class='edit container' v-else>
     <EditPost
@@ -46,7 +46,7 @@
 import Post from '../components/Post.vue';
 import EditPost from '../components/EditPost.vue';
 import CreateComment from '../components/CreateComment.vue';
-import CommentSection from '../components/CommentSection.vue';
+import CommentFeed from '../components/CommentFeed.vue';
 import NotFoundMessage from '../components/NotFoundMessage.vue';
 import { API_ADDRESS } from '../constants';
 
@@ -62,7 +62,7 @@ export default {
     Post,
     EditPost,
     CreateComment,
-    CommentSection,
+    CommentFeed,
     NotFoundMessage,
   },
   async mounted() {

@@ -8,6 +8,7 @@
         }"
         :content="comment.Content" :school="comment.SchoolName" :commentID="comment.Comment_ID"
       />
+      <CommentFeed class='sub-feed' :postid='postID' :parentid='comment.Comment_ID'/>
     </section>
   </section>
 </template>
@@ -17,17 +18,20 @@ import Comment from './Comment.vue';
 import { API_ADDRESS } from '../constants';
 
 export default {
-  name: 'CommentSection',
+  name: 'CommentFeed',
   components: {
     Comment,
   },
-  props: ['postid'],
+  props: ['postid', 'parentid'],
   data: () => ({
     comments: [],
+    postID: '',
   }),
   async mounted() {
-    const id = this.$props.postid;
-    const res = await fetch(`${API_ADDRESS}/api/getComments/?postID=${id}`);
+    this.postID = this.$props.postid;
+    const { postid } = this.$props;
+    const { parentid } = this.$props;
+    const res = await fetch(`${API_ADDRESS}/api/getComments/?postID=${postid}&parentID=${parentid}`);
     const data = await res.json();
     this.comments = data;
   },
@@ -49,5 +53,10 @@ export default {
   margin-bottom: 1em;
   color:inherit;
   text-decoration: none;
+}
+.sub-feed {
+  width: 95%;
+  float: right;
+  justify-content: right;
 }
 </style>

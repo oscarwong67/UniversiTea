@@ -83,7 +83,7 @@ export default {
       const mediaUrls = this.mediaUrls.map((mediaUrl) => ({
         ...mediaUrl,
       }));
-      await fetch(`${API_ADDRESS}/api/editPost/`, {
+      const res = await fetch(`${API_ADDRESS}/api/editPost/`, {
         method: 'POST',
         body: JSON.stringify({
           postid: id,
@@ -96,8 +96,12 @@ export default {
           'Content-Type': 'application/json',
         },
       });
-      this.$buefy.toast.open('Post updated!');
-      this.$router.go();
+      if (res.status === 200) {
+        this.$buefy.toast.open('Post updated!');
+        this.$router.go();
+      } else {
+        this.$buefy.toast.open('Changes could not be saved. Please try again later');
+      }
     },
   },
 };

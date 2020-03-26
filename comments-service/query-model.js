@@ -79,13 +79,28 @@ const deleteComment = async () => {
 
 const getComments = async (request) => {
   let postID = request.query.postID;
-
-  const result = await db.query(`
-    SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
-    FROM COMMENT AS C, USER AS U, SCHOOL AS S
-    WHERE ? AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
-    `, {Post_ID:postID}
-  );
+  let parentID = request.query.parentID;
+  let result;
+  console.log(postID);
+  console.log(parentID);
+  if (String(parentID) === String(undefined)) {
+    console.log('not parent');
+    result = await db.query(`
+      SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
+      FROM COMMENT AS C, USER AS U, SCHOOL AS S
+      WHERE C.Post_ID=? AND C.Parent_ID IS NULL AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
+      `, [postID]
+    );
+  } else {
+    console.log('parent');
+    result = await db.query(`
+      SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
+      FROM COMMENT AS C, USER AS U, SCHOOL AS S
+      WHERE C.Post_ID=? AND C.Parent_ID=? AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
+      `, [postID, parentID]
+    );
+  }
+  
 
   return {...result};
 }
