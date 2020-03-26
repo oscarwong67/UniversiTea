@@ -72,12 +72,14 @@ exports.plugin = {
               SELECT P.*, S.SchoolName, S.School_ID, U.FName, U.User_ID, U.Degree_Type
               FROM POSTS AS P, USER AS U, SCHOOL AS S
               WHERE P.Post_ID=${ postid} AND P.User_ID=U.User_ID AND P.School_ID=S.School_ID
-            `);
+            `, {Post_ID:postid}
+          );
           const media = await db.query(`
               SELECT Source_URL AS 'url', Type AS 'type', Media_ID AS 'id'
               FROM MEDIA
-              WHERE Post_ID=${ postid}
-            `)
+              WHERE ?
+            `, {Post_ID:postid}
+          );
           console.log(post);
           return helper.goodResponse, { post, media };
         } catch (err) {

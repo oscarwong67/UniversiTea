@@ -1,4 +1,4 @@
-const notificationsMicroserviceHost = 'localhost:3003';
+const notificationsMicroserviceHost = 'http://localhost:3003';
 const fetch = require('node-fetch');
 
 const addNotificationForComment = async (commentId) => {

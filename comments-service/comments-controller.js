@@ -21,6 +21,7 @@ exports.plugin = {
                     const commentId = await queryModel.addComment();
                      // no await - if notifications doesn't work, comment should still be posted
                     notificationController.addNotificationForComment(commentId);
+                    console.log(request.payload);
                     return helper.goodResponse(h, null);
                 } catch(err) {
                     return helper.badResponse(h, err);
@@ -67,7 +68,7 @@ exports.plugin = {
         // Output: Comments of a Post
         server.route({
             method: 'GET',
-            path: '/api/getComments',
+            path: '/api/getComments/',
             handler: async function (request, h) {
                 try {
                     // await commandModel.getComments(request);

@@ -5,6 +5,7 @@ const helper = require('./helper');
 
 
 const addComment = async () => {
+  console.log('hi');
 
   let eventContent = await db.query(
     'SELECT Content FROM EVENT WHERE Timestamp = (SELECT MAX(Timestamp) FROM EVENT)'
@@ -79,9 +80,11 @@ const deleteComment = async () => {
 const getComments = async (request) => {
   let postID = request.query.postID;
 
-  const result = await db.query(
-    `SELECT * FROM COMMENT 
-    WHERE Post_ID = '${postID}'`,
+  const result = await db.query(`
+    SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName
+    FROM COMMENT AS C, USER AS U, SCHOOL AS S
+    WHERE ? AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
+    `, {Post_ID:postID}
   );
 
   return {...result};

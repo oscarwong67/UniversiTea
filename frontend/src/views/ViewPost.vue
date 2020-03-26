@@ -1,34 +1,38 @@
 <template>
   <div class= "view container" v-if="!isEditing">
-    <div class = 'posts container' v-if="postExists">
-      <Post
-        :key='post[0].Post_ID'
-        :poster="{
-          name: post[0].FName, degreeType: post[0].Degree_Type, isAnonymous: post[0].Is_Anonymous
-        }"
-        :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
-      />
-      <div class='media container' v-if='hasMedia'>
-        <b-carousel :autoplay='false' :indicator-inside="false">
-          <b-carousel-item v-for="media in mediaList" :key="media.id">
-            <img class='media image' :src="media.url" v-if='media.type === "image"'/>
-            <video class='media video' :src="media.url"
-              v-else-if='media.type === "video"' controls/>
-            <iframe class='media youtube' :src="media.url" allowfullscreen="allowfullscreen"
-              v-else-if='media.type==="youtube"'/>
-          </b-carousel-item>
-        </b-carousel>
+    <div>
+      <div class = 'posts container' v-if="postExists">
+        <Post
+          :key='post[0].Post_ID'
+          :poster="{
+            name: post[0].FName, degreeType: post[0].Degree_Type, isAnonymous: post[0].Is_Anonymous
+          }"
+          :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
+        />
+        <div class='media container' v-if='hasMedia'>
+          <b-carousel :autoplay='false' :indicator-inside="false">
+            <b-carousel-item v-for="media in mediaList" :key="media.id">
+              <img class='media image' :src="media.url" v-if='media.type === "image"'/>
+              <video class='media video' :src="media.url"
+                v-else-if='media.type === "video"' controls/>
+              <iframe class='media youtube' :src="media.url" allowfullscreen="allowfullscreen"
+                v-else-if='media.type==="youtube"'/>
+            </b-carousel-item>
+          </b-carousel>
+        </div>
+        <div class = 'buttons container level-right' v-if="isOP">
+          <b-button @click='handleEdit'>Edit</b-button>
+          <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
+        </div>
+        <div class = 'create-comment container'>
+          <hr/>
+          <CreateComment/>
+        </div>
       </div>
-      <div class = 'buttons container level-right' v-if="isOP">
-        <b-button @click='handleEdit'>Edit</b-button>
-        <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
-      </div>
-      <div class = 'create-comment container' v-else>
-        <hr/>
-        <CreateComment/>
-      </div>
+      <NotFoundMessage :type='"post"' v-else/>
     </div>
-    <NotFoundMessage :type='"post"'  v-else/>
+    <hr/>
+    <CommentSection :postid='this.$route.params.postid'/>
   </div>
   <div class='edit container' v-else>
     <EditPost
@@ -42,6 +46,7 @@
 import Post from '../components/Post.vue';
 import EditPost from '../components/EditPost.vue';
 import CreateComment from '../components/CreateComment.vue';
+import CommentSection from '../components/CommentSection.vue';
 import NotFoundMessage from '../components/NotFoundMessage.vue';
 import { API_ADDRESS } from '../constants';
 
@@ -51,14 +56,16 @@ export default {
     post: [],
     mediaList: [],
     isEditing: false,
+    comments: [],
   }),
   components: {
     Post,
     EditPost,
     CreateComment,
+    CommentSection,
     NotFoundMessage,
   },
-  async created() {
+  async mounted() {
     const id = this.$route.params.postid;
     const res = await fetch(`${API_ADDRESS}/api/getPost/?postid=${id}`);
     const data = await res.json();

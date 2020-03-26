@@ -5,6 +5,7 @@ const db = require('./db');
 // Input: Comment ID, Post Content, User ID, Parent ID (if it is a reply)
 // Output: Void
 const addComment = async (request) => {  
+  console.log(request.payload);
     let commentID = request.payload.commentID;
     let content = request.payload.content;
     let userID = request.payload.userID;
