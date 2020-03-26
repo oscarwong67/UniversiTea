@@ -1,5 +1,5 @@
 <template>
-  <div class='container comment'>
+  <div class='container comment' v-if="!isEditing">
     <div class='comment-info'>
       <span class='posterName'>{{this.poster.isAnonymous ?
           'Anonymous' : this.poster.name}}&nbsp;(</span>
@@ -18,6 +18,11 @@
       <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
     </div>
   </div>
+  <div v-else>
+    <CreateComment
+      :commentid='this.commentID' :oldContent='this.content' :isAnon='this.poster.isAnonymous'
+    />
+  </div>
 </template>
 
 <script>
@@ -32,6 +37,7 @@ export default {
   props: ['commentID', 'poster', 'school', 'content'],
   data: () => ({
     toggleCreateComment: false,
+    isEditing: false,
   }),
   methods: {
     handleReply() {

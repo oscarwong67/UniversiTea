@@ -45,4 +45,19 @@ module.exports = [
       return res;
     }
   },
+
+  {
+    method: 'POST',
+    path: '/api/editComment',
+    async handler(request, h) {
+      const url = `http://${commentsMicroserviceHost}/api/editComment`;
+      const res = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify(request.payload),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      console.log(res);
+      return res;
+    }
+  },
 ];
