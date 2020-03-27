@@ -162,7 +162,7 @@ export default {
     },
   },
   created() {
-    console.log(typeof localStorage.getItem('Is_Admin'));
+    // console.log(typeof localStorage.getItem('Is_Admin'));
     if (!localStorage.getItem('Is_Admin')) {
       this.$router.push({ name: 'Home' });
     }
