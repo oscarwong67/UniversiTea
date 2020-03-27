@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const Hapi = require('@hapi/hapi');
 
 const init = async () => {
@@ -19,7 +17,12 @@ const init = async () => {
         {
           plugin: require('hapi-cors'),
           options: {
-            origins: [process.env.FRONTEND_ADDRESS]
+            origins: [process.env.FRONTEND_ADDRESS],
+            allowCredentials: 'true',
+    	    exposeHeaders: ['content-type', 'content-length'],
+    	    maxAge: 600,
+    	    methods: ['POST, GET, OPTIONS'],
+    	    headers: ['Accept', 'Content-Type', 'Authorization'],
           }
         },
         {
