@@ -16,14 +16,6 @@ const init = async () => {
       await server.register([
         {
           plugin: require('hapi-cors'),
-          options: {
-            origins: [process.env.FRONTEND_ADDRESS],
-            allowCredentials: 'true',
-    	    exposeHeaders: ['content-type', 'content-length'],
-    	    maxAge: 600,
-    	    methods: ['POST, GET, OPTIONS'],
-    	    headers: ['Accept', 'Content-Type', 'Authorization'],
-          }
         },
         {
           plugin: require('hapi-auth-cookie'),
