@@ -1,15 +1,13 @@
-
+require('dotenv').config();
 const fetch = require('node-fetch');
-const notificationsMicroserviceHost = 'localhost:3003';
-const commentsMicroserviceHost = 'localhost:3002';
-const postsMicroserviceHost = 'localhost:3001';
+const commentsMicroservice = process.env.COMMENTS_SERVICE;
 
 module.exports = [
   {
     method: 'GET',
     path: '/api/getComments/',
     async handler(request, h) {
-      const url = `http://${commentsMicroserviceHost}${request.url.pathname}${request.url.search}`;
+      const url = `${commentsMicroservice}${request.url.pathname}${request.url.search}`;
       const res = await fetch(url);
       const data = await res.json();
       return data;
@@ -20,7 +18,7 @@ module.exports = [
     method: 'POST',
     path: '/api/addComment',
     async handler(request, h) {
-      const url = `http://${commentsMicroserviceHost}/api/addComment`;
+      const url = `${commentsMicroservice}/api/addComment`;
       const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(request.payload),
@@ -35,7 +33,7 @@ module.exports = [
     method: 'POST',
     path: '/api/deleteComment',
     async handler(request, h) {
-      const url = `http://${commentsMicroserviceHost}/api/deleteComment`;
+      const url = `${commentsMicroservice}/api/deleteComment`;
       const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(request.payload),
@@ -50,7 +48,7 @@ module.exports = [
     method: 'POST',
     path: '/api/editComment',
     async handler(request, h) {
-      const url = `http://${commentsMicroserviceHost}/api/editComment`;
+      const url = `${commentsMicroservice}/api/editComment`;
       const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(request.payload),

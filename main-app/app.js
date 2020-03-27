@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const Hapi = require('@hapi/hapi');
 
 const init = async () => {
@@ -17,7 +19,7 @@ const init = async () => {
         {
           plugin: require('hapi-cors'),
           options: {
-            origins: ['http://localhost:8080']
+            origins: [process.env.FRONTEND_ADDRESS]
           }
         },
         {

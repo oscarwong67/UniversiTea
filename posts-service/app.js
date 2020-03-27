@@ -17,7 +17,7 @@ const init = async () => {
         {
           plugin: require('hapi-cors'),
           options: {
-            origins: ['http://localhost:8080', 'http://localhost:3000']
+            origins: [process.env.MAIN_APP]
           }
         }
       ]);

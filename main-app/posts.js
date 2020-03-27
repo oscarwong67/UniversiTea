@@ -1,6 +1,6 @@
-
+require('dotenv').config();
 const fetch = require('node-fetch');
-const postsMicroserviceHost = 'localhost:3001';
+const postsMicroservice = process.env.POSTS_SERVICE;
 
 module.exports = [
 
@@ -8,7 +8,7 @@ module.exports = [
     method: 'POST',
     path: '/api/uploadMedia',
     async handler(request, h) {
-      const url = `http://${postsMicroserviceHost}/api/uploadMedia`;
+      const url = `${postsMicroservice}/api/uploadMedia`;
       const res = await fetch(url, {
         method: 'POST',
         body: request.payload,
@@ -31,7 +31,7 @@ module.exports = [
     method: 'GET',
     path: '/api/feed',
     async handler(request, h) {
-      const url = `http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`;
+      const url = `${postsMicroservice}${request.url.pathname}${request.url.search}`;
       const res = await fetch(url);
       const data = await res.json();
       return data;
@@ -42,7 +42,7 @@ module.exports = [
     method: 'POST',
     path: '/api/addPost/',
     async handler(request, h) {
-      const url = `http://${postsMicroserviceHost}/api/addPost`;
+      const url = `${postsMicroservice}/api/addPost`;
       const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(request.payload),
@@ -56,7 +56,7 @@ module.exports = [
     method: 'GET',
     path: '/api/getPost/',
     async handler(request, h) {
-      const url = `http://${postsMicroserviceHost}${request.url.pathname}${request.url.search}`;
+      const url = `${postsMicroservice}${request.url.pathname}${request.url.search}`;
       const res = await fetch(url);
       const data = await res.json();
       // console.log(data);
@@ -68,7 +68,7 @@ module.exports = [
     method: 'POST',
     path: '/api/deletePost/',
     async handler(request, h) {
-      const url = `http://${postsMicroserviceHost}/api/deletePost/`;
+      const url = `${postsMicroservice}/api/deletePost/`;
       const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(request.payload),
@@ -83,7 +83,7 @@ module.exports = [
     path: '/api/editPost/',
     async handler(request, h) {
       console.log(request.payload);
-      const url = `http://${postsMicroserviceHost}/api/editPost/`;
+      const url = `${postsMicroservice}/api/editPost/`;
       const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(request.payload),
