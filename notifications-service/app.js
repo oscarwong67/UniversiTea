@@ -6,7 +6,7 @@ const init = async () => {
 
   const server = Hapi.server({
     port: 3003,
-    host: 'localhost'
+    host: '0.0.0.0'
   });
 
   await server.register(require('./notifications-controller')); // register the routes in notifications.js
