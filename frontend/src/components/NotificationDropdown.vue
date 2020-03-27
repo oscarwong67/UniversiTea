@@ -54,7 +54,7 @@ export default {
         const data = await res.json();
         this.notifications = Array.from(data);
       } catch (err) {
-        console.error(err);
+        // console.error(err);
       }
     },
     async handleNotificationPopupOpen() {
@@ -74,7 +74,7 @@ export default {
             return newNotification;
           });
         } catch (err) {
-          console.error(err);
+          // console.error(err);
         }
       }
     },
