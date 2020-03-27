@@ -32,7 +32,7 @@ pool.getConnection((err, connection) => {
     }
 
     if (connection) connection.release()
-
+    console.log(`Connected to: ${process.env.DB_NAME}`);
     return
 })
 
