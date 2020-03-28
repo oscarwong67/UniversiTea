@@ -3,7 +3,7 @@ const Path = require('path');
 
 const init = async () => {
   const server = Hapi.server({
-    port: 3000,
+    port: 80,
     host: '0.0.0.0',
     routes: {
       files: {
@@ -17,7 +17,10 @@ const init = async () => {
     encoding: 'base64json'
   });
 
+  await server.register(require('@hapi/inert'));
+
   const start = async function () {
+
     try {
       await server.register([
         {
@@ -27,12 +30,20 @@ const init = async () => {
           plugin: require('hapi-auth-cookie'),
           options: {}
         },
-        {
-          plugin: require('@hapi/inert'),
-        },
       ]);
 
       server.route(require('./routes'));
+
+
+      server.ext('onPreResponse', (request, h) => {
+        const response = request.response;
+        if (response.isBoom &&
+          response.output.statusCode === 404) {
+          return h.file('index.html');
+        }
+
+        return h.continue;
+      });
 
       await server.start();
     } catch (err) {
