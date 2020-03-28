@@ -1,9 +1,15 @@
 const Hapi = require('@hapi/hapi');
+const Path = require('path');
 
 const init = async () => {
   const server = Hapi.server({
     port: 3000,
     host: '0.0.0.0',
+    routes: {
+      files: {
+        relativeTo: Path.join(__dirname, '../frontend/dist')
+      }
+    }
   });
 
   server.state('session', {
@@ -20,6 +26,9 @@ const init = async () => {
         {
           plugin: require('hapi-auth-cookie'),
           options: {}
+        },
+        {
+          plugin: require('@hapi/inert'),
         },
       ]);
 
