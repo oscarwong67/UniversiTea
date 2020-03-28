@@ -86,6 +86,7 @@ export default {
         ...mediaUrl,
       }));
       const res = await fetch(`${API_ADDRESS}/api/editPost/`, {
+        mode: 'cors',
         method: 'POST',
         body: JSON.stringify({
           postid: id,

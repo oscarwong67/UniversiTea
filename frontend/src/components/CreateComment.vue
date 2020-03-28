@@ -41,6 +41,7 @@ export default {
       }
       const res = await fetch(`${API_ADDRESS}/api/addComment`, {
         method: 'POST',
+        mode: 'cors',
         body: JSON.stringify({
           content: this.content,
           userID: localStorage.getItem('User_ID'),
@@ -75,6 +76,7 @@ export default {
     async handleUpdateContent() {
       const id = this.$props.commentid;
       const res = await fetch(`${API_ADDRESS}/api/editComment`, {
+        mode: 'cors',
         method: 'POST',
         body: JSON.stringify({
           commentID: id,

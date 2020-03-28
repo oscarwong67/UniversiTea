@@ -64,6 +64,7 @@ export default {
         ...mediaUrl,
       }));
       const res = await fetch(`${API_ADDRESS}/api/addPost/`, {
+        mode: 'cors',
         method: 'POST',
         body: JSON.stringify({
           title: this.title,

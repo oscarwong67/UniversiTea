@@ -56,6 +56,7 @@ export default {
           const commentid = this.$props.commentID;
           const res = await fetch(`${API_ADDRESS}/api/deleteComment`, {
             method: 'POST',
+            mode: 'cors',
             body: JSON.stringify({
               commentID: commentid,
             }),

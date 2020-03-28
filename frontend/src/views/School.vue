@@ -1,18 +1,18 @@
 <template>
-  <div class='school container-fluid' v-if="this.schoolName !== ''">
+  <div class="school container-fluid" v-if="this.schoolName !== ''">
     <section class="hero is-small">
-        <div class="hero-body">
-          <div class="container">
-            <h1 class="title"> {{ this.schoolName }} </h1>
-          </div>
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">{{ this.schoolName }}</h1>
         </div>
-      </section>
-    <div class='feed container'>
-      <Feed :schoolid='this.$route.params.schoolid'/>
+      </div>
+    </section>
+    <div class="feed container">
+      <Feed :schoolid="this.$route.params.schoolid" />
     </div>
   </div>
-  <div class='school-not-found container' v-else>
-    <NotFoundMessage :type='"school"'/>
+  <div class="school-not-found container" v-else>
+    <NotFoundMessage :type="'school'" />
   </div>
 </template>
 
@@ -31,7 +31,11 @@ export default {
     schoolName: '',
   }),
   async created() {
-    const res = await fetch(`${API_ADDRESS}/api/getSchoolName/?schoolid=${this.$route.params.schoolid}`);
+    const res = await fetch(
+      `${API_ADDRESS}/api/getSchoolName/?schoolid=${this.$route.params.schoolid}`, {
+        mode: 'cors',
+      },
+    );
     const data = await res.json();
     if (data[0] !== undefined) {
       // eslint-disable-next-line prefer-destructuring
@@ -48,7 +52,7 @@ export default {
   width: 100%;
 }
 .title {
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-weight: 500;
   font-size: 50px;
 }

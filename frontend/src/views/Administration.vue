@@ -12,7 +12,7 @@
                   {{ user.Fname }} {{ user.Lname }}
                   &nbsp;|&nbsp;
                   {{ user.Email }}
-                  {{ '\t' }}
+                  {{ "\t" }}
                   <b-button @click="promoteUser(user.User_ID, user.Fname)">Promote</b-button>
                 </li>
               </ul>
@@ -76,7 +76,9 @@ export default {
   }),
   methods: {
     async fetchAllUsers() {
-      const res = await fetch(`${API_ADDRESS}/api/admin/getusers`);
+      const res = await fetch(`${API_ADDRESS}/api/admin/getusers`, {
+        mode: 'cors',
+      });
       const users = await res.json();
       return users;
     },
@@ -94,7 +96,9 @@ export default {
       this.admins = admins;
     },
     async fetchSchools() {
-      const res = await fetch(`${API_ADDRESS}/api/getSchools`);
+      const res = await fetch(`${API_ADDRESS}/api/getSchools`, {
+        mode: 'cors',
+      });
       const schools = await res.json();
       return schools;
     },
@@ -103,6 +107,7 @@ export default {
         return;
       }
       const res = await fetch(`${API_ADDRESS}/api/admin/addSchool`, {
+        mode: 'cors',
         method: 'POST',
         body: JSON.stringify({ schoolName: this.newSchoolName }),
         headers: {
@@ -125,6 +130,7 @@ export default {
       );
       if (decision) {
         await fetch(`${API_ADDRESS}/api/admin/deleteSchool`, {
+          mode: 'cors',
           method: 'POST',
           body: JSON.stringify({ schoolId }),
           headers: {
@@ -140,11 +146,10 @@ export default {
     },
     async promoteUser(userId, fname) {
       // eslint-disable-next-line no-restricted-globals
-      const decision = confirm(
-        `Are you sure you want to promote ${fname}?`,
-      );
+      const decision = confirm(`Are you sure you want to promote ${fname}?`);
       if (decision) {
         await fetch(`${API_ADDRESS}/api/admin/promote`, {
+          mode: 'cors',
           method: 'POST',
           body: JSON.stringify({ userId }),
           headers: {

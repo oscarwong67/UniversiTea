@@ -1,43 +1,57 @@
 <template>
-  <div class= "view container" v-if="!isEditing">
+  <div class="view container" v-if="!isEditing">
     <div>
-      <div class = 'posts container' v-if="postExists">
+      <div class="posts container" v-if="postExists">
         <Post
-          :key='post[0].Post_ID'
+          :key="post[0].Post_ID"
           :poster="{
-            name: post[0].FName, degreeType: post[0].Degree_Type, isAnonymous: post[0].Is_Anonymous
+            name: post[0].FName,
+            degreeType: post[0].Degree_Type,
+            isAnonymous: post[0].Is_Anonymous
           }"
-          :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
+          :title="post[0].Title"
+          :content="post[0].Content"
+          :school="post[0].SchoolName"
         />
-        <div class='media container' v-if='hasMedia'>
-          <b-carousel :autoplay='false' :indicator-inside="false">
+        <div class="media container" v-if="hasMedia">
+          <b-carousel :autoplay="false" :indicator-inside="false">
             <b-carousel-item v-for="media in mediaList" :key="media.id">
-              <img class='media image' :src="media.url" v-if='media.type === "image"'/>
-              <video class='media video' :src="media.url"
-                v-else-if='media.type === "video"' controls/>
-              <iframe class='media youtube' :src="media.url" allowfullscreen="allowfullscreen"
-                v-else-if='media.type==="youtube"'/>
+              <img class="media image" :src="media.url" v-if="media.type === 'image'" />
+              <video
+                class="media video"
+                :src="media.url"
+                v-else-if="media.type === 'video'"
+                controls
+              />
+              <iframe
+                class="media youtube"
+                :src="media.url"
+                allowfullscreen="allowfullscreen"
+                v-else-if="media.type === 'youtube'"
+              />
             </b-carousel-item>
           </b-carousel>
         </div>
-        <div class='buttons container level-right' v-if="isOP">
-          <b-button @click='handleEdit'>Edit</b-button>
-          <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
+        <div class="buttons container level-right" v-if="isOP">
+          <b-button @click="handleEdit">Edit</b-button>
+          <b-button type="is-danger" icon-right="delete" @click="handleDelete">Delete</b-button>
         </div>
-        <div class = 'create-comment container'>
-          <hr/>
-          <CreateComment/>
+        <div class="create-comment container">
+          <hr />
+          <CreateComment />
         </div>
       </div>
-      <NotFoundMessage :type='"post"' v-else/>
+      <NotFoundMessage :type="'post'" v-else />
     </div>
-    <hr/>
-    <CommentFeed :postid='this.$route.params.postid'/>
+    <hr />
+    <CommentFeed :postid="this.$route.params.postid" />
   </div>
-  <div class='edit container' v-else>
+  <div class="edit container" v-else>
     <EditPost
-      :oldTitle="post[0].Title" :oldContent="post[0].Content"
-      :oldMediaUrls="mediaList" :oldAnonymous="post[0].Is_Anonymous"
+      :oldTitle="post[0].Title"
+      :oldContent="post[0].Content"
+      :oldMediaUrls="mediaList"
+      :oldAnonymous="post[0].Is_Anonymous"
     />
   </div>
 </template>
@@ -67,7 +81,9 @@ export default {
   },
   async mounted() {
     const id = this.$route.params.postid;
-    const res = await fetch(`${API_ADDRESS}/api/getPost/?postid=${id}`);
+    const res = await fetch(`${API_ADDRESS}/api/getPost/?postid=${id}`, {
+      mode: 'cors',
+    });
     const data = await res.json();
     this.mediaList = data.media;
     this.post = data.post;
@@ -84,6 +100,7 @@ export default {
         hasIcon: true,
         onConfirm: async () => {
           const res = await fetch(`${API_ADDRESS}/api/deletePost/`, {
+            mode: 'cors',
             method: 'POST',
             body: JSON.stringify({
               postid: this.post[0].Post_ID,
@@ -104,10 +121,10 @@ export default {
   },
   computed: {
     isOP() {
-      return (localStorage.getItem('User_ID') === String(this.post[0].User_ID));
+      return localStorage.getItem('User_ID') === String(this.post[0].User_ID);
     },
     hasMedia() {
-      return (this.mediaList[0] !== undefined);
+      return this.mediaList[0] !== undefined;
     },
     postExists() {
       return !(this.post[0] === undefined);
@@ -131,7 +148,7 @@ export default {
   border-radius: 6px;
   background-color: white;
 }
-.carousel{
+.carousel {
   justify-content: center;
   align-items: center;
   margin-left: auto;

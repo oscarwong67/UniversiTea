@@ -159,6 +159,7 @@ export default {
     },
     async handleLogin() {
       const res = await fetch(`${API_ADDRESS}/api/authentication/login`, {
+        mode: 'cors',
         method: 'POST',
         body: JSON.stringify({
           email: this.email,
@@ -174,6 +175,7 @@ export default {
     },
     async handleSignup() {
       const res = await fetch(`${API_ADDRESS}/api/authentication/signup`, {
+        mode: 'cors',
         method: 'POST',
         body: JSON.stringify({
           email: this.email,
