@@ -136,7 +136,9 @@ export default {
     allSchools: [],
   }),
   async mounted() {
-    const res = await fetch(`${API_ADDRESS}/api/getSchools`);
+    const res = await fetch(`${API_ADDRESS}/api/getSchools`, {
+      mode: 'cors',
+    });
     const data = await res.json();
     this.allSchools = data;
   },
