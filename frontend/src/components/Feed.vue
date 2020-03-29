@@ -44,7 +44,7 @@ export default {
   async mounted() {
     // TODO: add query parameters similar to how I did it in the job board
     let res;
-    if (this.$props === undefined) {
+    if (this.$props.schoolid === undefined) {
       res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9`, {
         mode: 'cors',
       });
@@ -54,7 +54,7 @@ export default {
       });
     }
     const data = await res.json();
-    // console.log(data.posts);
+    // console.log(data);
     this.posts = data.posts;
   },
   computed: {

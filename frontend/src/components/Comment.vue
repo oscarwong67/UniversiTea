@@ -5,11 +5,12 @@
           'Anonymous' : this.poster.name}}&nbsp;(</span>
       <span class='degreeType'>{{this.poster.degreeType}} Student&nbsp;</span>
       <span class='school'>@ {{this.schoolname}})</span>
-      <span class='time'> on {{this.formatedTime}}</span>
+      <span class='time'> on {{this.formattedTime}}</span>
     </div>
-    <section class='body' v-html="content"/>
+    <section class='body'>{{this.content}}</section>
     <div class='reply'>
-      <b-button type='is-info' size="is-small" outlined @click='handleReply'>Reply</b-button>
+      <b-button type='is-info' size="is-small" outlined @click='handleReply'
+        v-if="isLoggedIn && canComment">Reply</b-button>
       <CreateComment class='create'
         :parentid='this.commentID' :parentschoolid='this.schoolid' v-if='toggleCreateComment'
       />
@@ -41,10 +42,10 @@ export default {
   data: () => ({
     toggleCreateComment: false,
     isEditing: false,
-    formatedTime: '',
+    formattedTime: '',
   }),
   created() {
-    this.formatedTime = formatTime(this.$props.time);
+    this.formattedTime = formatTime(this.$props.time);
   },
   methods: {
     handleReply() {
@@ -84,6 +85,12 @@ export default {
   computed: {
     isOP() {
       return (localStorage.getItem('User_ID') === String(this.poster.User_ID));
+    },
+    isLoggedIn() {
+      return localStorage.getItem('User_ID');
+    },
+    canComment() {
+      return (localStorage.getItem('School_ID') === String(this.$props.schoolid));
     },
   },
 };

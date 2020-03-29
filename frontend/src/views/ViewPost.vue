@@ -3,13 +3,13 @@
     <div>
       <div class="posts container" v-if="postExists">
         <Post
-          :key="post[0].Post_ID"
+          :key="post.Post_ID"
           :poster="{
-            name: post[0].FName,
-            degreeType: post[0].Degree_Type,
-            isAnonymous: post[0].Is_Anonymous
+            name: post.FName,
+            degreeType: post.Degree_Type,
+            isAnonymous: post.Is_Anonymous
           }"
-          :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
+          :title="post.Title" :content="post.Content" :school="post.SchoolName"
         />
         <div class="media container" v-if="hasMedia">
           <b-carousel :autoplay="false" :indicator-inside="false">
@@ -35,8 +35,12 @@
           <b-button type="is-danger" icon-right="delete" @click="handleDelete">Delete</b-button>
         </div>
         <div class="create-comment container">
-          <hr />
-          <CreateComment :parentschoolid="post.School_ID"/>
+          <hr/>
+          <CreateComment v-if="isLoggedIn && canComment"/>
+          <section class="message" v-else-if="isLoggedIn && !canComment">
+            You can only comment on posts in your school's forum!
+          </section>
+          <section class="message" v-else>Log In to Post and Comment!</section>
         </div>
       </div>
       <NotFoundMessage :type="'post'" v-else />
@@ -46,10 +50,10 @@
   </div>
   <div class="edit container" v-else>
     <EditPost
-      :oldTitle="post[0].Title"
-      :oldContent="post[0].Content"
+      :oldTitle="post.Title"
+      :oldContent="post.Content"
       :oldMediaUrls="mediaList"
-      :oldAnonymous="post[0].Is_Anonymous"
+      :oldAnonymous="post.Is_Anonymous"
     />
   </div>
 </template>
@@ -84,7 +88,8 @@ export default {
     });
     const data = await res.json();
     this.mediaList = data.media;
-    this.post = data.post;
+    // eslint-disable-next-line prefer-destructuring
+    this.post = data.post[0];
   },
   methods: {
     handleEdit() {
@@ -101,7 +106,7 @@ export default {
             mode: 'cors',
             method: 'POST',
             body: JSON.stringify({
-              postid: this.post[0].Post_ID,
+              postid: this.post.Post_ID,
             }),
             headers: {
               'Content-Type': 'application/json',
@@ -119,13 +124,19 @@ export default {
   },
   computed: {
     isOP() {
-      return localStorage.getItem('User_ID') === String(this.post[0].User_ID);
+      return localStorage.getItem('User_ID') === String(this.post.User_ID);
     },
     hasMedia() {
       return this.mediaList[0] !== undefined;
     },
     postExists() {
-      return !(this.post[0] === undefined);
+      return !(this.post === undefined);
+    },
+    isLoggedIn() {
+      return localStorage.getItem('User_ID');
+    },
+    canComment() {
+      return (localStorage.getItem('School_ID') === String(this.post.School_ID));
     },
   },
 };
@@ -171,5 +182,10 @@ export default {
 }
 .create-comment {
   width: 95%;
+  padding-bottom: 1em;
+}
+.message {
+  background-color: white;
+  padding-bottom: 1em;
 }
 </style>

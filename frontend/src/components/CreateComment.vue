@@ -1,5 +1,5 @@
 <template>
-<div class='create-comment container' v-if="(isLoggedIn && canComment) || (this.$props.content)">
+<div class='create-comment container'>
   <div class='header'><b>Write a comment</b></div>
   <b-input type='textarea' placeholder='Share your thoughts!' v-model="content"/>
   <b-checkbox class='checkbox' v-model='isAnonymous' :native-value="isAnonymous">
@@ -15,10 +15,6 @@
     </div>
   </div>
 </div>
-<h3 class="message" v-else-if="isLoggedIn && !canComment">
-      You can only post to your school's forum!
-    </h3>
-    <h3 class="message" v-else>Log In to Post and Comment!</h3>
 </template>
 
 <script>
@@ -26,7 +22,7 @@ import { API_ADDRESS } from '../constants';
 
 export default {
   name: 'CreateComment',
-  props: ['parentid', 'parentschoolid', 'commentid', 'oldContent', 'oldAnon'],
+  props: ['parentid', 'commentid', 'oldContent', 'oldAnon'],
   data: () => ({
     content: '',
     isAnonymous: false,
@@ -39,7 +35,6 @@ export default {
   },
   methods: {
     async handleSavingContent() {
-      console.log(this.content);
       let parent = null;
       if (this.$props !== undefined) {
         parent = this.$props.parentid;
@@ -99,18 +94,14 @@ export default {
       }
     },
   },
-  computed: {
-    isLoggedIn() {
-      return localStorage.getItem('User_ID');
-    },
-    canComment() {
-      return (localStorage.getItem('School_ID') === String(this.$props.parentschoolid));
-    },
-  },
 };
 </script>
 
 <style scoped>
+.time {
+  color: rgb(78, 78, 78);
+  font-size: 85%;
+}
 .header {
   padding-bottom: .5em;
 }
