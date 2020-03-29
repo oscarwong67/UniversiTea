@@ -8,7 +8,8 @@
             name: comment.Fname, degreeType: comment.Degree_Type,
             isAnonymous: comment.isAnonymous, User_ID: comment.User_ID
           }"
-          :content="comment.Content" :school="comment.SchoolName" :commentID="comment.Comment_ID"
+          :content="comment.Content" :schoolname="comment.SchoolName"
+          :schoolid="comment.School_ID" :commentID="comment.Comment_ID"
           :time="comment.Timestamp"
         />
       </div>

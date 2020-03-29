@@ -4,14 +4,14 @@
       <span class='posterName'>{{this.poster.isAnonymous ?
           'Anonymous' : this.poster.name}}&nbsp;(</span>
       <span class='degreeType'>{{this.poster.degreeType}} Student&nbsp;</span>
-      <span class='school'>@ {{this.school}})</span>
+      <span class='school'>@ {{this.schoolname}})</span>
       <span class='time'> on {{this.formatedTime}}</span>
     </div>
     <section class='body' v-html="content"/>
     <div class='reply'>
       <b-button type='is-info' size="is-small" outlined @click='handleReply'>Reply</b-button>
       <CreateComment class='create'
-        :parentid='this.commentID' v-if='toggleCreateComment'
+        :parentid='this.commentID' :parentschoolid='this.schoolid' v-if='toggleCreateComment'
       />
     </div>
     <div class = 'edit-buttons container level-right' v-if="isOP">
@@ -20,6 +20,7 @@
     </div>
   </div>
   <div v-else>
+    <!-- edit comment component -->
     <CreateComment
       :commentid='this.commentID' :oldContent='this.content' :oldAnon='this.poster.isAnonymous'
     />
@@ -36,7 +37,7 @@ export default {
   components: {
     CreateComment,
   },
-  props: ['commentID', 'poster', 'school', 'content', 'time'],
+  props: ['commentID', 'poster', 'schoolname', 'schoolid', 'content', 'time'],
   data: () => ({
     toggleCreateComment: false,
     isEditing: false,

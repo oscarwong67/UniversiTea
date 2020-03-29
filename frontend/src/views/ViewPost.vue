@@ -37,7 +37,7 @@
         </div>
         <div class="create-comment container">
           <hr />
-          <CreateComment />
+          <CreateComment :parentschoolid="post.School_ID"/>
         </div>
       </div>
       <NotFoundMessage :type="'post'" v-else />
