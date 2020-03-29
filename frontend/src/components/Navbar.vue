@@ -32,12 +32,17 @@
       </div>
       <div class="navbar-end">
         <div class="double-button-container navbar-item" v-if="isLoggedIn">
-          <NotificationDropdown />
+          <div class="left-button">
+            <NotificationDropdown />
+          </div>
           <b-button outlined @click="logout">Log Out</b-button>
         </div>
         <div v-else class="navbar-item double-button-container">
-          <b-button type="is-primary" outlined @click="isLoginModalActive = true">Log In</b-button>
-          <b-button type="is-primary" @click="isSignupModalActive = true">Signup</b-button>
+          <div class="left-button">
+            <b-button type="is-primary" outlined
+              @click="isLoginModalActive = true">Log In</b-button>
+          </div>
+            <b-button type="is-primary" @click="isSignupModalActive = true">Signup</b-button>
         </div>
         <b-modal class="modal" :active.sync="isLoginModalActive">
           <section class="section card">
@@ -69,7 +74,12 @@
                     <span>{{ schoolName ? `School: ${schoolName}` : "School" }}</span>
                     <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
                   </button>
-                  <b-dropdown-item value="TODO" aria-role="listitem">TODO</b-dropdown-item>
+                  <div class='list'>
+                    <b-dropdown-item
+                      value="schoolName" aria-role="listitem"
+                      v-for="school in allSchools" :key="school.School_ID"
+                    >{{ school.SchoolName }}</b-dropdown-item>
+                  </div>
                 </b-dropdown>
                 <b-dropdown v-model="degreeType" aria-role="list">
                   <button class="button is-light" slot="trigger" slot-scope="{ active }">
@@ -78,18 +88,18 @@
                     </span>
                     <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
                   </button>
-
-                  <b-dropdown-item
-                    :value="degreeType"
-                    aria-role="listitem"
-                    v-for="degreeType in degreeTypes"
-                    :key="degreeType"
-                    >{{ degreeType }}</b-dropdown-item
-                  >
+                  <div class='list'>
+                    <b-dropdown-item
+                      :value="degreeType" aria-role="listitem"
+                      v-for="degreeType in degreeTypes" :key="degreeType"
+                    >{{ degreeType }}</b-dropdown-item>
+                  </div>
                 </b-dropdown>
-                <b-button class="navbar-item" type="is-primary" native-type="submit">
-                  Sign Up!
-                </b-button>
+                <div class="submit">
+                  <b-button class="navbar-item" type="is-primary" native-type="submit">
+                    Sign Up!
+                  </b-button>
+                </div>
               </div>
             </form>
           </section>
@@ -213,9 +223,18 @@ export default {
 </script>
 
 <style scoped>
+.modal,
 .modal-content,
-.modal:nth-child(2),
 .card {
+  max-height: auto;
+  overflow: initial;
+  border-radius: 6px;
+}
+
+.list {
+  background: none;
+  padding: 0px;
+  max-height: 150px;
   overflow: auto;
 }
 
@@ -225,5 +244,8 @@ export default {
 
 .left-button {
   padding-right: 0.5em;
+}
+.submit {
+  padding-top: 1em;
 }
 </style>
