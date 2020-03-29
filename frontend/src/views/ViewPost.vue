@@ -8,6 +8,7 @@
             name: post[0].FName, degreeType: post[0].Degree_Type, isAnonymous: post[0].Is_Anonymous
           }"
           :title="post[0].Title" :content="post[0].Content" :school="post[0].SchoolName"
+          :time="post[0].Timestamp"
         />
         <div class='media container' v-if='hasMedia'>
           <b-carousel :autoplay='false' :indicator-inside="false">
@@ -153,6 +154,9 @@ export default {
 .youtube {
   width: 600px;
   height: 500px;
+}
+.time {
+  color: rgb(78, 78, 78);
 }
 .create-comment {
   width: 95%;

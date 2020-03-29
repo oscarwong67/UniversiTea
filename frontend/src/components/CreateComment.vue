@@ -72,7 +72,6 @@ export default {
         },
       });
     },
-    // TODO: anonymous not implemented in backend
     async handleUpdateContent() {
       const id = this.$props.commentid;
       const res = await fetch(`${API_ADDRESS}/api/editComment`, {
@@ -80,13 +79,14 @@ export default {
         body: JSON.stringify({
           commentID: id,
           newContent: this.content,
+          isAnon: this.isAnonymous,
         }),
         headers: {
           'Content-Type': 'application/json',
         },
       });
       if (res.status === 200) {
-        this.$buefy.toast.open('Post updated!');
+        this.$buefy.toast.open('Comment updated!');
         this.$router.go();
       } else {
         this.$buefy.toast.open('Changes could not be saved. Please try again later');

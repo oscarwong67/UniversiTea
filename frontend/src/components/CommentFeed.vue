@@ -45,7 +45,7 @@ export default {
 </script>
 
 <style scoped>
-/* TODO: rigth justify */
+/* TODO: right justify */
 .comments {
   display: flex;
   flex-direction: column;
@@ -53,7 +53,7 @@ export default {
   /* align-items: right; */
 }
 .comment-wrapper {
-  width: 95%;
+  width: 100%;
   /* display: flex; */
   padding: .5em;
   align-items: right;

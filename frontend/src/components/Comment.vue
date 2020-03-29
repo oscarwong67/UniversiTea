@@ -5,9 +5,9 @@
           'Anonymous' : this.poster.name}}&nbsp;(</span>
       <span class='degreeType'>{{this.poster.degreeType}} Student&nbsp;</span>
       <span class='school'>@ {{this.school}})</span>
+      <span class='time'> on {{this.formatedTime}}</span>
     </div>
     <section class='body' v-html="content"/>
-    <section class='time'>{{formatTime(this.time)}}</section>
     <div class='reply'>
       <b-button type='is-info' size="is-small" outlined @click='handleReply'>Reply</b-button>
       <CreateComment class='create'
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import moment from 'moment';
+import { formatTime } from '../helper';
 import CreateComment from './CreateComment.vue';
 import { API_ADDRESS } from '../constants';
 
@@ -40,14 +40,12 @@ export default {
   data: () => ({
     toggleCreateComment: false,
     isEditing: false,
+    formatedTime: '',
   }),
+  created() {
+    this.formatedTime = formatTime(this.$props.time);
+  },
   methods: {
-    formatTime(value) {
-      if (value) {
-        return moment(String(value)).format('MM/DD/YYYY hh:mm A');
-      }
-      return value;
-    },
     handleReply() {
       this.toggleCreateComment = !this.toggleCreateComment;
     },
@@ -90,6 +88,10 @@ export default {
 </script>
 
 <style scoped>
+.time {
+  color: rgb(78, 78, 78);
+  font-size: 85%;
+}
 .comment {
   background-color: white;
   border: 2px solid white;

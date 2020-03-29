@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const validYouTubeUrl = (url) => {
   if (url !== undefined || url !== '') {
     // eslint-disable-next-line no-useless-escape
@@ -33,4 +35,11 @@ const getMediaType = (url) => {
   return [newUrl, type];
 };
 
-module.exports = { getMediaType };
+const formatTime = (time) => {
+  if (time) {
+    return moment(String(time)).format('MM/DD/YYYY @ hh:mm A');
+  }
+  return time;
+};
+
+export { getMediaType, formatTime };
