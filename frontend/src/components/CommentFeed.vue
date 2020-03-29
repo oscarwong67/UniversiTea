@@ -1,5 +1,5 @@
 <template>
-  <section class='comment-section'>
+  <section class='comment-section' v-if="!noComments">
     <section class='comments' v-for='comment in comments' :key='comment.Comment_ID'>
       <div class='comment-wrapper container level-right'>
         <Comment
@@ -16,6 +16,9 @@
       <CommentFeed class='sub-feed' :postid='postID' :parentid='comment.Comment_ID'/>
     </section>
   </section>
+  <h3 class="message" v-else>
+      Theres no comments yet
+    </h3>
 </template>
 
 <script>
@@ -42,7 +45,10 @@ export default {
     const data = await res.json();
     this.comments = data;
   },
-  methods: {
+  computed: {
+    noComments() {
+      return (this.comments[0] === undefined);
+    },
   },
 };
 </script>
@@ -54,6 +60,10 @@ export default {
   flex-direction: column;
   /* justify-content: flex-end; */
   /* align-items: right; */
+}
+.message {
+  background-color: white;
+  padding: 1em;
 }
 .comment-wrapper {
   width: 95%;
