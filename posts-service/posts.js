@@ -9,7 +9,7 @@ exports.plugin = {
   register: async function (server, options) {
     server.route({
       method: 'GET',
-      path: '/api/feed/',
+      path: '/api/feed',
       handler: async function (request, h) {
         try {
           let page = parseInt(request.query.page) || 1;

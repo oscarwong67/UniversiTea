@@ -6,7 +6,7 @@
     </h3>
     <h3 class="message" v-else>Log In to Post and Comment!</h3>
     <hr />
-    <section class="posts">
+    <section class="posts" v-if="!noPosts">
       <a
         :href="`/viewpost/${post.Post_ID}`"
         v-for="post in posts"
@@ -23,6 +23,9 @@
         />
       </a>
     </section>
+    <h3 class="message" v-else>
+      Theres no posts to display here...
+    </h3>
   </section>
 </template>
 
@@ -69,6 +72,9 @@ export default {
         return true;
       }
       return false;
+    },
+    noPosts() {
+      return (this.posts[0] === undefined);
     },
   },
 };
