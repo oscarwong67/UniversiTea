@@ -1,6 +1,7 @@
 'use strict'
 
 // this file connects to the database
+require('dotenv').config();
 const util = require('util');
 const mysql = require('mysql');
 
@@ -8,10 +9,10 @@ console.log('Initializing database connection...');
 // this is the connection to the test DB on Jeremy's server
 const pool = mysql.createPool({
     connectionLimit: 10,
-    host: '107.180.50.225',
-    user: 'admin3',
-    password: 'joshua747',
-    database: 'seng401',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     charset: 'utf8mb4',
     debug: false
 });
@@ -31,7 +32,7 @@ pool.getConnection((err, connection) => {
     }
 
     if (connection) connection.release()
-
+    console.log(`Connected to: ${process.env.DB_NAME}`);
     return
 })
 

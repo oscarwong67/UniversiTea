@@ -1,16 +1,19 @@
 <template>
-  <section class='feed section'>
-    <CreatePost v-if="isLoggedIn && canPost"/>
-    <h3 class='message' v-else-if="isLoggedIn && !canPost">
+  <section class="feed section">
+    <CreatePost v-if="isLoggedIn && canPost" />
+    <h3 class="message" v-else-if="isLoggedIn && !canPost">
       You can only post to your school's forum!
     </h3>
-    <h3 class='message' v-else>Log In to Post and Comment!</h3>
-    <hr/>
-    <section class='posts'>
+    <h3 class="message" v-else>Log In to Post and Comment!</h3>
+    <hr />
+    <section class="posts">
       <a
         :href="`/viewpost/${post.Post_ID}`"
-        v-for='post in posts' :key='post.Post_ID'
-        target="_blank" noreferrer class='post-wrapper'
+        v-for="post in posts"
+        :key="post.Post_ID"
+        target="_blank"
+        noreferrer
+        class="post-wrapper"
       >
         <Post
           class='post'
@@ -42,9 +45,13 @@ export default {
     // TODO: add query parameters similar to how I did it in the job board
     let res;
     if (this.$props === undefined) {
-      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9`);
+      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9`, {
+        mode: 'cors',
+      });
     } else {
-      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&schoolID=${this.$props.schoolid}`);
+      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&schoolID=${this.$props.schoolid}`, {
+        mode: 'cors',
+      });
     }
     const data = await res.json();
     // console.log(data.posts);
@@ -85,7 +92,7 @@ export default {
   cursor: pointer;
   width: 100%;
   margin-bottom: 1em;
-  color:inherit;
+  color: inherit;
   text-decoration: none;
 }
 

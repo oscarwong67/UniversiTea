@@ -50,11 +50,13 @@ export default {
       // ];
       // this.notifications = mockedNotifications;
       try {
-        const res = await fetch(`${API_ADDRESS}/api/getNotifications?userId=${localStorage.getItem('User_ID')}&limit=25`);
+        const res = await fetch(`${API_ADDRESS}/api/getNotifications?userId=${localStorage.getItem('User_ID')}&limit=25`, {
+          mode: 'cors',
+        });
         const data = await res.json();
         this.notifications = Array.from(data);
       } catch (err) {
-        console.error(err);
+        // console.error(err);
       }
     },
     async handleNotificationPopupOpen() {
@@ -62,6 +64,7 @@ export default {
       if (!this.allNotificationsRead) {
         try {
           await fetch(`${API_ADDRESS}/api/markNotificationsAsRead`, {
+            mode: 'cors',
             method: 'POST',
             body: JSON.stringify({ userId: localStorage.getItem('User_ID') }),
             headers: {
@@ -74,7 +77,7 @@ export default {
             return newNotification;
           });
         } catch (err) {
-          console.error(err);
+          // console.error(err);
         }
       }
     },

@@ -35,7 +35,9 @@ export default {
     this.postID = this.$props.postid;
     const { postid } = this.$props;
     const { parentid } = this.$props;
-    const res = await fetch(`${API_ADDRESS}/api/getComments/?postID=${postid}&parentID=${parentid}`);
+    const res = await fetch(`${API_ADDRESS}/api/getComments/?postID=${postid}&parentID=${parentid}`, {
+      mode: 'cors',
+    });
     const data = await res.json();
     this.comments = data;
   },

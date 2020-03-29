@@ -1,11 +1,12 @@
 'use strict'
+require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 
 const init = async () => {
 
   const server = Hapi.server({
     port: 3003,
-    host: 'localhost'
+    host: '0.0.0.0'
   });
 
   await server.register(require('./notifications-controller')); // register the routes in notifications.js
@@ -16,7 +17,7 @@ const init = async () => {
         {
           plugin: require('hapi-cors'),
           options: {
-            origins: ['http://localhost:8080', 'http://localhost:3000']
+            origins: [process.env.MAIN_APP, process.env.COMMENTS_SERVICE]
           }
         }
       ]);

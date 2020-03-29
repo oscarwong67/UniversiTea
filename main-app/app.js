@@ -1,9 +1,16 @@
+require('dotenv').config();
 const Hapi = require('@hapi/hapi');
+const Path = require('path');
 
 const init = async () => {
   const server = Hapi.server({
-    port: 3000,
-    host: 'localhost',
+    port: process.env.SERVER_PORT || 3000,
+    host: '0.0.0.0',
+    routes: {
+      files: {
+        relativeTo: Path.join(__dirname, '../frontend/dist')
+      }
+    }
   });
 
   server.state('session', {
@@ -11,14 +18,14 @@ const init = async () => {
     encoding: 'base64json'
   });
 
+  await server.register(require('@hapi/inert'));
+
   const start = async function () {
+
     try {
       await server.register([
         {
           plugin: require('hapi-cors'),
-          options: {
-            origins: ['http://localhost:8080']
-          }
         },
         {
           plugin: require('hapi-auth-cookie'),
@@ -27,6 +34,17 @@ const init = async () => {
       ]);
 
       server.route(require('./routes'));
+
+
+      server.ext('onPreResponse', (request, h) => {
+        const response = request.response;
+        if (response.isBoom &&
+          response.output.statusCode === 404) {
+          return h.file('index.html');
+        }
+
+        return h.continue;
+      });
 
       await server.start();
     } catch (err) {

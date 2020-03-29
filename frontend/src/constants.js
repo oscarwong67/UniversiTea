@@ -1,2 +1,2 @@
-const API_ADDRESS = 'http://localhost:3000'; // TODO: set up environment variables
+const API_ADDRESS = process.env.VUE_APP_API_ADDRESS;
 module.exports = { API_ADDRESS };

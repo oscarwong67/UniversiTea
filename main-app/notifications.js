@@ -1,7 +1,8 @@
 'use strict'
+require('dotenv').config();
 const db = require('./db');
 const helper = require('./helper');
-const notificationsMicroserviceHost = 'localhost:3003';
+const notificationsMicroservice = process.env.NOTIFICATIONS_SERVICE;
 const fetch = require('node-fetch');
 
 module.exports = [
@@ -10,7 +11,7 @@ module.exports = [
     path: '/api/getNotifications',
     handler: async function (request, h) {
       try {
-        const url = `http://${notificationsMicroserviceHost}${request.url.pathname}${request.url.search}`;
+        const url = `${notificationsMicroservice}${request.url.pathname}${request.url.search}`;
         console.log(url);
         const res = await fetch(url);
         const data = await res.json();
@@ -24,7 +25,7 @@ module.exports = [
     method: 'POST',
     path: '/api/markNotificationsAsRead',
     handler: async function(request, h) {
-      const url = `http://${notificationsMicroserviceHost}/api/markNotificationsAsRead`;
+      const url = `${notificationsMicroservice}/api/markNotificationsAsRead`;
       const res = await fetch(url, {
         method: 'POST',
         body: JSON.stringify(request.payload),

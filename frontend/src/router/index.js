@@ -19,24 +19,24 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
-    path: '/school/:schoolid/',
+    path: '/school/:schoolid/', // feed for a specific school
     name: 'School',
-    component: () => import(/* webpackChunkName: "about" */ '../views/School.vue'),
-  },
-  {
-    path: '/school/:schoolid/viewpost/:postid',
-    name: 'School Post',
-    component: () => import(/* webpackChunkName: "about" */ '../views/ViewPost.vue'),
+    component: () => import(/* webpackChunkName: "school" */ '../views/School.vue'),
   },
   {
     path: '/viewpost/:postid',
     name: 'View Post',
-    component: () => import(/* webpackChunkName: "about" */ '../views/ViewPost.vue'),
+    component: () => import(/* webpackChunkName: "viewPost" */ '../views/ViewPost.vue'),
+  },
+  {
+    path: '/administration',
+    name: 'Administration',
+    component: () => import(/* webpackChunkname: "administration" */ '../views/Administration.vue'),
   },
   {
     path: '*',
     name: 'Not Found',
-    component: () => import(/* webpackChunkName: "about" */ '../views/NotFound.vue'),
+    component: () => import(/* webpackChunkName: "notFound" */ '../views/NotFound.vue'),
   },
 ];
 

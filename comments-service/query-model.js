@@ -20,7 +20,7 @@ const addComment = async () => {
 
   let ver = 1;
 
-  await db.query(
+  const insertResult = await db.query(
     'INSERT INTO COMMENT SET ?',
     { 
       Version: ver, 
@@ -32,7 +32,7 @@ const addComment = async () => {
     }
   );
 
-  return;
+  return insertResult.insertId;
 }
 
 const editComment = async () => {

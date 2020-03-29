@@ -6,7 +6,7 @@ const init = async () => {
 
   const server = Hapi.server({
     port: 3001,
-    host: 'localhost'
+    host: '0.0.0.0'
   });
 
   await server.register(require('./posts')); // register the routes in posts.js
@@ -17,7 +17,7 @@ const init = async () => {
         {
           plugin: require('hapi-cors'),
           options: {
-            origins: ['http://localhost:8080', 'http://localhost:3000']
+            origins: [process.env.MAIN_APP]
           }
         }
       ]);

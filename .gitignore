@@ -108,3 +108,5 @@ main-app/package-lock.json
 posts-service/package-lock.json
 posts-service/package-lock.json
 package-lock.json
+UniversiTea-EC2.pem
+frontend/.env.production
