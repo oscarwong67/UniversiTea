@@ -66,7 +66,7 @@ exports.plugin = {
         handler: async function (request, h) {
           console.log(request.payload);
           try {
-            await postsModel.addPost(request);
+            await postsModel.editPost(request);
             return helper.goodResponse(h);
           } catch (err) {
             return helper.badResponse(h, err);
