@@ -3,6 +3,7 @@
 const db = require('./db');
 const helper = require('./helper');
 
+// Gets called by REST API to get feed
 const getFeed = async (request) => {
     let page = parseInt(request.query.page) || 1;
     const limit = parseInt(request.query.limit) || 9;
@@ -18,6 +19,7 @@ const getFeed = async (request) => {
     return { posts };
 }
 
+// Gets called by REST API to add post
 const addPost = async (request) => {
     let content = request.payload.content;
     let title = request.payload.title;
@@ -41,6 +43,7 @@ const addPost = async (request) => {
     return;
 }
 
+// Gets called by REST API to get Post
 const getPost = async (request) => {
     let postid = parseInt(request.query.postid);
     console.log(postid);
@@ -60,6 +63,7 @@ const getPost = async (request) => {
     return { post, media };
 }
 
+// Gets called by REST API to delete a post
 const deletePost = async (request) => {
     let postid = request.payload.postid;
     await db.query(`
@@ -72,6 +76,7 @@ const deletePost = async (request) => {
         `);
 }
 
+// Gets called by REST API to edit a post
 const editPost = async (request) => {
     let postid = request.payload.postid;
     let content = request.payload.content;

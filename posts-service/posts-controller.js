@@ -1,13 +1,14 @@
 'use strict';
 
-const db = require('./db');
 const helper = require('./helper');
 const postsModel = require('./posts-model');
-const commentsMicroserviceHost = 'localhost:3002';
 
 exports.plugin = {
     pkg: require('./package.json'),
     register: async function (server, options) {
+
+      // API call for getting feed
+      // Input: page, limit, schoolID
       server.route({
         method: 'GET',
         path: '/api/feed',
@@ -21,6 +22,8 @@ exports.plugin = {
         }
       });
 
+      // API call for adding a post
+      // Input: content, title, user, school, mediaUrls, isAnonymous
       server.route({
         method: 'POST',
         path: '/api/addPost',
@@ -34,6 +37,8 @@ exports.plugin = {
         }
       });
 
+      // API call for getting a post
+      // Input: postid
       server.route({
         method: 'GET',
         path: '/api/getPost/',
@@ -47,6 +52,8 @@ exports.plugin = {
         }
       });
 
+      // API call for deleting a post
+      // Input: postid
       server.route({
         method: 'POST',
         path: '/api/deletePost/',
@@ -60,6 +67,8 @@ exports.plugin = {
         }
       });
 
+      // API call for editing a post
+      // Input: postid, content, title, user, school, mediaUrls, isAnonymous
       server.route({
         method: 'POST',
         path: '/api/editPost/',
