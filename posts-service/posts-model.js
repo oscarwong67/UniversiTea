@@ -7,6 +7,7 @@ const getFeed = async (request) => {
     let page = parseInt(request.query.page) || 1;
     const limit = parseInt(request.query.limit) || 9;
     const schoolID = parseInt(request.query.schoolID) || true;
+    if (page < 1) page = 1;
     const posts = await db.query(`
         SELECT * 
         FROM POSTS AS P, SCHOOL AS S, USER AS U
