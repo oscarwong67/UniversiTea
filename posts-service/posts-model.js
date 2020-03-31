@@ -29,6 +29,7 @@ const addPost = async (request) => {
     'INSERT INTO POSTS SET ?',
     { Content: content, Title: title, User_ID: user, School_ID: school, Is_Anonymous: isAnonymous }
     );
+    if (!postResult.insertId) throw new Error('Failed to insert post');
 }
 
 module.exports = {getFeed, addPost};
