@@ -13,6 +13,7 @@ exports.plugin = {
         path: '/api/feed',
         handler: async function (request, h) {
             const posts = postsModel.getFeed(request);
+            return { ...posts };
         }
       });
     }
