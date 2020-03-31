@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 require('dotenv').config();
 const db = require('./db');
 const helper = require('./helper');
