@@ -13,7 +13,7 @@ exports.plugin = {
         path: '/api/feed',
         handler: async function (request, h) {
             try {
-                const posts = postsModel.getFeed(request);
+                const posts = await postsModel.getFeed(request);
                 return { ...posts };
             } catch(err) {
                 return helper.badResponse(h, err);
@@ -72,7 +72,7 @@ exports.plugin = {
             return helper.badResponse(h, err);
           }
         }
-      })
+      });
 
     }
   };
