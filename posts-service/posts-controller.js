@@ -39,9 +39,8 @@ exports.plugin = {
         path: '/api/getPost/',
         handler: async function (request, h) {
           try {
-              // make result post and media
             const result = await postsModel.getPost(request);
-            return helper.goodResponse, { post, media };
+            return helper.goodResponse, result;
           } catch (err) {
             return helper.badResponse(h, err);
           }
