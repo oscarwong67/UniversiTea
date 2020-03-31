@@ -197,7 +197,6 @@ export default {
             Fname: this.fname,
             Lname: this.lname,
             Degree_Type: this.degreeType,
-            schoolName: this.school.SchoolName,
             schoolID: this.school.School_ID,
           }),
           credentials: 'include',

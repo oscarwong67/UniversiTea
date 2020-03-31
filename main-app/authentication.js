@@ -18,20 +18,13 @@ module.exports = [
         const Lname = request.payload.Lname;
         const Email = request.payload.email;
         const inputPassword = request.payload.password;
-        const schoolName = request.payload.schoolName;
         const schoolID = request.payload.schoolID;
         const Degree_Type = request.payload.Degree_Type;
-
-        //  get school id from SCHOOL
-        // console.log(schoolName);
-        // const schoolResult = await db.query('SELECT * FROM SCHOOL WHERE SchoolName=?', [schoolName]);
-        // if (!schoolResult.length) throw new Error('Invalid school name!');
 
         //  insert signup
         const password = Bcrypt.hashSync(inputPassword, saltRounds);
         const signupResults = await db.query('INSERT INTO USER SET ?', {
           Fname, Lname, Email, password, Degree_Type, schoolID
-          // School_ID: schoolResult[0].School_ID
         });
         return helper.goodResponse(h, { User_ID: signupResults.insertId, School_ID: schoolResult[0].School_ID, isValid: true });
       } catch (err) {
