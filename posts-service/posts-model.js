@@ -30,6 +30,13 @@ const addPost = async (request) => {
     { Content: content, Title: title, User_ID: user, School_ID: school, Is_Anonymous: isAnonymous }
     );
     if (!postResult.insertId) throw new Error('Failed to insert post');
+    mediaUrls.forEach(async (mediaUrl) => {
+    const mediaInsertResult = await db.query(
+        'INSERT INTO MEDIA SET ?',
+        { Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postResult.insertId }
+    )
+    if (!mediaInsertResult.insertId) throw new Error('Failed to insert media');
+    });
 }
 
 module.exports = {getFeed, addPost};
