@@ -1,5 +1,5 @@
 const posts = require('./posts');
-const authentication = require('./authentication');
+const authentication = require('./authentication-controller');
 const admin = require('./admin');
 const school = require('./school');
 const notifications = require('./notifications');
