@@ -26,7 +26,7 @@ exports.plugin = {
         path: '/api/addPost',
         handler: async function (request, h) {
           try {
-                
+            await postsModel.addPost(request);
             return helper.goodResponse(h);
           } catch (err) {
             return helper.badResponse(h, err);
@@ -34,6 +34,19 @@ exports.plugin = {
         }
       });
 
+      server.route({
+        method: 'GET',
+        path: '/api/getPost/',
+        handler: async function (request, h) {
+          try {
+              // make result post and media
+            const result = await postsModel.getPost(request);
+            return helper.goodResponse, { post, media };
+          } catch (err) {
+            return helper.badResponse(h, err);
+          }
+        }
+      });
 
     }
   };
