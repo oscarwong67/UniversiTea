@@ -13,12 +13,13 @@
           :time="comment.Timestamp"
         />
       </div>
-      <CommentFeed class='sub-feed' :postid='postID' :parentid='comment.Comment_ID'/>
+      <CommentFeed class='sub-feed'
+        :postid='postID' :parentid='comment.Comment_ID' :isSubFeed='true'/>
     </section>
   </section>
-  <h3 class="message" v-else>
-      Theres no comments yet
-    </h3>
+  <h3 class="message" v-else-if="noComments && !this.$props.isSubFeed">
+    Theres no comments yet
+  </h3>
 </template>
 
 <script>
@@ -30,7 +31,7 @@ export default {
   components: {
     Comment,
   },
-  props: ['postid', 'parentid'],
+  props: ['postid', 'parentid', 'isSubFeed'],
   data: () => ({
     comments: [],
     postID: '',

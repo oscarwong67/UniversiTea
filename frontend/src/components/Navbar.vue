@@ -69,15 +69,17 @@
                 <b-field label="Last Name">
                   <b-input v-model="lname"></b-input>
                 </b-field>
-                <b-dropdown v-model="schoolName" aria-role="list">
+                <b-dropdown v-model="school" aria-role="list">
                   <button class="button is-light" slot="trigger" slot-scope="{ active }">
-                    <span>{{ schoolName ? `School: ${schoolName}` : "School" }}</span>
+                    <span>
+                      {{ school ? `School: ${school.SchoolName}` : "School" }}
+                    </span>
                     <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
                   </button>
                   <div class='list'>
                     <b-dropdown-item
-                      value="schoolName" aria-role="listitem"
-                      v-for="school in allSchools" :key="school.School_ID"
+                      :value="school" aria-role="listitem"
+                      v-for="school in allSchools" :key="school.SchoolName"
                     >{{ school.SchoolName }}</b-dropdown-item>
                   </div>
                 </b-dropdown>
@@ -127,7 +129,7 @@ export default {
     password: '',
     fname: '',
     lname: '',
-    schoolName: '',
+    school: '',
     degreeType: '',
     degreeTypes: [
       'B.A.',
@@ -184,25 +186,29 @@ export default {
       this.afterLogin(data);
     },
     async handleSignup() {
-      const res = await fetch(`${API_ADDRESS}/api/authentication/signup`, {
-        mode: 'cors',
-        method: 'POST',
-        body: JSON.stringify({
-          email: this.email,
-          password: this.password,
-          Fname: this.fname,
-          Lname: this.lname,
-          Degree_Type: this.degreeType,
-          schoolName: this.schoolName,
-        }),
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      if (this.email && this.password && this.fname
+        && this.lname && this.school && this.degreeType) {
+        const res = await fetch(`${API_ADDRESS}/api/authentication/signup`, {
+          mode: 'cors',
+          method: 'POST',
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+            Fname: this.fname,
+            Lname: this.lname,
+            Degree_Type: this.degreeType,
+            schoolName: this.school.SchoolName,
+            schoolID: this.school.School_ID,
+          }),
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      const data = await res.json();
-      this.afterLogin(data);
+        const data = await res.json();
+        this.afterLogin(data);
+      }
     },
     logout() {
       localStorage.removeItem('User_ID');

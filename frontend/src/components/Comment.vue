@@ -16,12 +16,14 @@
       />
     </div>
     <div class = 'edit-buttons container level-right' v-if="isOP">
-      <b-button @click='handleEdit'>Edit</b-button>
+      <div class='left-button'>
+        <b-button @click='handleEdit'>Edit</b-button>
+      </div>
       <b-button type='is-danger' icon-right='delete' @click='handleDelete'>Delete</b-button>
     </div>
   </div>
   <div v-else>
-    <!-- CreateComment here is an edit comment component -->
+    <!-- CreateComment here acts as an edit comment component -->
     <CreateComment
       :commentid='this.commentID' :oldContent='this.content' :oldAnon='this.poster.isAnonymous'
     />
@@ -97,6 +99,9 @@ export default {
 </script>
 
 <style scoped>
+.left-button {
+  padding-right: .5em;
+}
 .time {
   color: rgb(78, 78, 78);
   font-size: 85%;
