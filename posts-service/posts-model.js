@@ -31,13 +31,13 @@ const addPost = async (request) => {
     );
     if (!postResult.insertId) throw new Error('Failed to insert post');
 
-    // mediaUrls.forEach(async (mediaUrl) => {
-    // const mediaInsertResult = await db.query(
-    //     'INSERT INTO MEDIA SET ?',
-    //     { Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postResult.insertId }
-    // )
-    // if (!mediaInsertResult.insertId) throw new Error('Failed to insert media');
-    // });
+    mediaUrls.forEach(async (mediaUrl) => {
+    const mediaInsertResult = await db.query(
+        'INSERT INTO MEDIA SET ?',
+        { Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postResult.insertId }
+    )
+    if (!mediaInsertResult.insertId) throw new Error('Failed to insert media');
+    });
     return;
 }
 
@@ -88,14 +88,14 @@ const editPost = async (request) => {
         DELETE FROM MEDIA
         WHERE Post_ID=${ postid}
         `);
-    // mediaUrls.forEach(async (mediaUrl) => {
-    //     console.log('here');
-    //     const mediaInsertResult = await db.query(
-    //     'INSERT INTO MEDIA SET ?',
-    //     { Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postid }
-    //     )
-    //     if (!mediaInsertResult.insertId) throw new Error('Failed to insert media');
-    // });
+    mediaUrls.forEach(async (mediaUrl) => {
+        console.log('here');
+        const mediaInsertResult = await db.query(
+        'INSERT INTO MEDIA SET ?',
+        { Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postid }
+        )
+        if (!mediaInsertResult.insertId) throw new Error('Failed to insert media');
+    });
 }
 
 module.exports = {getFeed, addPost, getPost, deletePost, editPost};
