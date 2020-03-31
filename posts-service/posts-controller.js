@@ -12,8 +12,12 @@ exports.plugin = {
         method: 'GET',
         path: '/api/feed',
         handler: async function (request, h) {
-            const posts = postsModel.getFeed(request);
-            return { ...posts };
+            try {
+                const posts = postsModel.getFeed(request);
+                return { ...posts };
+            } catch(err) {
+                return helper.badResponse(h, err);
+            }
         }
       });
     }
