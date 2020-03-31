@@ -20,7 +20,20 @@ exports.plugin = {
             }
         }
       });
+
+      server.route({
+        method: 'POST',
+        path: '/api/addPost',
+        handler: async function (request, h) {
+          try {
+                
+            return helper.goodResponse(h);
+          } catch (err) {
+            return helper.badResponse(h, err);
+          }
+        }
+      });
+
+
     }
-
-
   };
