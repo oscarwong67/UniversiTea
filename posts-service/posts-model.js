@@ -70,4 +70,30 @@ const deletePost = async (request) => {
         `);
 }
 
-module.exports = {getFeed, addPost, getPost, deletePost};
+const editPost = async (request) => {
+    let postid = request.payload.postid;
+    let content = request.payload.content;
+    let title = request.payload.title;
+    let mediaUrls = request.payload.mediaUrls;
+    let isAnonymous = request.payload.isAnonymous;
+    const post = await db.query(
+        `UPDATE POSTS
+        SET ?
+        WHERE Post_ID=${ postid}`,
+        { Content: content, Title: title, Is_Anonymous: isAnonymous }
+    )
+    await db.query(`
+        DELETE FROM MEDIA
+        WHERE Post_ID=${ postid}
+        `);
+    mediaUrls.forEach(async (mediaUrl) => {
+        console.log('here');
+        const mediaInsertResult = await db.query(
+        'INSERT INTO MEDIA SET ?',
+        { Source_Url: mediaUrl.url, Type: mediaUrl.type, Post_ID: postid }
+        )
+        if (!mediaInsertResult.insertId) throw new Error('Failed to insert media');
+    });
+}
+
+module.exports = {getFeed, addPost, getPost, deletePost, editPost};

@@ -60,5 +60,19 @@ exports.plugin = {
         }
       });
 
+      server.route({
+        method: 'POST',
+        path: '/api/editPost/',
+        handler: async function (request, h) {
+          console.log(request.payload);
+          try {
+            await postsModel.addPost(request);
+            return helper.goodResponse(h);
+          } catch (err) {
+            return helper.badResponse(h, err);
+          }
+        }
+      })
+
     }
   };
