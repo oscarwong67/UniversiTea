@@ -2,6 +2,7 @@
 
 const db = require('./db');
 const helper = require('./helper');
+const postsModel = require('./posts-model');
 const commentsMicroserviceHost = 'localhost:3002';
 
 exports.plugin = {
@@ -11,10 +12,10 @@ exports.plugin = {
         method: 'GET',
         path: '/api/feed',
         handler: async function (request, h) {
-            //Write Code Here
+            const posts = postsModel.getFeed(request);
         }
       });
     }
 
-    
+
   };
