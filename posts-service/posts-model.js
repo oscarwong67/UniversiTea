@@ -18,4 +18,17 @@ const getFeed = async (request) => {
     return { posts };
 }
 
-module.exports = {getFeed};
+const addPost = async (request) => {
+    let content = request.payload.content;
+    let title = request.payload.title;
+    let user = request.payload.user;
+    let school = request.payload.school;
+    let mediaUrls = request.payload.mediaUrls;
+    let isAnonymous = request.payload.isAnonymous;
+    const postResult = await db.query(
+    'INSERT INTO POSTS SET ?',
+    { Content: content, Title: title, User_ID: user, School_ID: school, Is_Anonymous: isAnonymous }
+    );
+}
+
+module.exports = {getFeed, addPost};
