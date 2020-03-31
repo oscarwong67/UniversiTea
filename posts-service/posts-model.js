@@ -58,5 +58,16 @@ const getPost = async (request) => {
     return { post, media };
 }
 
+const deletePost = async (request) => {
+    let postid = request.payload.postid;
+    await db.query(`
+        DELETE FROM POSTS
+        WHERE Post_ID=${ postid}
+        `);
+    await db.query(`
+        DELETE FROM MEDIA
+        WHERE Post_ID=${ postid}
+        `);
+}
 
-module.exports = {getFeed, addPost, getPost};
+module.exports = {getFeed, addPost, getPost, deletePost};

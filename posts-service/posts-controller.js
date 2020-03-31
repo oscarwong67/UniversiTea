@@ -47,5 +47,18 @@ exports.plugin = {
         }
       });
 
+      server.route({
+        method: 'POST',
+        path: '/api/deletePost/',
+        handler: async function (request, h) {
+          try {
+            await postsModel.deletePost(request);
+            return helper.goodResponse(h);
+          } catch (err) {
+            return helper.badResponse(h, err);
+          }
+        }
+      });
+
     }
   };
