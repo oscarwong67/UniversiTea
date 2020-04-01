@@ -22,7 +22,7 @@ const getFeed = async (request) => {
             SELECT * 
             FROM POSTS AS P, SCHOOL AS S, USER AS U
             WHERE P.User_ID=U.User_ID AND P.School_ID=S.School_ID AND S.School_ID=?
-                    AND P.Title LIKE ?
+                    AND P.Title LIKE '?'
             ORDER BY Post_id
             LIMIT ${(page - 1) * limit}, ${limit}
             `, schoolID, '%'+search+'%')
