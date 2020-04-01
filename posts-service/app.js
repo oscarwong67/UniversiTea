@@ -9,7 +9,7 @@ const init = async () => {
     host: '0.0.0.0'
   });
 
-  await server.register(require('./posts')); // register the routes in posts.js
+  await server.register(require('./posts-controller')); // register the routes in posts.js
 
   const start = async function () {
     try {

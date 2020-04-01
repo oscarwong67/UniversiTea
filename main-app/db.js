@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // this file connects to the database
 require('dotenv').config();
