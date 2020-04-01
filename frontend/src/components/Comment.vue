@@ -113,6 +113,10 @@ export default {
   border-radius: 6px;
   padding: 1em;
 }
+.body {
+  white-space: pre-wrap;
+  padding-left: .5em;
+}
 .reply {
   padding-top: 1em;
 }
