@@ -44,4 +44,4 @@ const editComment = async(request) => {
   return res;
 }
 
-module.exports = {getComments, addComment, deleteComment, editComment};
+module.exports = { getComments, addComment, deleteComment, editComment };
