@@ -32,13 +32,14 @@ export default {
     mediaUrls: [],
     isAnonymous: false,
   }),
-  mounted() {
-    this.title = this.$props.oldTitle || '';
-    this.content = this.$props.oldContent || '';
-    this.mediaUrls = this.$props.oldMediaUrls || [];
+  async mounted() {
+    this.title = await this.$props.oldTitle || '';
+    this.content = await this.$props.oldContent || '';
+    this.mediaUrls = await this.$props.oldMediaUrls || [];
     if (this.$props.oldAnonymous) {
-      this.isAnonymous = true;
+      this.isAnonymous = await true;
     }
+    console.log(this.title, this.content, this.mediaUrls, this.isAnonymous);
   },
   methods: {
     updateTitle(newTitle) {

@@ -63,13 +63,16 @@ export default {
     isAnonymous: false,
   }),
   props: ['header', 'oldTitle', 'oldContent', 'oldMediaUrls', 'oldAnonymous'],
-  mounted() {
-    this.title = this.$props.oldTitle || '';
-    this.content = this.$props.oldContent || '';
-    this.mediaUrls = this.$props.oldMediaUrls || [];
+  async mounted() {
+    this.title = await this.$props.oldTitle;
+    this.content = await this.$props.oldContent || '';
+    this.mediaUrls = await this.$props.oldMediaUrls || [];
     if (this.$props.oldAnonymous) {
-      this.isAnonymous = true;
+      this.isAnonymous = await true;
     }
+    console.log(this.title, this.content, this.mediaUrls, this.isAnonymous);
+    // console.log(this.$props.oldTitle, this.$props.oldContent,
+    // this.$props.oldMediaUrls, this.$props.oldAnonymous);
   },
   methods: {
     handleTitleChange() {

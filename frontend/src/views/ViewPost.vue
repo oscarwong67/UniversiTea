@@ -127,7 +127,7 @@ export default {
       return localStorage.getItem('User_ID') === String(this.post.User_ID);
     },
     hasMedia() {
-      return this.mediaList[0] !== undefined;
+      return this.mediaList !== [];
     },
     postExists() {
       return !(this.post === undefined);

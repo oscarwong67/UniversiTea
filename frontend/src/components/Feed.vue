@@ -78,7 +78,7 @@ export default {
       return false;
     },
     noPosts() {
-      return (this.posts[0] === undefined);
+      return (this.posts === undefined);
     },
   },
 };

@@ -80,13 +80,24 @@ const deleteComment = async () => {
 
 const getComments = async (request) => {
   let postID = request.query.postID;
+  let parentID = request.query.parentID;
   let result;
-  result = await db.query(`
+  if (String(parentID) === String(undefined)) {
+    result = await db.query(`
       SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName, S.School_ID
       FROM COMMENT AS C, USER AS U, SCHOOL AS S
-      WHERE C.Post_ID=? AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID`,
-    [postID]
-  );
+      WHERE C.Post_ID=? AND C.Parent_ID IS NULL AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
+      `, [postID]
+    );
+  } else {
+    result = await db.query(`
+      SELECT C.*, U.Fname, U.Degree_Type, S.SchoolName, S.School_ID
+      FROM COMMENT AS C, USER AS U, SCHOOL AS S
+      WHERE C.Post_ID=? AND C.Parent_ID=? AND C.User_ID=U.User_ID AND U.School_ID=S.School_ID
+      `, [postID, parentID]
+    );
+  }
+  
   return {...result};
 }
 

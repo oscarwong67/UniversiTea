@@ -92,6 +92,7 @@ export default {
       return localStorage.getItem('User_ID');
     },
     canComment() {
+      console.log(this.$props.schoolid);
       return (localStorage.getItem('School_ID') === String(this.$props.schoolid));
     },
   },

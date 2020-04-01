@@ -9,9 +9,9 @@ const getFeed = async (request) => {
     const limit = parseInt(request.query.limit) || 9;
     const schoolID = parseInt(request.query.schoolID) || true;
     if (page < 1) page = 1;
-    let search = request.query.search || '';
+    let search = request.query.search || true;
     let posts;
-    // if(search !== undefined) {
+    if(search !== undefined) {
         // IDK if this works actually
         // search = search.toString()
         //         .replace("!", "!!")
@@ -25,15 +25,15 @@ const getFeed = async (request) => {
                     AND P.Title LIKE ?
             ORDER BY Post_id
             `, [schoolID, '%'+search+'%'])
-    // } else {
-    //     posts = await db.query(`
-    //         SELECT * 
-    //         FROM POSTS AS P, SCHOOL AS S, USER AS U
-    //         WHERE P.User_ID=U.User_ID AND P.School_ID=S.School_ID AND S.School_ID=?
-    //         ORDER BY Post_id
-    //         LIMIT ${(page - 1) * limit}, ${limit}
-    //         `, schoolID)
-    // }
+    } else {
+        posts = await db.query(`
+            SELECT * 
+            FROM POSTS AS P, SCHOOL AS S, USER AS U
+            WHERE P.User_ID=U.User_ID AND P.School_ID=S.School_ID AND S.School_ID=?
+            ORDER BY Post_id
+            LIMIT ${(page - 1) * limit}, ${limit}
+            `, schoolID)
+    }
     return { posts };
 }
 

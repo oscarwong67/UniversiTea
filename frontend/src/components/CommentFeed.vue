@@ -1,7 +1,7 @@
 <template>
   <section class="comment-section" v-if="hasComments">
-    <section class="comments" v-for="comment in topLevelComments" :key="comment.Comment_ID">
-      <div class="comment-wrapper container level-right">
+    <section class="comments" v-for="comment in comments" :key="comment.Comment_ID">
+      <div class="comment-wrapper">
         <Comment
           class="comment"
           :poster="{
@@ -18,11 +18,11 @@
         />
       </div>
       <CommentFeed class='sub-feed'
-        :postid='postID' :parentid='comment.Comment_ID' :isSubFeed='true'/>
+          :postid='postID' :parentid='comment.Comment_ID' :isSubFeed='true'/>
     </section>
   </section>
-  <h3 class="message" v-else-if="noComments && !this.$props.isSubFeed">
-    Theres no comments yet
+  <h3 class="message" v-else-if="!hasComments && !this.$props.isSubFeed">
+    There are no comments yet
   </h3>
 </template>
 
@@ -38,40 +38,20 @@ export default {
   },
   props: ['postid', 'parentid', 'isSubFeed'],
   data: () => ({
-    topLevelComments: [],
+    comments: [],
     postID: '',
   }),
   async mounted() {
-    if (this.$props.topLevelCommentsProp && this.$props.topLevelCommentsProp.length > 0) {
-      this.topLevelComments = this.$props.topLevelCommentsProp;
-    } else {
-      this.postID = this.$props.postid;
-      const { postid } = this.$props;
-      const res = await fetch(`${API_ADDRESS}/api/getComments/?postID=${postid}`, {
-        mode: 'cors',
-      });
-      const data = await res.json();
-      const comments = Object.entries(data).map((comment) => comment[1]);
-      // map comment id to comment
-      const topLevelCommentsObj = comments
-        .filter((comment) => !comment.Parent_ID)
-        .reduce((accumulatorObj, comment) => {
-          accumulatorObj[comment.Comment_ID] = comment;
-          accumulatorObj[comment.Comment_ID].children = [];
-          return accumulatorObj;
-        }, {});
-      // map children to their parents (1 level deep)
-      comments.forEach((comment) => {
-        if (comment.Parent_ID) {
-          topLevelCommentsObj[comment.Parent_ID].children.push(comment);
-        }
-      });
-      this.topLevelComments = Object.values(topLevelCommentsObj);
-    }
+    this.postID = this.$props.postid;
+    const { postid } = this.$props;
+    const { parentid } = this.$props;
+    const res = await fetch(`${API_ADDRESS}/api/getComments/?postID=${postid}&parentID=${parentid}`);
+    const data = await res.json();
+    this.comments = data;
   },
   computed: {
     hasComments() {
-      return this.topLevelComments && this.topLevelComments.length > 0;
+      return this.comments[0] !== undefined;
     },
   },
 };
@@ -82,7 +62,7 @@ export default {
 .comments {
   display: flex;
   flex-direction: column;
-  /* justify-content: flex-end; */
+  justify-content: flex-end;
   align-items: flex-end;
 }
 .message {
@@ -90,16 +70,10 @@ export default {
   padding: 1em;
 }
 .comment-wrapper {
-  width: 95%;
+  width: 100%;
   /* display: flex; */
   padding: 0.5em;
   align-items: right;
-}
-.comment {
-  cursor: pointer;
-  width: 100%;
-  color: inherit;
-  text-decoration: none;
 }
 .edit-buttons {
   padding: 1em;
