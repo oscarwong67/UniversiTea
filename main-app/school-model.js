@@ -4,7 +4,7 @@ const helper = require('./helper');
 
 module.exports = [
   {
-    //gets all schools in dbF
+    //gets all schools in db
     method: 'GET',
     path: '/api/getSchools',
     handler: async function () {
