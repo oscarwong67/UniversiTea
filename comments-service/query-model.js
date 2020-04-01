@@ -78,9 +78,7 @@ const deleteComment = async () => {
   return;
 }
 
-const getComments = async (request) => {
-  let postID = request.query.postID;
-  let parentID = request.query.parentID;
+const getComments = async (postID, parentID) => {  
   let result;
   if (String(parentID) === String(undefined)) {
     result = await db.query(`

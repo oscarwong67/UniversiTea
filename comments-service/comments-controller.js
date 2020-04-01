@@ -17,7 +17,13 @@ exports.plugin = {
       path: '/api/addComment',
       handler: async function (request, h) {
         try {
-          await commandModel.addComment(request);
+          let commentID = request.payload.commentID;
+          let content = request.payload.content;
+          let userID = request.payload.userID;
+          let postID = request.payload.postID;
+          let parentID = request.payload.parentID == undefined ? null : request.payload.parentID;
+          let isAnon = request.payload.isAnon; 
+          await commandModel.addComment(commentID, content, userID, postID, parentID, isAnon);
           const commentId = await queryModel.addComment();
           // no await - if notifications doesn't work, comment should still be posted
           notificationController.addNotificationForComment(commentId);
@@ -36,7 +42,10 @@ exports.plugin = {
       path: '/api/editComment',
       handler: async function (request, h) {
         try {
-          await commandModel.editComment(request);
+          let commentID = request.payload.commentID;
+          let isAnon = request.payload.isAnon;
+          let newContent = request.payload.newContent;   
+          await commandModel.editComment(commentID, isAnon, newContent);
           await queryModel.editComment();
           return helper.goodResponse(h, null);
         } catch (err) {
@@ -53,7 +62,8 @@ exports.plugin = {
       path: '/api/deleteComment',
       handler: async function (request, h) {
         try {
-          await commandModel.deleteComment(request);
+          let commentID = request.payload.commentID;
+          await commandModel.deleteComment(commentID);
           await queryModel.deleteComment();
           return helper.goodResponse(h, null);
         } catch (err) {
@@ -70,8 +80,9 @@ exports.plugin = {
       path: '/api/getComments/',
       handler: async function (request, h) {
         try {
-          // await commandModel.getComments(request);
-          const result = await queryModel.getComments(request);
+          let postID = request.query.postID;
+          let parentID = request.query.parentID;
+          const result = await queryModel.getComments(postID, parentID);
           return { ...result };
         } catch (err) {
           return helper.badResponse(h, err);

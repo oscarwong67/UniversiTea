@@ -39,10 +39,11 @@
         </div>
         <div v-else class="navbar-item double-button-container">
           <div class="left-button">
-            <b-button type="is-primary" outlined
-              @click="isLoginModalActive = true">Log In</b-button>
+            <b-button type="is-primary" outlined @click="isLoginModalActive = true"
+              >Log In</b-button
+            >
           </div>
-            <b-button type="is-primary" @click="isSignupModalActive = true">Signup</b-button>
+          <b-button type="is-primary" @click="isSignupModalActive = true">Signup</b-button>
         </div>
         <b-modal class="modal" :active.sync="isLoginModalActive">
           <section class="card section">
@@ -58,7 +59,7 @@
           </section>
         </b-modal>
         <b-modal class="modal" :active.sync="isSignupModalActive">
-          <div class='signup-modal-content'>
+          <div class="signup-modal-content">
             <section class="card section">
               <form @submit.prevent="handleSignup">
                 <h2>Signup</h2>
@@ -77,11 +78,14 @@
                       </span>
                       <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
-                    <div class='list'>
+                    <div class="list">
                       <b-dropdown-item
-                        :value="school" aria-role="listitem"
-                        v-for="school in allSchools" :key="school.SchoolName"
-                      >{{ school.SchoolName }}</b-dropdown-item>
+                        :value="school"
+                        aria-role="listitem"
+                        v-for="school in allSchools"
+                        :key="school.SchoolName"
+                        >{{ school.SchoolName }}</b-dropdown-item
+                      >
                     </div>
                   </b-dropdown>
                   <b-dropdown v-model="degreeType" aria-role="list">
@@ -91,11 +95,14 @@
                       </span>
                       <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
-                    <div class='list'>
+                    <div class="list">
                       <b-dropdown-item
-                        :value="degreeType" aria-role="listitem"
-                        v-for="degreeType in degreeTypes" :key="degreeType"
-                      >{{ degreeType }}</b-dropdown-item>
+                        :value="degreeType"
+                        aria-role="listitem"
+                        v-for="degreeType in degreeTypes"
+                        :key="degreeType"
+                        >{{ degreeType }}</b-dropdown-item
+                      >
                     </div>
                   </b-dropdown>
                   <div class="submit">
@@ -113,6 +120,7 @@
   </nav>
 </template>
 <script>
+/* eslint-disable no-alert */
 import LoginForm from './LoginForm.vue';
 import NotificationDropdown from './NotificationDropdown.vue';
 import { API_ADDRESS } from '../constants';
@@ -169,46 +177,62 @@ export default {
           localStorage.setItem('Is_Admin', data.Is_Admin);
         }
         this.$router.go();
+      } else {
+        alert('Operation failed! Please try again later.');
       }
     },
     async handleLogin() {
-      const res = await fetch(`${API_ADDRESS}/api/authentication/login`, {
-        mode: 'cors',
-        method: 'POST',
-        body: JSON.stringify({
-          email: this.email,
-          password: this.password,
-        }),
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await res.json();
-      this.afterLogin(data);
-    },
-    async handleSignup() {
-      if (this.email && this.password && this.fname
-        && this.lname && this.school && this.degreeType) {
-        const res = await fetch(`${API_ADDRESS}/api/authentication/signup`, {
+      try {
+        const res = await fetch(`${API_ADDRESS}/api/authentication/login`, {
           mode: 'cors',
           method: 'POST',
           body: JSON.stringify({
             email: this.email,
             password: this.password,
-            Fname: this.fname,
-            Lname: this.lname,
-            Degree_Type: this.degreeType,
-            schoolID: this.school.School_ID,
           }),
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
         });
-
         const data = await res.json();
         this.afterLogin(data);
+      } catch (err) {
+        alert('Login Failed! Please enter a valid username and password.');
+      }
+    },
+    async handleSignup() {
+      if (
+        this.email
+        && this.password
+        && this.fname
+        && this.lname
+        && this.school
+        && this.degreeType
+      ) {
+        try {
+          const res = await fetch(`${API_ADDRESS}/api/authentication/signup`, {
+            mode: 'cors',
+            method: 'POST',
+            body: JSON.stringify({
+              email: this.email,
+              password: this.password,
+              Fname: this.fname,
+              Lname: this.lname,
+              Degree_Type: this.degreeType,
+              schoolID: this.school.School_ID,
+            }),
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          const data = await res.json();
+          this.afterLogin(data);
+        } catch (err) {
+          alert('Signup Failed! Please try again later.');
+        }
       }
     },
     logout() {

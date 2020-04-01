@@ -61,8 +61,9 @@ export default {
         });
       }
     },
-    removeMediaUrl(index) {
-      this.mediaUrls.splice(index, 1);
+    removeMediaUrl(mediaUrl) {
+      const mediaUrls = this.mediaUrls.filter((curr) => curr.url !== mediaUrl);
+      this.mediaUrls = mediaUrls;
     },
     updateAnon(newAnonymous) {
       this.isAnonymous = newAnonymous;

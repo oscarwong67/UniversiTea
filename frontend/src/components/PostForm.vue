@@ -21,7 +21,7 @@
           <div class='break' />
           <p class='break' v-for="media in mediaUrls" :key="media.url">
             <strong>url:</strong> {{media.url}}, <strong>type:</strong> {{media.type}}
-            <b-button outlined @click='handleRmMediaChange(media)'>x</b-button>
+            <b-button outlined @click='handleRmMediaChange(media.url)'>x</b-button>
           </p>
           <b-input
             v-model="currentMediaUrl" placeholder="https://example.com" type="text"
@@ -91,16 +91,10 @@ export default {
       }
       this.currentMediaUrl = '';
     },
-    handleRmMediaChange(media) {
-      let i;
-      // eslint-disable-next-line no-plusplus
-      for (i = 0; i < this.mediaUrls.length; i++) {
-        if (this.mediaUrls[i] === media) {
-          this.mediaUrls.splice(i, 1);
-          break;
-        }
-      }
-      this.$emit('mediaRm', i);
+    handleRmMediaChange(mediaUrl) {
+      const mediaUrls = this.mediaUrls.filter((curr) => curr.url !== mediaUrl);
+      this.mediaUrls = mediaUrls;
+      this.$emit('mediaRm', mediaUrl);
     },
     handleAnonChange() {
       this.$emit('anonChange', this.isAnonymous);

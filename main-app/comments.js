@@ -24,7 +24,6 @@ module.exports = [
         body: JSON.stringify(request.payload),
         headers: { 'Content-Type': 'application/json' },
       });
-      console.log(res);
       return res;
     }
   },
@@ -39,7 +38,6 @@ module.exports = [
         body: JSON.stringify(request.payload),
         headers: { 'Content-Type': 'application/json' },
       });
-      console.log(res);
       return res;
     }
   },
@@ -54,7 +52,6 @@ module.exports = [
         body: JSON.stringify(request.payload),
         headers: { 'Content-Type': 'application/json' },
       });
-      console.log(res);
       return res;
     }
   },

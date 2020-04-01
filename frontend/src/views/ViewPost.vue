@@ -9,7 +9,10 @@
             degreeType: post.Degree_Type,
             isAnonymous: post.Is_Anonymous
           }"
-          :title="post.Title" :content="post.Content" :school="post.SchoolName"
+          :title="post.Title"
+          :content="post.Content"
+          :school="post.SchoolName"
+          :time="post.Timestamp"
         />
         <div class="media container" v-if="hasMedia">
           <b-carousel :autoplay="false" :indicator-inside="false">
