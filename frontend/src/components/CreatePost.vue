@@ -90,11 +90,6 @@ export default {
 </script>
 
 <style scoped>
-.message {
-  background-color: white;
-  padding: 1em;
-}
-
 .form {
   padding-bottom: 0px;
 }

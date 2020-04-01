@@ -86,10 +86,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.message {
-  background-color: white;
-  padding: 1em;
-}
 
 .posts {
   display: flex;
