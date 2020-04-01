@@ -19,6 +19,16 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
+    path: '/school/:schoolid/search/:searchkeys',
+    name: 'School Search',
+    component: () => import(/* webpackChunkName: "school" */ '../views/SearchResults.vue'),
+  },
+  {
+    path: '/search/:searchkeys',
+    name: 'General Search',
+    component: () => import(/* webpackChunkName: "school" */ '../views/SearchResults.vue'),
+  },
+  {
     path: '/school/:schoolid/', // feed for a specific school
     name: 'School',
     component: () => import(/* webpackChunkName: "school" */ '../views/School.vue'),

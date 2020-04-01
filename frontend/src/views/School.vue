@@ -8,6 +8,13 @@
       </div>
     </section>
     <div class="feed container">
+      <SearchBar class='searchbar' :schoolid='this.$route.params.schoolid'/>
+      <CreatePost v-if="isLoggedIn && canPost" />
+      <h3 class="message" v-else-if="isLoggedIn && !canPost">
+        You can only post to your school's forum!
+      </h3>
+      <h3 class="message" v-else>Log In to Post and Comment!</h3>
+      <hr />
       <Feed :schoolid="this.$route.params.schoolid" />
     </div>
   </div>
@@ -17,6 +24,8 @@
 </template>
 
 <script>
+import SearchBar from '../components/SearchBar.vue';
+import CreatePost from '../components/CreatePost.vue';
 import Feed from '../components/Feed.vue';
 import NotFoundMessage from '../components/NotFoundMessage.vue';
 import { API_ADDRESS } from '../constants';
@@ -24,6 +33,8 @@ import { API_ADDRESS } from '../constants';
 export default {
   name: 'School',
   components: {
+    SearchBar,
+    CreatePost,
     Feed,
     NotFoundMessage,
   },
@@ -42,10 +53,27 @@ export default {
       this.schoolName = data[0].SchoolName;
     }
   },
+  computed: {
+    isLoggedIn() {
+      return localStorage.getItem('User_ID');
+    },
+    canPost() {
+      if (this.$route.params.schoolid === undefined) {
+        return true;
+      }
+      if (localStorage.getItem('School_ID') === String(this.$route.params.schoolid)) {
+        return true;
+      }
+      return false;
+    },
+  },
 };
 </script>
 
 <style scoped>
+.feed {
+  padding: 2em;
+}
 .hero {
   background-color: #8ce3ff;
   overflow: visible;

@@ -1,11 +1,5 @@
 <template>
   <section class="feed section">
-    <CreatePost v-if="isLoggedIn && canPost" />
-    <h3 class="message" v-else-if="isLoggedIn && !canPost">
-      You can only post to your school's forum!
-    </h3>
-    <h3 class="message" v-else>Log In to Post and Comment!</h3>
-    <hr />
     <section class="posts" v-if="!noPosts">
       <a
         :href="`/viewpost/${post.Post_ID}`"
@@ -30,29 +24,39 @@
 </template>
 
 <script>
-import CreatePost from './CreatePost.vue';
+// import CreatePost from './CreatePost.vue';
 import Post from './Post.vue';
 import { API_ADDRESS } from '../constants';
 
 export default {
   name: 'Feed',
   components: {
-    CreatePost,
+    // CreatePost,
     Post,
   },
-  props: ['schoolid'],
+  props: ['schoolid', 'searchkeys'],
   data: () => ({
     posts: [],
   }),
   async mounted() {
-    // TODO: add query parameters similar to how I did it in the job board
     let res;
-    if (this.$props.schoolid === undefined) {
-      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9`, {
+    // no schoolid and search
+    if (this.$props.schoolid === undefined && this.$props.searchkeys !== undefined) {
+      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&search=${this.$props.searchkeys}`, {
+        mode: 'cors',
+      });
+    // schoolid, no search
+    } else if (this.$props.schoolid !== undefined && this.$props.searchkeys === undefined) {
+      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&schoolID=${this.$props.schoolid}`, {
+        mode: 'cors',
+      });
+    // schoolid and search
+    } else if (this.$props.schoolid !== undefined && this.$props.searchkeys !== undefined) {
+      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&schoolID=${this.$props.schoolid}&search=${this.$props.searchkeys}`, {
         mode: 'cors',
       });
     } else {
-      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&schoolID=${this.$props.schoolid}`, {
+      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9`, {
         mode: 'cors',
       });
     }
