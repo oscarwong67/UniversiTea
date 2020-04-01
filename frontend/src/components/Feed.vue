@@ -61,7 +61,7 @@ export default {
       });
     }
     const data = await res.json();
-    console.log(data);
+    // console.log(data);
     this.posts = data.posts;
   },
   computed: {
