@@ -1,5 +1,5 @@
 'use-strict';
-require('dotenv').config();
+
 const adminModel = require('./admin-model');
 
 exports.plugin = {
@@ -7,17 +7,17 @@ exports.plugin = {
   register: async function (server, options) {
     
     server.route({
-      method: 'GET',
+      method: 'POST',
       path: '/api/admin/promote',
       async handler(request, h) {
-        const data = await adminModel.getUsers(request);
-        return data;
+        const res = await adminModel.getUsers(request);
+        return res;
       },
     });
 
     server.route({
       method: 'GET',
-      path: '/api/admin/getUsers',
+      path: '/api/admin/getusers',
       async handler(request, h) {
         const data = await adminModel.getUsers(request);
         return data;
