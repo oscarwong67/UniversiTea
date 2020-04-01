@@ -12,11 +12,11 @@ const getFeed = async (request) => {
 
     let search = request.query.search;
     if(search != undefined) {
-        search = search.toString()
-                .replace("!", "!!")
-                .replace("?", "!?")
-                .replace("_", "!_")
-                .replace("[", "!["); // makes sure the special characters dont get confused in the LIKE statement
+        // IDK if this works actually
+        // search = search.toString()
+        //         .replace("!", "!!")
+        //         .replace("%", "!%")
+        //         .replace("_", "!_"); // makes sure the special characters dont get confused in the LIKE statement
 
         const posts = await db.query(`
             SELECT * 
