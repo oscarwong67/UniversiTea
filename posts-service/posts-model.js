@@ -9,13 +9,26 @@ const getFeed = async (request) => {
     const limit = parseInt(request.query.limit) || 9;
     const schoolID = parseInt(request.query.schoolID) || true;
     if (page < 1) page = 1;
-    const posts = await db.query(`
-        SELECT * 
-        FROM POSTS AS P, SCHOOL AS S, USER AS U
-        WHERE P.User_ID=U.User_ID AND P.School_ID=S.School_ID AND S.School_ID=?
-        ORDER BY Post_id
-        LIMIT ${(page - 1) * limit}, ${limit}
-    `, schoolID)
+
+    const search = request.query.search;
+    if(search != undefined) {
+        const posts = await db.query(`
+            SELECT * 
+            FROM POSTS AS P, SCHOOL AS S, USER AS U
+            WHERE P.User_ID=U.User_ID AND P.School_ID=S.School_ID AND S.School_ID=?
+                    AND P.Title LIKE ?
+            ORDER BY Post_id
+            LIMIT ${(page - 1) * limit}, ${limit}
+            `, schoolID, '%'+search+'%')
+    } else {
+        const posts = await db.query(`
+            SELECT * 
+            FROM POSTS AS P, SCHOOL AS S, USER AS U
+            WHERE P.User_ID=U.User_ID AND P.School_ID=S.School_ID AND S.School_ID=?
+            ORDER BY Post_id
+            LIMIT ${(page - 1) * limit}, ${limit}
+            `, schoolID)
+    }
     return { posts };
 }
 
