@@ -50,6 +50,7 @@ export default {
   components: {
     VueEditor,
   },
+  props: ['header', 'oldTitle', 'oldContent', 'oldMediaUrls', 'oldAnonymous'],
   data: () => ({
     customToolbar: [
       ['bold', 'italic', 'underline'],
@@ -62,7 +63,6 @@ export default {
     currentMediaUrl: '',
     isAnonymous: false,
   }),
-  props: ['header', 'oldTitle', 'oldContent', 'oldMediaUrls', 'oldAnonymous'],
   mounted() {
     this.title = this.$props.oldTitle || '';
     this.content = this.$props.oldContent || '';

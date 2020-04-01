@@ -45,10 +45,10 @@
             <b-button type="is-primary" @click="isSignupModalActive = true">Signup</b-button>
         </div>
         <b-modal class="modal" :active.sync="isLoginModalActive">
-          <section class="section card">
+          <section class="card section">
             <form @submit.prevent="handleLogin">
               <h2>Log In</h2>
-              <div class="container">
+              <div class="login-modal-content container">
                 <LoginForm @formChange="updateEmailPassword" />
                 <b-button class="navbar-item" type="is-primary" native-type="submit"
                   >Log In!</b-button
@@ -58,51 +58,55 @@
           </section>
         </b-modal>
         <b-modal class="modal" :active.sync="isSignupModalActive">
-          <section class="section card">
-            <form @submit.prevent="handleSignup">
-              <h2>Signup</h2>
-              <div class="container">
-                <LoginForm @formChange="updateEmailPassword" />
-                <b-field label="First Name">
-                  <b-input v-model="fname"></b-input>
-                </b-field>
-                <b-field label="Last Name">
-                  <b-input v-model="lname"></b-input>
-                </b-field>
-                <b-dropdown v-model="schoolName" aria-role="list">
-                  <button class="button is-light" slot="trigger" slot-scope="{ active }">
-                    <span>{{ schoolName ? `School: ${schoolName}` : "School" }}</span>
-                    <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
-                  </button>
-                  <div class='list'>
-                    <b-dropdown-item
-                      value="schoolName" aria-role="listitem"
-                      v-for="school in allSchools" :key="school.School_ID"
-                    >{{ school.SchoolName }}</b-dropdown-item>
+          <div class='signup-modal-content'>
+            <section class="card section">
+              <form @submit.prevent="handleSignup">
+                <h2>Signup</h2>
+                <div class="container">
+                  <LoginForm @formChange="updateEmailPassword" />
+                  <b-field label="First Name">
+                    <b-input v-model="fname"></b-input>
+                  </b-field>
+                  <b-field label="Last Name">
+                    <b-input v-model="lname"></b-input>
+                  </b-field>
+                  <b-dropdown v-model="school" aria-role="list">
+                    <button class="button is-light" slot="trigger" slot-scope="{ active }">
+                      <span>
+                        {{ school ? `School: ${school.SchoolName}` : "School" }}
+                      </span>
+                      <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
+                    </button>
+                    <div class='list'>
+                      <b-dropdown-item
+                        :value="school" aria-role="listitem"
+                        v-for="school in allSchools" :key="school.SchoolName"
+                      >{{ school.SchoolName }}</b-dropdown-item>
+                    </div>
+                  </b-dropdown>
+                  <b-dropdown v-model="degreeType" aria-role="list">
+                    <button class="button is-light" slot="trigger" slot-scope="{ active }">
+                      <span>
+                        {{ degreeType ? `Degree Type: ${degreeType}` : "Degree Type" }}
+                      </span>
+                      <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
+                    </button>
+                    <div class='list'>
+                      <b-dropdown-item
+                        :value="degreeType" aria-role="listitem"
+                        v-for="degreeType in degreeTypes" :key="degreeType"
+                      >{{ degreeType }}</b-dropdown-item>
+                    </div>
+                  </b-dropdown>
+                  <div class="submit">
+                    <b-button class="navbar-item" type="is-primary" native-type="submit">
+                      Sign Up!
+                    </b-button>
                   </div>
-                </b-dropdown>
-                <b-dropdown v-model="degreeType" aria-role="list">
-                  <button class="button is-light" slot="trigger" slot-scope="{ active }">
-                    <span>
-                      {{ degreeType ? `Degree Type: ${degreeType}` : "Degree Type" }}
-                    </span>
-                    <b-icon :icon="active ? 'menu-up' : 'menu-down'"></b-icon>
-                  </button>
-                  <div class='list'>
-                    <b-dropdown-item
-                      :value="degreeType" aria-role="listitem"
-                      v-for="degreeType in degreeTypes" :key="degreeType"
-                    >{{ degreeType }}</b-dropdown-item>
-                  </div>
-                </b-dropdown>
-                <div class="submit">
-                  <b-button class="navbar-item" type="is-primary" native-type="submit">
-                    Sign Up!
-                  </b-button>
                 </div>
-              </div>
-            </form>
-          </section>
+              </form>
+            </section>
+          </div>
         </b-modal>
       </div>
     </div>
@@ -127,7 +131,7 @@ export default {
     password: '',
     fname: '',
     lname: '',
-    schoolName: '',
+    school: '',
     degreeType: '',
     degreeTypes: [
       'B.A.',
@@ -184,25 +188,28 @@ export default {
       this.afterLogin(data);
     },
     async handleSignup() {
-      const res = await fetch(`${API_ADDRESS}/api/authentication/signup`, {
-        mode: 'cors',
-        method: 'POST',
-        body: JSON.stringify({
-          email: this.email,
-          password: this.password,
-          Fname: this.fname,
-          Lname: this.lname,
-          Degree_Type: this.degreeType,
-          schoolName: this.schoolName,
-        }),
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      if (this.email && this.password && this.fname
+        && this.lname && this.school && this.degreeType) {
+        const res = await fetch(`${API_ADDRESS}/api/authentication/signup`, {
+          mode: 'cors',
+          method: 'POST',
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+            Fname: this.fname,
+            Lname: this.lname,
+            Degree_Type: this.degreeType,
+            schoolID: this.school.School_ID,
+          }),
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      const data = await res.json();
-      this.afterLogin(data);
+        const data = await res.json();
+        this.afterLogin(data);
+      }
     },
     logout() {
       localStorage.removeItem('User_ID');
@@ -223,11 +230,17 @@ export default {
 </script>
 
 <style scoped>
-.modal,
-.modal-content,
+.login-modal-content {
+  height: auto;
+}
+.signup-modal-content {
+  /* max-height: auto; */
+  height: 650px;
+  overflow: visible;
+  border-radius: 6px;
+}
+
 .card {
-  max-height: auto;
-  overflow: initial;
   border-radius: 6px;
 }
 

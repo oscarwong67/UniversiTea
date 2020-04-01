@@ -32,7 +32,7 @@ export default {
     mediaUrls: [],
     isAnonymous: false,
   }),
-  mounted() {
+  created() {
     this.title = this.$props.oldTitle || '';
     this.content = this.$props.oldContent || '';
     this.mediaUrls = this.$props.oldMediaUrls || [];

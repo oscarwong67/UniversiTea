@@ -11,7 +11,7 @@ exports.plugin = {
       // Input: page, limit, schoolID
       server.route({
         method: 'GET',
-        path: '/api/feed',
+        path: '/api/feed/',
         handler: async function (request, h) {
             try {
                 const posts = await postsModel.getFeed(request);

@@ -5,34 +5,29 @@ const helper = require('./helper');
 
 // Gets called by REST API to get feed
 const getFeed = async (request) => {
-    let page = parseInt(request.query.page) || 1;
-    const limit = parseInt(request.query.limit) || 9;
     const schoolID = parseInt(request.query.schoolID) || true;
-    if (page < 1) page = 1;
-
     let search = request.query.search;
-    if(search != undefined) {
+    let posts;
+    if(search !== undefined) {
         // IDK if this works actually
         // search = search.toString()
         //         .replace("!", "!!")
         //         .replace("%", "!%")
         //         .replace("_", "!_"); // makes sure the special characters dont get confused in the LIKE statement
 
-        const posts = await db.query(`
+        posts = await db.query(`
             SELECT * 
             FROM POSTS AS P, SCHOOL AS S, USER AS U
             WHERE P.User_ID=U.User_ID AND P.School_ID=S.School_ID AND S.School_ID=?
-                    AND P.Title LIKE '?'
+                    AND P.Title LIKE ?
             ORDER BY Post_id
-            LIMIT ${(page - 1) * limit}, ${limit}
-            `, schoolID, '%'+search+'%')
+            `, [schoolID, '%'+search+'%'])
     } else {
-        const posts = await db.query(`
+        posts = await db.query(`
             SELECT * 
             FROM POSTS AS P, SCHOOL AS S, USER AS U
             WHERE P.User_ID=U.User_ID AND P.School_ID=S.School_ID AND S.School_ID=?
             ORDER BY Post_id
-            LIMIT ${(page - 1) * limit}, ${limit}
             `, schoolID)
     }
     return { posts };
