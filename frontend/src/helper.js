@@ -7,7 +7,7 @@ const validYouTubeUrl = (url) => {
     const match = url.match(regExp);
     if (match && match[2].length === 11) {
       // change to embedded
-      this.currentMediaUrl = `https://www.youtube.com/embed/${match[2]}`;
+      // this.currentMediaUrl = `https://www.youtube.com/embed/${match[2]}`;
       const youtubeEmbedded = `https://www.youtube.com/embed/${match[2]}`;
       return [true, youtubeEmbedded];
     }

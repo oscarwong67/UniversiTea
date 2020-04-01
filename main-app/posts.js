@@ -29,7 +29,7 @@ module.exports = [
 
   {
     method: 'GET',
-    path: '/api/feed',
+    path: '/api/feed/',
     async handler(request, h) {
       const url = `${postsMicroservice}${request.url.pathname}${request.url.search}`;
       const res = await fetch(url);

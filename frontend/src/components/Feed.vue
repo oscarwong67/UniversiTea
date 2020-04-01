@@ -42,26 +42,26 @@ export default {
     let res;
     // no schoolid and search
     if (this.$props.schoolid === undefined && this.$props.searchkeys !== undefined) {
-      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&search=${this.$props.searchkeys}`, {
+      res = await fetch(`${API_ADDRESS}/api/feed/?search=${this.$props.searchkeys}`, {
         mode: 'cors',
       });
     // schoolid, no search
     } else if (this.$props.schoolid !== undefined && this.$props.searchkeys === undefined) {
-      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&schoolID=${this.$props.schoolid}`, {
+      res = await fetch(`${API_ADDRESS}/api/feed/?schoolID=${this.$props.schoolid}`, {
         mode: 'cors',
       });
     // schoolid and search
     } else if (this.$props.schoolid !== undefined && this.$props.searchkeys !== undefined) {
-      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9&schoolID=${this.$props.schoolid}&search=${this.$props.searchkeys}`, {
+      res = await fetch(`${API_ADDRESS}/api/feed/?schoolID=${this.$props.schoolid}&search=${this.$props.searchkeys}`, {
         mode: 'cors',
       });
     } else {
-      res = await fetch(`${API_ADDRESS}/api/feed?page=1&limit=9`, {
+      res = await fetch(`${API_ADDRESS}/api/feed/`, {
         mode: 'cors',
       });
     }
     const data = await res.json();
-    // console.log(data);
+    console.log(data);
     this.posts = data.posts;
   },
   computed: {

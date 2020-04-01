@@ -71,6 +71,11 @@ export default {
 </script>
 
 <style scoped>
+.message {
+  background-color: white;
+  padding: 1em;
+}
+
 .feed {
   padding: 2em;
 }

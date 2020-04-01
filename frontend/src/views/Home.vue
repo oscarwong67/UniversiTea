@@ -29,6 +29,11 @@ export default {
 </script>
 
 <style scoped>
+.message {
+  background-color: white;
+  padding: 1em;
+}
+
 .home {
   padding: 1em;
   padding-top: 2em;
