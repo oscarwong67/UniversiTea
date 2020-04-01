@@ -10,8 +10,14 @@ const getFeed = async (request) => {
     const schoolID = parseInt(request.query.schoolID) || true;
     if (page < 1) page = 1;
 
-    const search = request.query.search;
+    let search = request.query.search;
     if(search != undefined) {
+        search = search.toString()
+                .replace("!", "!!")
+                .replace("?", "!?")
+                .replace("_", "!_")
+                .replace("[", "!["); // makes sure the special characters dont get confused in the LIKE statement
+
         const posts = await db.query(`
             SELECT * 
             FROM POSTS AS P, SCHOOL AS S, USER AS U
