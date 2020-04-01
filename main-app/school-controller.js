@@ -1,6 +1,5 @@
 'use strict';
 
-const helper = require('./helper');
 const schoolModel = require('./school-model');
 
 module.exports = [
@@ -10,13 +9,9 @@ module.exports = [
     // Output: array of all schools
     method: 'GET',
     path: '/api/getSchools',
-    async handler(request, h) {
-      try {
-        const schools = await schoolModel.getSchool();
-        return helper.goodResponse(h, schools);
-      } catch (err) {
-        return helper.badResponse(h, err);
-      }
+    handler: async function (request, h) {
+      const res = await schoolModel.getSchools(h);
+      return res;
     }
   },
   {
@@ -25,13 +20,9 @@ module.exports = [
     // Output: the school obj
     method: 'GET',
     path: '/api/getSchoolName/',
-    async handler(request, h) {
-      try {
-        const schoolNames = await schoolModel.getSchoolNames(request);
-        return helper.goodResponse(h, schoolNames);
-      } catch (err) {
-        return helper.badResponse(h, err);
-      }
+    handler: async function (request, h) {
+      const res = await schoolModel.getSchoolName(request, h);
+      return res;
     }
   }
 ]
