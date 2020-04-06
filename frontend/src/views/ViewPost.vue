@@ -127,7 +127,7 @@ export default {
   },
   computed: {
     isOP() {
-      return localStorage.getItem('User_ID') === String(this.post.User_ID);
+      return (localStorage.getItem('User_ID') === String(this.poster.User_ID) || localStorage.getItem('Is_Admin'));
     },
     hasMedia() {
       return this.mediaList !== [];
