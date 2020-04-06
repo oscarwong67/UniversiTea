@@ -86,13 +86,13 @@ export default {
   },
   computed: {
     isOP() {
-      return (localStorage.getItem('User_ID') === String(this.poster.User_ID));
+      return (localStorage.getItem('User_ID') === String(this.poster.User_ID) || localStorage.getItem('Is_Admin'));
     },
     isLoggedIn() {
       return localStorage.getItem('User_ID');
     },
     canComment() {
-      console.log(this.$props.schoolid);
+      // console.log(this.$props.schoolid);
       return (localStorage.getItem('School_ID') === String(this.$props.schoolid));
     },
   },
